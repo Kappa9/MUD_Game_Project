@@ -8,8 +8,8 @@ using namespace std;
 
 class Goods {
 public:
-	char Nume[32];          //名称
-	char Description[512];  //描述
+	string Nume;            //名称
+	string Description;     //描述
 	int Attribute;          //属性    0-可消耗，1-装备，2-学习
 	int AddAtract;          //增加攻击
 	int AddDefense;         //增加防御
