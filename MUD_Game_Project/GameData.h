@@ -8,25 +8,44 @@ using namespace std;
 
 class Goods {
 public:
-	string Name;            //名称
-	string Description;     //描述
-	int Attribute;          //属性    0-可消耗，1-装备，2-学习
-	int AddAtract;          //增加攻击
-	int AddDefense;         //增加防御
-	int AddHP;              //回复血量
-	int AddMaxHP;           //增加血量上限
-	int AddMP;              //回复蓝量
-	int AddMaxMP;           //增加蓝量上限
-	int AddSpeed;           //增加速度
-	int SkillIndex;         //技能书编号
-	int Location;           //装备位置  0-头，1-身，2-手
-	int Cost;               //价值
+	string name;            //名称
+	string description;     //描述
+	int attribute;          //属性    0-可消耗，1-装备，2-学习
+	int addAtract;          //增加攻击
+	int addDefense;         //增加防御
+	int addHP;              //回复血量
+	int addMaxHP;           //增加血量上限
+	int addMP;              //回复蓝量
+	int addMaxMP;           //增加蓝量上限
+	int addSpeed;           //增加速度
+	int skillIndex;         //技能书编号
+	int location;           //装备位置  0-头，1-身，2-手,3-足
+	int cost;               //价值
+	void copy(Goods* thing);//复制
 };
+
+
 class Bag {
 public:
+	struct goods {
+		Goods* thing;
+		int num;
+	
+		goods() { thing = NULL; num = 0; }
+		goods(Goods* entry_thing,int add_on) {
+			thing = entry_thing;
+			num = add_on;
+		}
+	};
 
-	vector<Goods>m_vecItems;
+	void AddGoods(Goods* thing);        //向背包中添加物品
+	void AbandonGoods(Goods* thing);    //删除背包中存在的物品
+	void UsingGoods(Goods* thing);      //使用背包中的消耗品 
+	void ReturNum(Goods* thing);        //返回在背包中该物品的剩余情况
+
+	std::vector <goods> cargo;
  };
+
 class NPC {
 public:
 	string Name = NULL;         //NPC名称 
@@ -39,23 +58,7 @@ public:
 	int Defence = 0;           //防御
 	string Skill = NULL;             //已学会的技能
 };
-class NPC1 :public NPC   //勇者   
-{
-public:
-	string Name = ("勇者");
-	int inf() {
-		cout << Name << endl;             //勇者个人信息（初次战斗时显示）
-		cout << "HP:" << HPMAX << endl;
-		cout << "MP:" << MPMAX << endl;
-		return 0;
-	}
-	int elseinf() {
-		cout << "攻击力:" << Attack << endl;       //勇者其他信息（查看勇者个人信息时显示）
-		cout << "防御力:" << Defence << endl;
-		cout << "速度:" << Speed << endl;
-		return 0;
-	}
-};
+
 class CSkill {
 public:
 	string nName[50]; //名称
@@ -65,3 +68,10 @@ public:
 	string nDamage;//伤害
 
 };
+
+bool IfZero(int num) {
+	if (num == 0)
+		return true;
+	else
+		return false;
+}
