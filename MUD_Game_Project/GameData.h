@@ -8,7 +8,7 @@ using namespace std;
 
 class Goods {
 public:
-	string Nume;            //名称
+	string Name;            //名称
 	string Description;     //描述
 	int Attribute;          //属性    0-可消耗，1-装备，2-学习
 	int AddAtract;          //增加攻击
@@ -22,5 +22,4 @@ public:
 	int Location;           //装备位置  0-头，1-身，2-手
 	int Cost;               //价值
 };
-
 
