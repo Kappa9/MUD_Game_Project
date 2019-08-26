@@ -22,4 +22,8 @@ public:
 	int Location;           //装备位置  0-头，1-身，2-手
 	int Cost;               //价值
 };
+class Bag {
+public:
 
+	vector<Goods>m_vecItems;
+ };
