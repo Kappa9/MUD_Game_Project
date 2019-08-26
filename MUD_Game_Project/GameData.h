@@ -19,7 +19,7 @@ public:
 	int addMaxMP;           //增加蓝量上限
 	int addSpeed;           //增加速度
 	int skillIndex;         //技能书编号
-	int location;           //装备位置  0-头，1-身，2-手,3-足
+	int location;           //装备位置  0-头，1-身，2-手, 3-足, 4-非装备
 	int cost;               //价值
 	void copy(Goods* thing);//复制
 };
@@ -38,17 +38,25 @@ public:
 		}
 	};
 
-	void AddGoods(Goods* thing);        //向背包中添加物品
-	void AbandonGoods(Goods* thing);    //删除背包中存在的物品
-	void UsingGoods(Goods* thing);      //使用背包中的消耗品 
-	void ReturNum(Goods* thing);        //返回在背包中该物品的剩余情况
+	void Print();                                  //描述背包中存在的物品
+	void PrintEquipment();                         //描述武器栏中的情况
+	void AddGoods(Goods* thing,int num=1);         //向背包中添加物品
+	void AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品
+	void UsingGoods(Goods* thing);                 //使用背包中的消耗品 
+	void ReturNum(Goods* thing);                   //返回在背包中该物品的剩余情况
+	void Equip(Goods* thing);                      //装备背包中的装备 
+	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
+	void Sell(Goods* thing, int num=1);            //出售背包中的物品
+	void purchase(Goods* thing, int num=1);        //购买物品
 
+	int money;
 	std::vector <goods> cargo;
+	Goods* equipment[4];
  };
 
 class NPC {
 public:
-	string Name = NULL;         //NPC名称 
+	string Name = NULL;        //NPC名称 
 	int HP = 0;                //血量
 	int HPMAX = 0;             //初始血量
 	int MP = 0;                //魔法值
@@ -56,7 +64,7 @@ public:
 	int Speed = 0;             //速度
 	int Attack = 0;            //攻击
 	int Defence = 0;           //防御
-	string Skill = NULL;             //已学会的技能
+	CSkill skill[5];          //已学会的技能
 };
 
 class CSkill {
