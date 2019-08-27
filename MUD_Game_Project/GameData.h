@@ -21,7 +21,7 @@ public:
 	int skillIndex;         //技能书编号
 	int location;           //装备位置  0-头，1-身，2-手, 3-足, 4-非装备
 	int cost;               //价值
-	void copy(Goods* thing);//复制
+	void copy(Goods* thing);//复制物品
 };
 
 

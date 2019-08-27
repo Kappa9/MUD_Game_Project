@@ -1,7 +1,7 @@
 #include "GameData.h";
 
 void Goods::copy(Goods* thing)
-{//复制
+{//复制物品
 	name=thing->name;            
 	description=thing->description;     
 	attribute=thing->attribute;          
@@ -27,6 +27,7 @@ void Bag::Print()
 	for (int i = 0; i < cargo.size; i++) {
 		cout << cargo[i].thing->name<<" ×"<<cargo[i].num<<endl;
 	}
+	cout << "金币:" << money;
 }
 
 void Bag::PrintEquipment()
@@ -65,7 +66,7 @@ void Bag::AddGoods(Goods* thing,int num=1)
 	struct goods sthing;
 	sthing.thing = thing;
 
-	for (int i = 0; i < cargo.size; i++) {
+	for (int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->name == thing->name) {
 			cargo[i].num+=num;
 			judge = false;
@@ -79,24 +80,34 @@ void Bag::AddGoods(Goods* thing,int num=1)
 
 void Bag::AbandonGoods(Goods* thing,int num=1)
 {//在背包中删除物品
-	for (int i = 0; i < cargo.size; i++) {
+	bool judge = false;
+	int position;
+	for (int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->name == thing->name) {
 			if ((cargo[i].num -num)==0) {
-			cout << " ";
+				judge = true;
+				position = i;
 			}
-			else{
-			cargo[i].num--;
-			this->ReturNum;
+			if ((cargo[i].num-num)>0){
+				cargo[i].num-num;
+				this->ReturNum;
+			}
+			if ((cargo[i].num - num) < 0) {
+				cout << "背包中不存在这么多的物品";
 			}
 		}
 	}
-	
+
+	if (judge) {
+		cout <<cargo[position].thing->name<< "已不存在";
+		cargo.erase(cargo.begin() + position);
+	}
 }
 
 
 void Bag::ReturNum(Goods* thing)
 {//返回在背包中该物品的剩余情况
-	for (int i = 0; i < cargo.size; i++) {
+	for (int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->name == thing->name) {
 			if (cargo[i].num != 0) {
 				cout << "还剩余" << cargo[i].num << "件";
