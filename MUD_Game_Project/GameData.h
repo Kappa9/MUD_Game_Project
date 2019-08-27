@@ -19,7 +19,7 @@ public:
 	int addMaxMP;           //增加蓝量上限
 	int addSpeed;           //增加速度
 	int skillIndex;         //技能书编号
-	int location;           //装备位置  0-头，1-身，2-手, 3-足, 4-非装备
+	int location;           //装备位置  0-身，1-手，2-足, 3-非装备
 	int cost;               //价值
 	void copy(Goods* thing);//复制物品
 };
@@ -47,11 +47,11 @@ public:
 	void Equip(Goods* thing);                      //装备背包中的装备 
 	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
 	void Sell(Goods* thing, int num=1);            //出售背包中的物品
-	void purchase(Goods* thing, int num=1);        //购买物品
+	void Purchase(Goods* thing, int num=1);        //购买物品
 
 	int money;
 	std::vector <goods> cargo;
-	Goods* equipment[4];
+	Goods* equipment[3];
  };
 
 class NPC {

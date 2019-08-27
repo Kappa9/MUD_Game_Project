@@ -33,20 +33,19 @@ void Bag::Print()
 void Bag::PrintEquipment()
 {//描述武器栏中的情况
 	bool judge;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (equipment[i] != NULL) {
 			judge = true;
 		}
 	}
 		if (judge) {
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < 2; i++) {
 				if (equipment[i] != NULL) {
 					switch (i)
 					{
-					case 0:cout << "头盔：" << equipment[i]->name << endl;
-					case 1:cout << "铠甲：" << equipment[i]->name << endl;
-					case 2:cout << "武器：" << equipment[i]->name << endl;
-					case 3:cout << "足具：" << equipment[i]->name << endl;
+					case 0:cout << "铠甲：" << equipment[i]->name <<" 防御："<<equipment[i]->addDefense<<endl;
+					case 1:cout << "武器：" << equipment[i]->name <<" 攻击："<<equipment[i]->addAtract<< endl;
+					case 2:cout << "足具：" << equipment[i]->name <<" 速度："<<equipment[i]->addSpeed<<endl;
 					default:
 						break;
 					}
@@ -99,7 +98,8 @@ void Bag::AbandonGoods(Goods* thing,int num=1)
 	}
 
 	if (judge) {
-		cout <<cargo[position].thing->name<< "已不存在";
+		this->ReturNum(thing);
+
 		cargo.erase(cargo.begin() + position);
 	}
 }
@@ -107,15 +107,19 @@ void Bag::AbandonGoods(Goods* thing,int num=1)
 
 void Bag::ReturNum(Goods* thing)
 {//返回在背包中该物品的剩余情况
+	bool judge = false;
+
 	for (int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->name == thing->name) {
+			judge = true;
 			if (cargo[i].num != 0) {
-				cout << "还剩余" << cargo[i].num << "件";
+				cout << thing->name<<"还剩余" << cargo[i].num << "件";
 			}
-			else
-				cout << "该物品已不存在";
 		}
+	}
 
+	if (judge) {
+		cout << thing->name << "已不存在";
 	}
 }
 
@@ -156,7 +160,7 @@ void Bag::Sell(Goods* thing, int num=1)
 	cout<< ", 获得了" << (thing->cost) * num << "元";
 }
 
-void Bag::purchase(Goods* thing,int num=1)
+void Bag::Purchase(Goods* thing,int num=1)
 {//购买物品
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
