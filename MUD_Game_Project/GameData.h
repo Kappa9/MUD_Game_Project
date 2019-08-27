@@ -54,6 +54,16 @@ public:
 	Goods* equipment[3];
  };
 
+class CSkill {
+public:
+	string nName[50];          //名称
+	string nDescription[256];  //技能描述	
+	short nPower;              //技能威力
+	short nMpCost;			   //消耗MP值
+	string nDamage;			   //伤害
+
+};
+
 class NPC {
 public:
 	string Name = NULL;        //NPC名称 
@@ -64,18 +74,10 @@ public:
 	int Speed = 0;             //速度
 	int Attack = 0;            //攻击
 	int Defence = 0;           //防御
-	CSkill skill[5];          //已学会的技能
+	CSkill skill[5];           //已学会的技能
 };
 
-class CSkill {
-public:
-	string nName[50]; //名称
-	string nDescription[256];//技能描述	
-	short nPower;//技能威力
-	short nMpCost;//消耗MP值
-	string nDamage;//伤害
 
-};
 
 bool IfZero(int num) {
 	if (num == 0)
