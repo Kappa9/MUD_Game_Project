@@ -337,6 +337,14 @@ void Skill::PrintDescription()
 Hero::Hero() {
 	id = 0;
 }
+
+//显示某角色的状态
+void NPC::ShowNPCState()
+{
+	cout << this->name;
+	cout << "（生命值:" << this->HP << "/" << this->HPmax;
+	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
+}
 void Place::OnEnterPlace() {
 	//待对接，读地图对话脚本(enterScript)
 }
@@ -365,3 +373,20 @@ void InteractSystem::PrintLog(string message) {
 void InteractSystem::PrintMap() {
 
 }
+void Spot::readSoptInformation()
+{
+
+}
+
+void Spot::printSpotInformation() {
+		cout << "你到达了" << spotName << "，" << "spotDescription";
+	}
+
+void Spot::printNPCs()
+{
+	for (int i = 0; i++; i < NPCnumber) {
+
+	}
+}
+
+
