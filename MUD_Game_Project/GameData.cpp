@@ -345,9 +345,6 @@ void NPC::ShowNPCState()
 	cout << "（生命值:" << this->HP << "/" << this->HPmax;
 	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
 }
-void Place::OnEnterPlace() {
-	//待对接，读地图对话脚本(enterScript)
-}
 InteractSystem::InteractSystem() {
 	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }
@@ -388,5 +385,7 @@ void Spot::printNPCs()
 
 	}
 }
-
+DataList::DataList() {
+	for (int i : trigger) trigger[i] = 0;
+}
 

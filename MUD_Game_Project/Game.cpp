@@ -34,7 +34,7 @@ void Fight::Fighting()
 {
 	cout << "你与" << enemy->name << "斗在了一起";
 	NPC* actor = DecideWhoAct();
-	if (actor->index == 0) {
+	if (actor->id == 0) {
 		cout << "轮到你行动了！";
 		player->ShowNPCState();
 		cout << "1.攻击 2.技能 3.物品 4.逃走 ";
@@ -53,7 +53,7 @@ void Fight::Fighting()
 
 
 }
-GameThread::GameThread() :trigger{ 0 } {
+GameThread::GameThread(){
 	cout << endl << "Game Started." << endl;
 }
 void GameThread::LaunchGame() {
@@ -86,8 +86,9 @@ vector<string> GameThread::SplitString(string str) {
 void GameThread::GetItemData(vector<string> list) {
 	for (string str : list) {
 		vector<string> split(SplitString(str));
-
-
+		Goods i;
+		//
+		DataList::goodList.push_back(i);
 	}
 }
 void GameThread::SaveGame() {

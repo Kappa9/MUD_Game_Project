@@ -44,6 +44,9 @@ private:
 	vector<string> ReadFile(string fileName);
 	vector<string> SplitString(string str);
 	void GetItemData(vector<string> list);
+	void GetSkillData(vector<string> list);
+	void GetNPCData(vector<string> list);
+	void GetSpotData(vector<string> list);
 	void SaveGame();
 	void LoadGame();
 };

@@ -90,6 +90,7 @@ public:
 	int defense = 0;           //·ÀÓù
 	int talkingScript;
 	SkillBar skillList;
+	void ShowNPCState();
 };
 
 class SkillBar {
@@ -131,6 +132,7 @@ public:
 };
 static class DataList {
 public:
+	DataList();
 	static vector<Goods> goodList;
 	static vector<Skill> skillList;
 	static vector<NPC> npcList;
