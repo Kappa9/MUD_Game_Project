@@ -333,4 +333,10 @@ void Skill::PrintDescription()
 	cout << this->description;
 }
 
-
+//显示某角色的状态
+void NPC::ShowNPCState()
+{
+	cout << this->name;
+	cout << "（生命值:"<<this->HP<<"/"<<this->HPmax;
+	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
+}

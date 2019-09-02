@@ -79,14 +79,16 @@ public:
 
 class NPC {
 public:
-	string name = NULL;        //NPC名称 
-	int HP = 0;                //血量
-	int HPmax = 0;             //初始血量
-	int MP = 0;                //魔法值
-	int MPmax = 0;             //初始魔法值
-	int speed = 0;             //速度
-	int attack = 0;            //攻击
-	int defence = 0;           //防御
+	string name = NULL;          //NPC名称 
+	int HP = 0;                  //血量
+	int HPmax = 0;               //初始血量
+	int MP = 0;                  //魔法值
+	int MPmax = 0;               //初始魔法值
+	int speed = 0;               //速度
+	int attack = 0;              //攻击
+	int defence = 0;             //防御
+	int index;                   //编号
+	void ShowNPCState();         //显示NPC的状态
 
 };
 
