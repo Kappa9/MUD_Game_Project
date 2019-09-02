@@ -66,12 +66,12 @@ public:
 	string name;               //名称
 	string description;        //技能描述	
 	short  MPcost;			   //消耗MP值
-	string damage;			   //伤害
+	int damage;			       //伤害
 	float  critRate;           //暴击率
 	float  accuracyRate;       //命中率
 
 	Skill() ;                //
-	Skill(string name=" ", string description=" ", short Mpcost=0, string damage=" ", float critRate=0, float accuracyRate=0) ;
+	Skill(string name=" ", string description=" ", short Mpcost=0, int damage=0, float critRate=0, float accuracyRate=0) ;
 	                  
 	void Copy(Skill* ability); //复制技能
 	void PrintDescription();   //关于技能的详细描述
@@ -79,6 +79,9 @@ public:
 
 class NPC {
 public:
+	void ShowNPCState();         //显示NPC的状态
+
+
 	int id;
 	string name = NULL;        //NPC名称 
 	int HP = 0;                //血量
@@ -90,6 +93,7 @@ public:
 	int defense = 0;           //防御
 	int talkingScript;
 	SkillBar skillList;
+
 };
 
 class SkillBar {

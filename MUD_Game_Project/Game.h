@@ -6,13 +6,15 @@
 #include <fstream>
 class Fight {
 public:
-	Fight(NPC* player, NPC* enemy);  //构造函数
-	~Fight();                        //析构函数
-	NPC* DecideWhoAct();             //决定谁先手
-	int UseWhichSkill(NPC* role);
+	Fight(NPC* player, NPC* enemy);           //构造函数
+	~Fight();                                 //析构函数
+	NPC* DecideWhoAct();                      //决定谁先手
+	void UseSkillAttrck(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害           
 	void UseSkill(NPC* role);                 //使用技能
-	void Fighting();                 //战斗过程
-
+	void Escape(NPC* escaper,NPC* arrester);  //逃跑
+	void DecideAct(NPC* ememy,NPC* player);   //ememy的选择
+	void Fighting();                         //战斗过程
+	
 	NPC* player;        //玩家
 	NPC* enemy;         //敌人
 	vector<NPC*>list;   //关于回合判定的vector

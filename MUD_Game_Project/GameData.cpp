@@ -283,6 +283,7 @@ void SkillBar::Print()
 		cout << "你已学会技能：";
 		for (int i = 0; i < list.size(); i++) {
 			cout << i+1<<". "<<list[i]->name<<" 消耗MP："<<list[i]->MPcost;
+			cout << endl;
 		}
 	}
 }
@@ -306,7 +307,7 @@ Skill::Skill()
 }
 
 //Skill的构造函数
-Skill::Skill(string name, string description, short MPcost, string damage, float critRate, float accuracyRate)
+Skill::Skill(string name, string description, short MPcost, int damage, float critRate, float accuracyRate)
 {
 	this->name = name;
 	this->description = description;
