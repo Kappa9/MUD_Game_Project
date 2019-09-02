@@ -3,7 +3,7 @@
 #include<iostream>
 #include<string>
 #include<vector>
-
+#include <fstream>
 class Fight {
 public:
 	Fight(NPC* player, NPC* enemy);  //构造函数
@@ -34,3 +34,17 @@ int GetUserInput(int min, int max) {
 	}
 	return n;
 }
+//游戏进程类，处于结构的最顶层
+class GameThread {
+public:
+	GameThread();
+	void LaunchGame();
+private:
+	InteractSystem sys;
+	short trigger[100];
+	vector<string> ReadFile(string fileName);
+	vector<string> SplitString(string str);
+	void GetItemData(vector<string> list);
+	void SaveGame();
+	void LoadGame();
+};

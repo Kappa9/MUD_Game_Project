@@ -3,8 +3,8 @@
 #include<string>
 #include <vector>
 #include <list>
-
-
+#include<conio.h>
+#include<Windows.h>
 using namespace std;
 
 class Goods {
@@ -79,17 +79,17 @@ public:
 
 class NPC {
 public:
-	string name = NULL;          //NPC名称 
-	int HP = 0;                  //血量
-	int HPmax = 0;               //初始血量
-	int MP = 0;                  //魔法值
-	int MPmax = 0;               //初始魔法值
-	int speed = 0;               //速度
-	int attack = 0;              //攻击
-	int defence = 0;             //防御
-	int index;                   //编号
-	void ShowNPCState();         //显示NPC的状态
-
+	int id;
+	string name = NULL;        //NPC名称 
+	int HP = 0;                //血量
+	int HPmax = 0;             //初始血量
+	int MP = 0;                //魔法值
+	int MPmax = 0;             //初始魔法值
+	int speed = 0;             //速度
+	int attack = 0;            //攻击
+	int defense = 0;           //防御
+	int talkingScript;
+	SkillBar skillList;
 };
 
 class SkillBar {
@@ -106,3 +106,29 @@ bool IfZero(int num) {
 	else
 		return false;
 }
+class Hero :NPC {
+public:
+	Hero();
+	Bag bag;
+};
+class Place {
+public:
+	int id;
+	string name;
+	void OnEnterPlace();
+private:
+	vector<int> contactid;
+	vector<NPC> npc;
+	int enterScript;
+};
+class InteractSystem
+{
+public:
+	InteractSystem();
+	int GetUserInput();
+	int GetUserInput(int maxNum);
+	void PrintLog(string message);
+	void PrintMap();
+private:
+	HANDLE handle;
+};
