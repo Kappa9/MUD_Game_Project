@@ -334,3 +334,22 @@ void Skill::PrintDescription()
 }
 
 
+
+
+void Spot::readSoptInformation()
+{
+
+}
+
+void Spot::printSpotInformation() {
+		cout << "Äãµ½´ïÁË" << spotName << "£¬" << "spotDescription";
+	}
+
+void Spot::printNPCs()
+{
+	for (int i = 0; i++; i < NPCnumber) {
+
+	}
+}
+
+

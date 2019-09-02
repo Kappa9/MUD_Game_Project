@@ -51,7 +51,7 @@ public:
 	void Equip(Goods* thing);                      //装备背包中的装备 
 	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
 	void Sell(Goods* thing, int num=1);            //出售背包中的物品
-	void Purchase(Goods* thing, int num=1);        //购买物品
+	void Purchase(Goods* thing, int num=1);        //购买物品 
 
 	int money;
 	vector <goods> cargo;
@@ -104,3 +104,22 @@ bool IfZero(int num) {
 	else
 		return false;
 }
+
+//场景类
+class Spot {
+public:
+	int spotNumber;                   //场景编号
+	int NPCnumber;                    //NPC数量
+	string spotName;                  //场景名称
+	string spotDescription;           //场景描述
+	
+
+	void readSoptInformation();                 //读取场景信息
+	void printSpotInformation();                 //输出场景信息
+	void printNPCs();                            //输出场景中所有NPC的信息
+
+	
+	vector<NPC*>list;                 //包含场景中存在的NPC
+	vector<int>nearSpotNumber;        //包含临近场景的编号
+
+};
