@@ -32,7 +32,7 @@ vector<string> GameThread::SplitString(string str) {
 void GameThread::GetItemData(vector<string> list) {
 	for (string str : list) {
 		vector<string> split(SplitString(str));
-
+		
 		
 	}
 }

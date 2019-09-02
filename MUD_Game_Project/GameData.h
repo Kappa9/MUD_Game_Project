@@ -121,6 +121,15 @@ private:
 	vector<NPC> npc;
 	int enterScript;
 };
+static class DataList {
+public:
+	static vector<Goods> goodList;
+	static vector<Skill> skillList;
+	static vector<NPC> npcList;
+	static vector<Spot> spotList;
+	static short trigger[100];
+	
+};
 class InteractSystem
 {
 public:

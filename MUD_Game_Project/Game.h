@@ -8,7 +8,6 @@ public:
 	void LaunchGame();
 private:
 	InteractSystem sys;
-	short trigger[100];
 	vector<string> ReadFile(string fileName);
 	vector<string> SplitString(string str);
 	void GetItemData(vector<string> list);
