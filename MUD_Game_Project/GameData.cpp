@@ -24,7 +24,7 @@ void Goods::copy(Goods* thing)
 void Bag::Print()
 {//描述背包内容
 	cout << "背包内有：" << endl;
-	for (int i = 0; i < cargo.size; i++) {
+	for (int i = 0; i <  cargo.size(); i++) {
 		cout << cargo[i].thing->name<<" ×"<<cargo[i].num<<endl;
 	}
 	cout << "金币:" << money;
@@ -32,7 +32,7 @@ void Bag::Print()
 
 void Bag::PrintEquipment()
 {//描述武器栏中的情况
-	bool judge;
+	bool judge=false;
 	for (int i = 0; i < 2; i++) {
 		if (equipment[i] != NULL) {
 			judge = true;
@@ -58,7 +58,7 @@ void Bag::PrintEquipment()
 		}
 }
 
-void Bag::AddGoods(Goods* thing,int num=1)
+void Bag::AddGoods(Goods* thing,int num)
 {//向背包中添加物品
 	bool judge = true;
 
@@ -77,7 +77,7 @@ void Bag::AddGoods(Goods* thing,int num=1)
 	 }
 }
 
-void Bag::AbandonGoods(Goods* thing,int num=1)
+void Bag::AbandonGoods(Goods* thing,int num)
 {//在背包中删除物品
 	bool judge = false;
 	int position;
@@ -88,8 +88,8 @@ void Bag::AbandonGoods(Goods* thing,int num=1)
 				position = i;
 			}
 			if ((cargo[i].num-num)>0){
-				cargo[i].num-num;
-				this->ReturNum;
+				cargo[i].num-=num;
+				this->ReturNum(thing);
 			}
 			if ((cargo[i].num - num) < 0) {
 				cout << "背包中不存在这么多的物品";
@@ -152,7 +152,7 @@ void Bag::Unload(Goods* thing)
 }
 
 
-void Bag::Sell(Goods* thing, int num=1)
+void Bag::Sell(Goods* thing, int num)
 {//出售背包中的物品
 	money +=(thing->cost)*num;
 	this->AbandonGoods(thing);
@@ -160,7 +160,7 @@ void Bag::Sell(Goods* thing, int num=1)
 	cout<< ", 获得了" << (thing->cost) * num << "元";
 }
 
-void Bag::Purchase(Goods* thing,int num=1)
+void Bag::Purchase(Goods* thing,int num)
 {//购买物品
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
@@ -178,7 +178,7 @@ void Bag::UsingGoods(Goods* thing)
 	if (thing->attribute == 0) {
 		this->AbandonGoods(thing);
 		cout << "你使用了" << thing->name ;
-		this->ReturNum;
+		this->ReturNum(thing);
 		if (IfZero(thing->addHP)) {}
 		else {
 			cout << "你的HP增加了" << thing->addHP << "点";
