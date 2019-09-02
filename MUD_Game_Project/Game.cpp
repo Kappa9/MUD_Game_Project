@@ -124,7 +124,7 @@ void Fight::Fighting()
 
 
 }
-GameThread::GameThread() :trigger{ 0 } {
+GameThread::GameThread(){
 	cout << endl << "Game Started." << endl;
 }
 void GameThread::LaunchGame() {
@@ -157,8 +157,9 @@ vector<string> GameThread::SplitString(string str) {
 void GameThread::GetItemData(vector<string> list) {
 	for (string str : list) {
 		vector<string> split(SplitString(str));
-
-
+		Goods i;
+		//
+		DataList::goodList.push_back(i);
 	}
 }
 void GameThread::SaveGame() {
