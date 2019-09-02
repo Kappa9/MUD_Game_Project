@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 
+
 using namespace std;
 
 class Goods {
@@ -18,10 +19,12 @@ public:
 	int addMP;              //回复蓝量
 	int addMaxMP;           //增加蓝量上限
 	int addSpeed;           //增加速度
-	int skillIndex;         //技能书编号
+	int index;              //编号
 	int location;           //装备位置  0-身，1-手，2-足, 3-非装备
 	int cost;               //价值
-	void copy(Goods* thing);//复制物品
+
+	void Copy(Goods* thing);//复制物品
+	void PrintDescription();//输出物品的详细描述
 };
 
 
@@ -30,56 +33,70 @@ public:
 	struct goods {
 		Goods* thing;
 		int num;
-	
+
 		goods() { thing = NULL; num = 0; }
-		goods(Goods* entry_thing,int add_on) {
+		goods(Goods* entry_thing, int add_on) {
 			thing = entry_thing;
 			num = add_on;
 		}
 	};
 
-	void Print();                                  //描述背包中存在的物品
+	void Print(int page);                          //描述背包中存在的物品
+	void PrintPart(int i);                         //描述背包中的部分物体
 	void PrintEquipment();                         //描述武器栏中的情况
 	void AddGoods(Goods* thing,int num=1);         //向背包中添加物品
 	void AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品
 	void UsingGoods(Goods* thing);                 //使用背包中的消耗品 
-	void ReturNum(Goods* thing);                   //返回在背包中该物品的剩余情况
+	void ReturnNum(Goods* thing);                  //返回在背包中该物品的剩余情况
 	void Equip(Goods* thing);                      //装备背包中的装备 
 	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
 	void Sell(Goods* thing, int num=1);            //出售背包中的物品
 	void Purchase(Goods* thing, int num=1);        //购买物品
 
 	int money;
-	std::vector <goods> cargo;
+	vector <goods> cargo;
 	Goods* equipment[3];
  };
 
 
 
 
-class CSkill {
+class Skill {
 public:
-	string nName[50]; //名称
-	string nDescription[256];//技能描述	
-	short nPower;//技能威力
-	short nMpCost;//消耗MP值
-	string nDamage;//伤害
+	string name;               //名称
+	string description;        //技能描述	
+	short  MPcost;			   //消耗MP值
+	string damage;			   //伤害
+	float  critRate;           //暴击率
+	float  accuracyRate;       //命中率
 
+	Skill() ;                //
+	Skill(string name=" ", string description=" ", short Mpcost=0, string damage=" ", float critRate=0, float accuracyRate=0) ;
+	                  
+	void Copy(Skill* ability); //复制技能
+	void PrintDescription();   //关于技能的详细描述
 };
+
 class NPC {
 public:
-	string Name = NULL;        //NPC名称 
+	string name = NULL;        //NPC名称 
 	int HP = 0;                //血量
-	int HPMAX = 0;             //初始血量
+	int HPmax = 0;             //初始血量
 	int MP = 0;                //魔法值
-	int MPMAX = 0;             //初始魔法值
-	int Speed = 0;             //速度
-	int Attack = 0;            //攻击
-	int Defence = 0;           //防御
-	CSkill skill[5];          //已学会的技能
+	int MPmax = 0;             //初始魔法值
+	int speed = 0;             //速度
+	int attack = 0;            //攻击
+	int defence = 0;           //防御
+
 };
 
+class SkillBar {
+public:
+	void Print();				             //输出技能列表
+	void LearnSkill(Skill* ability);         //学习技能
 
+	vector<Skill*>list;
+};
 
 bool IfZero(int num) {
 	if (num == 0)

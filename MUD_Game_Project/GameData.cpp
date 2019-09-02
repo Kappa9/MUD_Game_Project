@@ -1,7 +1,8 @@
 #include "GameData.h";
 
-void Goods::copy(Goods* thing)
-{//复制物品
+//复制物品
+void Goods::Copy(Goods* thing)
+{
 	name=thing->name;            
 	description=thing->description;     
 	attribute=thing->attribute;          
@@ -12,27 +13,99 @@ void Goods::copy(Goods* thing)
 	addMP=thing->addMP;              
 	addMaxMP=thing->addMaxMP;          
 	addSpeed = thing->addSpeed;           
-	skillIndex=thing->skillIndex;         
+	index=thing->index;         
 	location=thing->location;           
 	cost=thing->cost;               
 
 }
 
-
-
-
-void Bag::Print()
-{//描述背包内容
-	cout << "背包内有：" << endl;
-	for (int i = 0; i <  cargo.size(); i++) {
-		cout << cargo[i].thing->name<<" ×"<<cargo[i].num<<endl;
-	}
-	cout << "金币:" << money;
+//输出物品的详细描述
+void Goods::PrintDescription()
+{
+	cout << this->description;
 }
 
+
+
+//描述背包内容
+void Bag::Print(int page)
+{
+	int i = (page - 1) * 7;
+	int number = 1;
+	PrintPart(i);
+
+}
+
+	/*	cin >> number;
+		while (number < 0 || number>9) {
+			cout << "请输入正确的数字";
+			cin >> number;
+
+			if (number == 8) {
+				if (i < 7) {
+					cout << "无法翻到上一页";
+				}
+				else {
+					int remainder;
+					remainder = (i) % 7;
+					i -= (7 + remainder);
+					PrintPart(i);
+				}
+			}
+
+			if (number == 9) {
+				if (i == cargo.size()) {
+					cout << "无法翻到下一页";
+				}
+				else {
+					PrintPart(i);
+				}
+			}
+		}
+
+		if (number == 8) {
+			if (i < 7) {
+				cout << "无法翻到上一页";
+			}
+			else {
+				int remainder;
+				remainder = (i) % 7;
+				i -= (7 + remainder);
+				PrintPart(i);
+			}
+		}
+
+		if (number == 9) {
+			if (i == cargo.size()) {
+				cout << "无法翻到下一页";
+			}
+			else {
+				PrintPart(i);
+			}
+		}
+	}*/
+
+//描述背包中的部分物体
+void Bag::PrintPart(int i)
+{
+	int num = 0;
+	cout << "背包内有：" << endl;
+	for (i ; i < cargo.size(); i++) {
+		num++;
+		cout << num << ". " << cargo[i].thing->name << " ×" << cargo[i].num << " ";
+		if (num == 7) {
+			num = 0;
+			cout << "8. 上一页 9. 下一页 ";
+			break;
+		}
+	}
+}
+
+//描述武器栏中的情况
 void Bag::PrintEquipment()
-{//描述武器栏中的情况
+{
 	bool judge=false;
+
 	for (int i = 0; i < 2; i++) {
 		if (equipment[i] != NULL) {
 			judge = true;
@@ -58,8 +131,10 @@ void Bag::PrintEquipment()
 		}
 }
 
+
+//向背包中添加物品
 void Bag::AddGoods(Goods* thing,int num)
-{//向背包中添加物品
+{
 	bool judge = true;
 
 	struct goods sthing;
@@ -77,8 +152,9 @@ void Bag::AddGoods(Goods* thing,int num)
 	 }
 }
 
+//在背包中删除物品
 void Bag::AbandonGoods(Goods* thing,int num)
-{//在背包中删除物品
+{
 	bool judge = false;
 	int position;
 	for (int i = 0; i < cargo.size(); i++) {
@@ -89,7 +165,7 @@ void Bag::AbandonGoods(Goods* thing,int num)
 			}
 			if ((cargo[i].num-num)>0){
 				cargo[i].num-=num;
-				this->ReturNum(thing);
+				this->ReturnNum(thing);
 			}
 			if ((cargo[i].num - num) < 0) {
 				cout << "背包中不存在这么多的物品";
@@ -98,45 +174,48 @@ void Bag::AbandonGoods(Goods* thing,int num)
 	}
 
 	if (judge) {
-		this->ReturNum(thing);
+		this->ReturnNum(thing);
 
 		cargo.erase(cargo.begin() + position);
 	}
 }
 
-
-void Bag::ReturNum(Goods* thing)
-{//返回在背包中该物品的剩余情况
+//返回在背包中该物品的剩余情况
+void Bag::ReturnNum(Goods* thing)
+{
 	bool judge = false;
 
 	for (int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->name == thing->name) {
-			judge = true;
 			if (cargo[i].num != 0) {
 				cout << thing->name<<"还剩余" << cargo[i].num << "件";
 			}
+			else {
+				judge = true;
+			}
 		}
 	}
-
 	if (judge) {
 		cout << thing->name << "已不存在";
 	}
+
 }
 
+//装备背包中的装备
 void Bag::Equip(Goods* thing)
-{//装备背包中的装备
+{
 	if (thing->attribute == 1)
 	{
 		cout << "装备了" << thing->name<<endl;
 
 		if (equipment[thing->location] == NULL) {
-			equipment[thing->location]->copy(thing);
+			equipment[thing->location]->Copy(thing);
 		}
 		else
 		{
 			this->AddGoods(equipment[thing->location]);
 			cout << "卸下了" << equipment[thing->location]->name;
-			equipment[thing->location]->copy(thing);
+			equipment[thing->location]->Copy(thing);
 		}
 	}
 	
@@ -144,24 +223,27 @@ void Bag::Equip(Goods* thing)
 
 }
 
+//卸下装备
 void Bag::Unload(Goods* thing)
-{//卸下装备
+{
 	this->AddGoods(equipment[thing->location]);
 	equipment[thing->location] = NULL;
 	cout << "将" << thing->name << "卸下";
 }
 
 
+//出售背包中的物品
 void Bag::Sell(Goods* thing, int num)
-{//出售背包中的物品
+{
 	money +=(thing->cost)*num;
-	this->AbandonGoods(thing);
+	this->AbandonGoods(thing,num);
 	cout << "你出售了" << thing->name << " ×" << num << endl;
 	cout<< ", 获得了" << (thing->cost) * num << "元";
 }
 
+//购买物品
 void Bag::Purchase(Goods* thing,int num)
-{//购买物品
+{
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
 		cout << "你的余额为：" << money;
@@ -172,13 +254,13 @@ void Bag::Purchase(Goods* thing,int num)
 	}
 }
 
-
+//在背包中使用消耗品
 void Bag::UsingGoods(Goods* thing)
-{//在背包中使用消耗品
+{
 	if (thing->attribute == 0) {
 		this->AbandonGoods(thing);
 		cout << "你使用了" << thing->name ;
-		this->ReturNum(thing);
+		this->ReturnNum(thing);
 		if (IfZero(thing->addHP)) {}
 		else {
 			cout << "你的HP增加了" << thing->addHP << "点";
@@ -189,3 +271,66 @@ void Bag::UsingGoods(Goods* thing)
 		}
 	}
 }
+
+
+//输出技能列表
+void SkillBar::Print()
+{
+	if (list.size() == 0) {
+		cout << "还未学会技能";
+	}
+	else {
+		cout << "你已学会技能：";
+		for (int i = 0; i < list.size(); i++) {
+			cout << i+1<<". "<<list[i]->name<<" 消耗MP："<<list[i]->MPcost;
+		}
+	}
+}
+
+//学习技能
+void SkillBar::LearnSkill(Skill* ability)
+{
+	this->list.push_back(ability);
+
+}
+
+//Skill的构造函数
+Skill::Skill()
+{
+	name = " ";
+	description = " ";
+	MPcost = 0;
+	damage = " ";
+	critRate = 0;
+	accuracyRate = 0;
+}
+
+//Skill的构造函数
+Skill::Skill(string name, string description, short MPcost, string damage, float critRate, float accuracyRate)
+{
+	this->name = name;
+	this->description = description;
+	this->MPcost = MPcost;
+	this->damage = damage;
+	this->critRate = critRate;
+	this->accuracyRate = accuracyRate;
+}
+
+//复制技能
+void Skill::Copy(Skill* ability)
+{
+	this->name = ability->name;
+	this->description = ability->description;
+	this->MPcost = ability->MPcost;
+	this->damage = ability->damage;
+	this->critRate = ability->critRate;
+	this->accuracyRate = ability->accuracyRate;
+}
+
+//关于技能的详细描述
+void Skill::PrintDescription()
+{
+	cout << this->description;
+}
+
+
