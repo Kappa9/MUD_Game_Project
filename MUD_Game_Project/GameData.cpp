@@ -430,20 +430,20 @@ void InteractSystem::PrintMap() {
 
 
 //读取文件中的场景信息
-void Place::readPlaceInformation()
+void Spot::readSpotInformation()
 {
 
 }
 
 
 //输出场景信息
-void Place::printPlaceInformation() {
-	cout << "你到达了" << placeName << "，" << placeDescription << "。" << endl;
+void Spot::printSpotInformation() {
+	cout << "你到达了" << spotName << "，" << spotDescription << "。" << endl;
 	}
 
 
 //读取文件信息后输出NPC信息
-void Place::printNPCs()
+void Spot::printNPCs()
 {
 	for (int i = 0; i++; i < NPCnumber) {
 	
@@ -455,6 +455,6 @@ DataList::DataList() {
 
 
 //待对接，读地图对话脚本(enterScript)
-void Place::OnEnterPlace() {
+void Spot::OnEnterSpot() {
 	
 }
