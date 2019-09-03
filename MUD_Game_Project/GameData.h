@@ -107,13 +107,15 @@ public:
 };
 
 
-
+//勇者类
 class Hero :public NPC {
 public:
 	Hero();
 	void UsingGoods(int id);                       //使用背包中的消耗品 
 	Bag bag;
 };
+
+
 
 //场景类
 class Spot {
@@ -124,15 +126,17 @@ public:
 	string spotDescription;           //场景描述
 
 
-	void readSoptInformation();                 //读取场景信息
+	void readSpotInformation();                 //读取场景信息
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
+	void OnEnterSpot();                        //待对接，读地图对话脚本(enterScript)
 
 
-	vector<NPC*>list;                 //包含场景中存在的NPC
+	vector<NPC*>NPClist;                 //包含场景中存在的NPC
 	vector<int>nearSpotNumber;        //包含临近场景的编号
 
 };
+
 
 //数据列表
 class DataList {
@@ -144,6 +148,8 @@ public:
 	static vector<Spot> spotList;
 	static array<short, 100> trigger;
 };
+
+
 //交互系统
 class InteractSystem
 {

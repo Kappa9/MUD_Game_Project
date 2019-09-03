@@ -415,6 +415,7 @@ int InteractSystem::GetUserInput() {
 	command[0] = _getch();
 	return atoi(command);
 }
+
 //用户输入数字选项，maxNum(最大为10)为选项数，返回选项编号
 int InteractSystem::UserInput(int maxNum) {
 	int n = -1;
@@ -424,6 +425,7 @@ int InteractSystem::UserInput(int maxNum) {
 	}
 	return n;
 }
+
 void InteractSystem::PrintLog(string message) {
 	SetConsoleTextAttribute(handle, 15 | 0);
 	cout << message << endl << endl;
@@ -431,15 +433,22 @@ void InteractSystem::PrintLog(string message) {
 void InteractSystem::PrintMap() {
 
 }
-void Spot::readSoptInformation()
+
+
+//读取文件中的场景信息
+void Spot::readSpotInformation()
 {
 
 }
 
+
+//输出场景信息
 void Spot::printSpotInformation() {
-		cout << "你到达了" << spotName << "，" << "spotDescription";
+	cout << "你到达了" << spotName << "，" << spotDescription << "。" << endl;
 	}
 
+
+//读取文件信息后输出NPC信息
 void Spot::printNPCs()
 {
 	for (int i = 0; i < NPCnumber; i++) {
@@ -450,3 +459,8 @@ DataList::DataList() {
 	for (int i : trigger) trigger[i] = 0;
 }
 
+
+//待对接，读地图对话脚本(enterScript)
+void Spot::OnEnterSpot() {
+	
+}
