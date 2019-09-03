@@ -45,7 +45,7 @@ public:
 	void Print(int page);                          //描述背包中存在的物品
 	void PrintPart(int i);                         //描述背包中的部分物体
 	void PrintEquipment();                         //描述武器栏中的情况
-	void AddGoods(Goods* thing,int num=1);         //向背包中添加物品
+	void AddGoods(int id,int num=1);               //向背包中添加物品
 	void AbandonGoods(int id, int num = 1);        //删除背包中存在的物品
 	void AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品 
 	void ReturnNum(Goods* thing);                  //返回在背包中该物品的剩余情况
@@ -91,7 +91,7 @@ public:
 class NPC {
 public:
 	int id;
-	string name = "";      //NPC名称 
+	string name = "";          //NPC名称 
 	int HP = 0;                //血量
 	int HPmax = 0;             //初始血量
 	int MP = 0;                //魔法值
@@ -111,11 +111,20 @@ public:
 class Hero :public NPC {
 public:
 	Hero();
+	int level;                                     //等级
+	bool LevelUp();								   //升级
 	void UsingGoods(int id);                       //使用背包中的消耗品 
 	Bag bag;
 };
 
 
+class store {
+public:
+	store();                                //构造函数
+	void AddGoodsId(int id);                //添加物品的ID
+	void Purchase(Hero* player, int id);    //购买物品
+	vector<int>goodsIdList;
+};
 
 //场景类
 class Spot {
@@ -129,11 +138,11 @@ public:
 	void readSpotInformation();                 //读取场景信息
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
-	void OnEnterSpot();                        //待对接，读地图对话脚本(enterScript)
+	void OnEnterSpot();                         //待对接，读地图对话脚本(enterScript)
 
 
-	vector<NPC*>NPClist;                 //包含场景中存在的NPC
-	vector<int>nearSpotNumber;        //包含临近场景的编号
+	vector<int>NPCIdList;                 //包含场景中存在的NPC
+	vector<int>nearSpotNumber;            //包含临近场景的编号
 
 };
 
