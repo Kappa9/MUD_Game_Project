@@ -345,9 +345,7 @@ void NPC::ShowNPCState()
 	cout << "（生命值:" << this->HP << "/" << this->HPmax;
 	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
 }
-void Place::OnEnterPlace() {
-	//待对接，读地图对话脚本(enterScript)
-}
+
 InteractSystem::InteractSystem() {
 	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }
@@ -357,6 +355,7 @@ int InteractSystem::GetUserInput() {
 	command[0] = _getch();
 	return atoi(command);
 }
+
 //用户输入数字选项，maxNum(最大为10)为选项数，返回选项编号
 int InteractSystem::GetUserInput(int maxNum) {
 	int n = -1;
@@ -366,6 +365,7 @@ int InteractSystem::GetUserInput(int maxNum) {
 	}
 	return n;
 }
+
 void InteractSystem::PrintLog(string message) {
 	SetConsoleTextAttribute(handle, 15 | 0);
 	cout << message << endl << endl;
@@ -373,20 +373,32 @@ void InteractSystem::PrintLog(string message) {
 void InteractSystem::PrintMap() {
 
 }
-void Spot::readSoptInformation()
+
+
+//读取文件中的场景信息
+void Place::readPlaceInformation()
 {
 
 }
 
-void Spot::printSpotInformation() {
-		cout << "你到达了" << spotName << "，" << "spotDescription";
+
+//输出场景信息
+void Place::printPlaceInformation() {
+	cout << "你到达了" << placeName << "，" << placeDescription << "。" << endl;
 	}
 
-void Spot::printNPCs()
+
+//读取文件信息后输出NPC信息
+void Place::printNPCs()
 {
 	for (int i = 0; i++; i < NPCnumber) {
-
+	
 	}
 }
 
 
+
+//待对接，读地图对话脚本(enterScript)
+void Place::OnEnterPlace() {
+	
+}

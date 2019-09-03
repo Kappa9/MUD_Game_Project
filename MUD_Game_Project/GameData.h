@@ -90,6 +90,7 @@ public:
 	int defense = 0;           //防御
 	int talkingScript;
 	SkillBar skillList;
+	void ShowNPCState();
 };
 
 class SkillBar {
@@ -112,21 +113,22 @@ public:
 	Bag bag;
 };
 //场景类
-class Spot {
+class Place {
 public:
-	int spotNumber;                   //场景编号
-	int NPCnumber;                    //NPC数量
-	string spotName;                  //场景名称
-	string spotDescription;           //场景描述
+	int placeNumber;                   //场景编号
+	int NPCnumber;                     //NPC数量
+	string placeName;                  //场景名称
+	string placeDescription;           //场景描述
 
 
-	void readSoptInformation();                 //读取场景信息
-	void printSpotInformation();                 //输出场景信息
+	void readPlaceInformation();                 //读取场景信息
+	void printPlaceInformation();                //输出场景信息
 	void printNPCs();                            //输出场景中所有NPC的信息
+	void OnEnterPlace();                         //读地图对话脚本
 
 
 	vector<NPC*>list;                 //包含场景中存在的NPC
-	vector<int>nearSpotNumber;        //包含临近场景的编号
+	vector<int>nearPlaceNumber;        //包含临近场景的编号
 
 };
 class InteractSystem
