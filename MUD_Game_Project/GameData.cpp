@@ -152,6 +152,33 @@ void Bag::AddGoods(Goods* thing,int num)
 	 }
 }
 
+//删除背包中的物品
+void Bag::AbandonGoods(int id, int num)
+{
+	bool judge = false;
+	int position;
+	for (int i = 0; i < cargo.size(); i++) {
+		if (cargo[i].thing->index == id) {
+			if ((cargo[i].num - num) == 0) {
+				judge = true;
+				position = i;
+			}
+			if ((cargo[i].num - num) > 0) {
+				cargo[i].num -= num;
+				this->ReturnNum(cargo[i].thing);
+			}
+			if ((cargo[i].num - num) < 0) {
+				cout << "背包中不存在这么多的物品";
+			}
+		}
+	}
+	if (judge) {
+		this->ReturnNum(cargo[position].thing);
+
+		cargo.erase(cargo.begin() + position);
+	}
+}
+
 //在背包中删除物品
 void Bag::AbandonGoods(Goods* thing,int num)
 {
@@ -254,23 +281,12 @@ void Bag::Purchase(Goods* thing,int num)
 	}
 }
 
-//在背包中使用消耗品
-void Bag::UsingGoods(Goods* thing)
+//返回编号
+int Bag::ReturnId(int num)
 {
-	if (thing->attribute == 0) {
-		this->AbandonGoods(thing);
-		cout << "你使用了" << thing->name ;
-		this->ReturnNum(thing);
-		if (thing->addHP == 0) {}
-		else {
-			cout << "你的HP增加了" << thing->addHP << "点";
-		}
-		if (thing->addMP == 0) {}
-		else {
-			cout << "你的MP增加了" << thing->addMP << "点";
-		}
-	}
+	return cargo[num - 1].thing->index;
 }
+
 
 
 //输出技能列表
@@ -283,6 +299,7 @@ void SkillBar::Print()
 		cout << "你已学会技能：";
 		for (int i = 0; i < list.size(); i++) {
 			cout << i+1<<". "<<list[i]->name<<" 消耗MP："<<list[i]->MPcost;
+			cout << endl;
 		}
 	}
 }
@@ -300,17 +317,17 @@ Skill::Skill()
 	name = " ";
 	description = " ";
 	MPcost = 0;
-	damage = " ";
+	damage = 0;
 	critRate = 0;
 	accuracyRate = 0;
 }
 
 //Skill的构造函数
-Skill::Skill(string name, string description, short Mpcost, string damage, float critRate, float accuracyRate)
+Skill::Skill(string name, string description, short MPcost, int damage, float critRate, float accuracyRate)
 {
 	this->name = name;
 	this->description = description;
-	this->MPcost = Mpcost;
+	this->MPcost = MPcost;
 	this->damage = damage;
 	this->critRate = critRate;
 	this->accuracyRate = accuracyRate;
@@ -337,6 +354,43 @@ void Skill::PrintDescription()
 Hero::Hero() {
 	id = 0;
 }
+
+//Hero在背包中使用消耗品
+void Hero::UsingGoods(int id)
+{
+	Goods usingGoods = DataList().goodsList[id];
+	if (usingGoods.attribute == 0) {
+		this->bag.AbandonGoods(id);
+		cout << "你使用了" << usingGoods.name;
+		for (int i = 0; i < bag.cargo.size(); i++) {
+			if (bag.cargo[i].thing->index == id) {
+				bag.ReturnNum(bag.cargo[i].thing);
+			}
+		}
+		if ((DataList().goodsList[id].addHP)==0) {}
+		else {
+			if (DataList().goodsList[id].addHP<=(this->HPmax-this->HP))
+				cout << "你的HP增加了" << DataList().goodsList[id].addHP << "点";
+			else {
+				cout << "你的HP增加了" << this->HPmax - this->HP;
+			}
+		}
+		if ((DataList().goodsList[id].addMP)==0) {}
+		else {
+			if (DataList().goodsList[id].addMP <= (this->MPmax - this->MP)) {
+				cout << "你的MP增加了" << DataList().goodsList[id].addMP << "点";
+			}
+			else {
+				cout << "你的MP增加了" << this->MPmax - this->MP;
+			}
+		}
+	}
+	else {
+		cout << "选择的物品无法使用";
+	}
+}
+
+
 
 //显示某角色的状态
 void NPC::ShowNPCState()
