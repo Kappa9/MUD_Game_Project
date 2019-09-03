@@ -400,7 +400,7 @@ void NPC::ShowNPCState()
 	cout << "Ä§·¨Öµ" << this->MP << "/" << this->MPmax << ")";
 }
 
-vector<Goods> DataList::goodList(0);
+vector<Goods> DataList::goodsList(0);
 vector<Skill> DataList::skillList(0);
 vector<NPC> DataList::npcList(0);
 vector<Spot> DataList::spotList(0);

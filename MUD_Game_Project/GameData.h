@@ -74,7 +74,7 @@ public:
 	int id;                    //技能编号
 
 	Skill();                //
-	Skill(string name, string description, short Mpcost, string damage, float critRate, float accuracyRate);
+	Skill(string name, string description, short Mpcost, int damage, float critRate, float accuracyRate);
 	                  
 	void Copy(Skill* ability); //复制技能
 	void PrintDescription();   //关于技能的详细描述
