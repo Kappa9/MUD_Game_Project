@@ -45,13 +45,14 @@ public:
 	void PrintPart(int i);                         //描述背包中的部分物体
 	void PrintEquipment();                         //描述武器栏中的情况
 	void AddGoods(Goods* thing,int num=1);         //向背包中添加物品
-	void AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品
-	void UsingGoods(Goods* thing);                 //使用背包中的消耗品 
+	void AbandonGoods(int id, int num = 1);        //删除背包中存在的物品
+	void AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品 
 	void ReturnNum(Goods* thing);                  //返回在背包中该物品的剩余情况
 	void Equip(Goods* thing);                      //装备背包中的装备 
 	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
 	void Sell(Goods* thing, int num=1);            //出售背包中的物品
 	void Purchase(Goods* thing, int num=1);        //购买物品 
+	int ReturnId(int num);                         //返回ID
 
 	int money;
 	vector <goods> cargo;
@@ -69,12 +70,21 @@ public:
 	int damage;			       //伤害
 	float  critRate;           //暴击率
 	float  accuracyRate;       //命中率
+	int id;                    //技能编号
 
 	Skill() ;                //
 	Skill(string name=" ", string description=" ", short Mpcost=0, int damage=0, float critRate=0, float accuracyRate=0) ;
 	                  
 	void Copy(Skill* ability); //复制技能
 	void PrintDescription();   //关于技能的详细描述
+};
+
+class SkillBar {
+public:
+	void Print();				             //输出技能列表
+	void LearnSkill(Skill* ability);         //学习技能
+
+	vector<Skill*>list;
 };
 
 class NPC {
@@ -88,28 +98,19 @@ public:
 	int speed = 0;             //速度
 	int attack = 0;            //攻击
 	int defense = 0;           //防御
+	int experience=0;          //经验
+	int money = 0;             //金钱
 	int talkingScript;
-	SkillBar skillList;
+	SkillBar skillBar;
 	void ShowNPCState();
 };
 
-class SkillBar {
-public:
-	void Print();				             //输出技能列表
-	void LearnSkill(Skill* ability);         //学习技能
 
-	vector<Skill*>list;
-};
 
-bool IfZero(int num) {
-	if (num == 0)
-		return true;
-	else
-		return false;
-}
-class Hero :NPC {
+class Hero :public NPC {
 public:
 	Hero();
+	void UsingGoods(int id);                       //使用背包中的消耗品 
 	Bag bag;
 };
 //场景类
@@ -122,24 +123,26 @@ public:
 
 
 	void readSoptInformation();                 //读取场景信息
-	void printSpotInformation();                 //输出场景信息
-	void printNPCs();                            //输出场景中所有NPC的信息
+	void printSpotInformation();                //输出场景信息
+	void printNPCs();                           //输出场景中所有NPC的信息
 
 
 	vector<NPC*>list;                 //包含场景中存在的NPC
 	vector<int>nearSpotNumber;        //包含临近场景的编号
 
 };
-static class DataList {
+//数据列表
+class DataList {
 public:
 	DataList();
-	static vector<Goods> goodList;
+	static vector<Goods> goodsList;
 	static vector<Skill> skillList;
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
 	static short trigger[100];
 	
 };
+//交互系统
 class InteractSystem
 {
 public:
