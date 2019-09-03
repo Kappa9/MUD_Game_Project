@@ -1,4 +1,4 @@
-#include "GameData.h";
+#include "GameData.h"
 
 //复制物品
 void Goods::Copy(Goods* thing)
@@ -90,7 +90,7 @@ void Bag::PrintPart(int i)
 {
 	int num = 0;
 	cout << "背包内有：" << endl;
-	for (i ; i < cargo.size(); i++) {
+	for (; i < cargo.size(); i++) {
 		num++;
 		cout << num << ". " << cargo[i].thing->name << " ×" << cargo[i].num << " ";
 		if (num == 7) {
@@ -140,7 +140,7 @@ void Bag::AddGoods(Goods* thing,int num)
 	struct goods sthing;
 	sthing.thing = thing;
 
-	for (int i = 0; i < cargo.size(); i++) {
+	for (unsigned int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->name == thing->name) {
 			cargo[i].num+=num;
 			judge = false;
@@ -261,11 +261,11 @@ void Bag::UsingGoods(Goods* thing)
 		this->AbandonGoods(thing);
 		cout << "你使用了" << thing->name ;
 		this->ReturnNum(thing);
-		if (IfZero(thing->addHP)) {}
+		if (thing->addHP == 0) {}
 		else {
 			cout << "你的HP增加了" << thing->addHP << "点";
 		}
-		if (IfZero(thing->addMP)) {}
+		if (thing->addMP == 0) {}
 		else {
 			cout << "你的MP增加了" << thing->addMP << "点";
 		}
@@ -306,11 +306,11 @@ Skill::Skill()
 }
 
 //Skill的构造函数
-Skill::Skill(string name, string description, short MPcost, string damage, float critRate, float accuracyRate)
+Skill::Skill(string name, string description, short Mpcost, string damage, float critRate, float accuracyRate)
 {
 	this->name = name;
 	this->description = description;
-	this->MPcost = MPcost;
+	this->MPcost = Mpcost;
 	this->damage = damage;
 	this->critRate = critRate;
 	this->accuracyRate = accuracyRate;
@@ -345,6 +345,13 @@ void NPC::ShowNPCState()
 	cout << "（生命值:" << this->HP << "/" << this->HPmax;
 	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
 }
+
+vector<Goods> DataList::goodList(0);
+vector<Skill> DataList::skillList(0);
+vector<NPC> DataList::npcList(0);
+vector<Spot> DataList::spotList(0);
+array<short, 100> DataList::trigger = { 0 };
+
 InteractSystem::InteractSystem() {
 	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }
@@ -355,7 +362,7 @@ int InteractSystem::GetUserInput() {
 	return atoi(command);
 }
 //用户输入数字选项，maxNum(最大为10)为选项数，返回选项编号
-int InteractSystem::GetUserInput(int maxNum) {
+int InteractSystem::UserInput(int maxNum) {
 	int n = -1;
 	while (n <= 0 || n > maxNum) {
 		n = GetUserInput();
@@ -381,7 +388,7 @@ void Spot::printSpotInformation() {
 
 void Spot::printNPCs()
 {
-	for (int i = 0; i++; i < NPCnumber) {
+	for (int i = 0; i < NPCnumber; i++) {
 
 	}
 }

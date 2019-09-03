@@ -2,6 +2,7 @@
 #include<iostream>
 #include<string>
 #include <vector>
+#include <array>
 #include <list>
 #include<conio.h>
 #include<Windows.h>
@@ -70,17 +71,25 @@ public:
 	float  critRate;           //暴击率
 	float  accuracyRate;       //命中率
 
-	Skill() ;                //
-	Skill(string name=" ", string description=" ", short Mpcost=0, string damage=" ", float critRate=0, float accuracyRate=0) ;
+	Skill();                //
+	Skill(string name, string description, short Mpcost, string damage, float critRate, float accuracyRate);
 	                  
 	void Copy(Skill* ability); //复制技能
 	void PrintDescription();   //关于技能的详细描述
 };
 
+class SkillBar {
+public:
+	void Print();				             //输出技能列表
+	void LearnSkill(Skill* ability);         //学习技能
+
+	vector<Skill*>list;
+};
+
 class NPC {
 public:
 	int id;
-	string name = NULL;        //NPC名称 
+	string name = "";      //NPC名称 
 	int HP = 0;                //血量
 	int HPmax = 0;             //初始血量
 	int MP = 0;                //魔法值
@@ -93,21 +102,7 @@ public:
 	void ShowNPCState();
 };
 
-class SkillBar {
-public:
-	void Print();				             //输出技能列表
-	void LearnSkill(Skill* ability);         //学习技能
-
-	vector<Skill*>list;
-};
-
-bool IfZero(int num) {
-	if (num == 0)
-		return true;
-	else
-		return false;
-}
-class Hero :NPC {
+class Hero :public NPC {
 public:
 	Hero();
 	Bag bag;
@@ -130,22 +125,21 @@ public:
 	vector<int>nearSpotNumber;        //包含临近场景的编号
 
 };
-static class DataList {
+class DataList {
 public:
 	DataList();
 	static vector<Goods> goodList;
 	static vector<Skill> skillList;
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
-	static short trigger[100];
-	
+	static array<short, 100> trigger;
 };
 class InteractSystem
 {
 public:
 	InteractSystem();
 	int GetUserInput();
-	int GetUserInput(int maxNum);
+	int UserInput(int maxNum);
 	void PrintLog(string message);
 	void PrintMap();
 private:

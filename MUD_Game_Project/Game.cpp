@@ -1,4 +1,14 @@
-#include "Game.h";
+#include "Game.h"
+int main()
+{
+	cout << "Hello World!";
+	GameThread game;
+
+
+
+
+	return 0;
+}
 
 //Fight的构造函数
 Fight::Fight(NPC* player, NPC* enemy)
@@ -18,7 +28,7 @@ NPC* Fight::DecideWhoAct()
 	if (player->speed >= enemy->speed) {
 		return player;
 	}
-	if (player->speed < enemy->speed) {
+	else {
 		return enemy;
 	}
 }
@@ -73,8 +83,8 @@ vector<string> GameThread::SplitString(string str) {
 	vector<string> split;
 	string::size_type pos;
 	str += ",";
-	int size = str.size();
-	for (int i = 0; i < size; i++) {
+	unsigned int size = str.size();
+	for (unsigned int i = 0; i < size; i++) {
 		pos = str.find(",", i);
 		if (pos < size) {
 			string s = str.substr(i, pos - i);
