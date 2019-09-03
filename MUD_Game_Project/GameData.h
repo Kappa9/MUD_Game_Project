@@ -148,7 +148,41 @@ public:
 	static vector<Spot> spotList;
 	static array<short, 100> trigger;
 };
+class Speak {
+public:
+	int Choose;
+	bool a=true;
+	string Speaklist = "";
+	void Judge() {
+		if (Speaklist == "#END") {
+			//结束对话
+		}
+		if (Speaklist == "#DECISION") {
+			//开始选择
+			a = false;
+			cin >> Choose;           //玩家输入的选择
+		}
+		if (Speaklist == "#DECISIONEND") {
+			//结束选择
+			a = true;
+		}
+		if (Choose == 1) {
+			Speaklist == "#CASE1";
+			//第一种可能
+		}
+		if (Choose == 2) {
+			Speaklist == "#CASE2";
+			//第二种可能
+		}
+		if ((Choose != 1) || (Choose != 2)) {
+			cout << "error";
+		}
+		if (Speaklist == "#CASEEND") {
+			//可能结束
+		}
+	}
 
+};
 
 //交互系统
 class InteractSystem

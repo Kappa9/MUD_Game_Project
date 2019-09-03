@@ -23,7 +23,6 @@ public:
 	vector<NPC*>list;   //关于回合判定的vector
 };
 
-
 //游戏进程类，处于结构的最顶层
 class GameThread {
 public:
