@@ -133,10 +133,10 @@ void Bag::PrintEquipment()
 
 
 //向背包中添加物品
-void Bag::AddGoods(Goods* thing,int num)
+void Bag::AddGoods(int id,int num)
 {
 	bool judge = true;
-
+	Goods* thing = &DataList::goodsList[id];
 	struct goods sthing;
 	sthing.thing = thing;
 
@@ -240,7 +240,7 @@ void Bag::Equip(Goods* thing)
 		}
 		else
 		{
-			this->AddGoods(equipment[thing->location]);
+			this->AddGoods(equipment[thing->location]->index);
 			cout << "卸下了" << equipment[thing->location]->name;
 			equipment[thing->location]->Copy(thing);
 		}
@@ -253,7 +253,7 @@ void Bag::Equip(Goods* thing)
 //卸下装备
 void Bag::Unload(Goods* thing)
 {
-	this->AddGoods(equipment[thing->location]);
+	this->AddGoods(equipment[thing->location]->index);
 	equipment[thing->location] = NULL;
 	cout << "将" << thing->name << "卸下";
 }
@@ -274,7 +274,7 @@ void Bag::Purchase(Goods* thing,int num)
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
 		cout << "你的余额为：" << money;
-		this->AddGoods(thing,num);
+		this->AddGoods(thing->index,num);
 	}
 	else {
 		cout << "你的余额不足";
@@ -350,9 +350,36 @@ void Skill::PrintDescription()
 	cout << this->description;
 }
 
-
+//Hero构造函数
 Hero::Hero() {
 	id = 0;
+}
+
+//升级
+bool Hero::LevelUp()
+{
+	int num = this->level;
+	if ( this->experience < 10) {
+		this->level = 1;
+	}
+	else if(this->experience<40){
+		this->level = 2;
+	}
+	else if (this->experience>=40&&this->experience<100) {
+		this->level = 3;
+	}
+	else if (this->experience > 100 && this->experience < 200) {
+		this->level = 4;
+	}
+	else if (this->experience >= 200) {
+		this->level = 5;
+	}
+	if (level > num) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 //Hero在背包中使用消耗品
@@ -455,6 +482,7 @@ void Spot::printNPCs()
 
 	}
 }
+
 DataList::DataList() {
 	for (int i : trigger) trigger[i] = 0;
 }
@@ -463,4 +491,28 @@ DataList::DataList() {
 //待对接，读地图对话脚本(enterScript)
 void Spot::OnEnterSpot() {
 	
+}
+
+//构造函数
+store::store()
+{
+}
+
+//添加物品的ID
+void store::AddGoodsId(int id)
+{
+	goodsIdList.push_back(id);
+}
+
+//购买物品
+void store::Purchase(Hero* player, int id)
+{
+	if (player->bag.money >= DataList::goodsList[id].cost) { 
+		player->bag.AddGoods(DataList::goodsList[id].index);
+		player->bag.money -= DataList::goodsList[id].cost;
+		cout << "你购买了" << DataList::goodsList[id].name << endl;
+	}
+	else {
+		cout << "你的金币不足" << endl;
+	}
 }

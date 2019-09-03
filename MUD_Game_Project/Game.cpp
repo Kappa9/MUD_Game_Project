@@ -53,25 +53,42 @@ NPC* Fight::DecideWhoAct()
 //技能造成伤害(包括普通攻击）
 void Fight::UseSkillAttrck(NPC* attacker,NPC* defender,int id)
 {
-	if (id != 0) {
-		int MPcost;
-		MPcost = DataList().skillList[id].MPcost;
-		if (attacker->MP < MPcost) {
-			cout << "魔法值不足";
-		}
-		else {
-			int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
-			attacker->MP -= MPcost;
-			defender->HP -= damage;
-			cout <<attacker->name<< "使用了" << DataList().skillList[id].name;
-			cout << endl << "对" << defender->name << "造成了" << damage << "点伤害";
-		}
+	int MPcost;
+	MPcost = DataList().skillList[id].MPcost;
+	if (attacker->MP < MPcost) {
+		cout << "魔法值不足";
 	}
 	else {
-		int damage = 5 * attacker->attack - defender->defense * 2;
-		defender->HP -= damage;
-		cout <<attacker->name<< "攻击了" << defender->name;
-		cout << "对其造成了" << damage << "点伤害";
+		srand((int)time(0));
+		if (random(100) <= DataList::skillList[id].accuracyRate) {
+			if (random(100) <= DataList::skillList[id].critRate) {
+				int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
+				attacker->MP -= MPcost;
+				defender->HP -= 2 * damage;
+				if (id != 0) {
+					cout << attacker->name << "使用了" << DataList().skillList[id].name << "并产生了暴击";
+				}
+				else {
+					cout << "你攻击了" << defender->name << "，并产生了暴击";
+				}
+				cout << endl << "对" << defender->name << "造成了" << 2 * damage << "点伤害";
+			}
+			else {
+				int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
+				attacker->MP -= MPcost;
+				defender->HP -= damage;
+				if (id != 0) {
+					cout << attacker->name << "使用了" << DataList().skillList[id].name;
+				}
+				else {
+					cout << "你攻击了" << defender->name;
+				}
+				cout << endl << "对" << defender->name << "造成了" << damage << "点伤害";
+			}
+		}
+		else {
+			cout << "你的攻击被闪避了";
+		}
 	}
 }
 
@@ -213,6 +230,13 @@ void Fight::Fighting()
 		}
 	}
 	Victory(player, enemy);
+	//查看等级提升
+	if (player->LevelUp()) {
+		cout << "恭喜你的等级提升到"<<player->level<<"级";
+	}
+	else {
+	}
+	
 }
 
 GameThread::GameThread(){

@@ -4,6 +4,11 @@
 #include<string>
 #include<vector>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
+#define random(x) rand()%(x)
+
+
 class Fight {
 public:
 	Fight(Hero* player, NPC* enemy);          //¹¹Ôìº¯Êý
