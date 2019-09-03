@@ -113,6 +113,7 @@ public:
 	void UsingGoods(int id);                       //使用背包中的消耗品 
 	Bag bag;
 };
+
 //场景类
 class Spot {
 public:
@@ -131,6 +132,7 @@ public:
 	vector<int>nearSpotNumber;        //包含临近场景的编号
 
 };
+
 //数据列表
 class DataList {
 public:
