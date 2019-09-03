@@ -2,6 +2,7 @@
 #include<iostream>
 #include<string>
 #include <vector>
+#include <array>
 #include <list>
 #include<conio.h>
 #include<Windows.h>
@@ -72,8 +73,8 @@ public:
 	float  accuracyRate;       //命中率
 	int id;                    //技能编号
 
-	Skill() ;                //
-	Skill(string name=" ", string description=" ", short Mpcost=0, int damage=0, float critRate=0, float accuracyRate=0) ;
+	Skill();                //
+	Skill(string name, string description, short Mpcost, string damage, float critRate, float accuracyRate);
 	                  
 	void Copy(Skill* ability); //复制技能
 	void PrintDescription();   //关于技能的详细描述
@@ -90,7 +91,7 @@ public:
 class NPC {
 public:
 	int id;
-	string name = NULL;        //NPC名称 
+	string name = "";      //NPC名称 
 	int HP = 0;                //血量
 	int HPmax = 0;             //初始血量
 	int MP = 0;                //魔法值
@@ -145,8 +146,7 @@ public:
 	static vector<Skill> skillList;
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
-	static short trigger[100];
-	
+	static array<short, 100> trigger;
 };
 
 
@@ -156,7 +156,7 @@ class InteractSystem
 public:
 	InteractSystem();
 	int GetUserInput();
-	int GetUserInput(int maxNum);
+	int UserInput(int maxNum);
 	void PrintLog(string message);
 	void PrintMap();
 private:
