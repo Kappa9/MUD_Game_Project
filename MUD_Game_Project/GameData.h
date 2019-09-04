@@ -10,7 +10,9 @@ using namespace std;
 
 class Goods {
 public:
-	Goods(vector<string>list);//物品的构造函数            
+	Goods();
+	Goods(vector<string>list);//物品的构造函数   
+
 	string name;              //名称
 	string description;       //描述
 	int attribute;            //属性    0-可消耗，1-装备，2-学习
@@ -105,6 +107,7 @@ public:
 	int money = 0;             //金钱
 	int talkingScript;         //
 
+	NPC();
 	NPC(vector<string>list);  //构造函数
 
 	SkillBar skillBar;
@@ -139,7 +142,7 @@ public:
 	string spotName;                  //场景名称
 	string spotDescription;           //场景描述
 
-
+	Spot();
 	Spot(vector<string>list);                   //构造函数
 
 	void readSpotInformation();                 //读取场景信息
