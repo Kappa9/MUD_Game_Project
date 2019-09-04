@@ -10,19 +10,20 @@ using namespace std;
 
 class Goods {
 public:
-	string name;            //名称
-	string description;     //描述
-	int attribute;          //属性    0-可消耗，1-装备，2-学习
-	int addAtract;          //增加攻击
-	int addDefense;         //增加防御
-	int addHP;              //回复血量
-	int addMaxHP;           //增加血量上限
-	int addMP;              //回复蓝量
-	int addMaxMP;           //增加蓝量上限
-	int addSpeed;           //增加速度
-	int index;              //编号
-	int location;           //装备位置  0-身，1-手，2-足, 3-非装备
-	int cost;               //价值
+	Goods(vector<string>list);//物品的构造函数            
+	string name;              //名称
+	string description;       //描述
+	int attribute;            //属性    0-可消耗，1-装备，2-学习
+	int addAtract;            //增加攻击
+	int addDefense;           //增加防御
+	int addHP;                //回复血量
+	int addMaxHP;             //增加血量上限
+	int addMP;                //回复蓝量
+	int addMaxMP;             //增加蓝量上限
+	int addSpeed;             //增加速度
+	int index;                //编号
+	int location;             //装备位置  0-身，1-手，2-足, 3-非装备
+	int cost;                 //价值
 
 	void Copy(Goods* thing);//复制物品
 	void PrintDescription();//输出物品的详细描述
@@ -73,7 +74,8 @@ public:
 	float  accuracyRate;       //命中率
 	int id;                    //技能编号
 
-	Skill();                //
+	Skill();                   //构造函数
+	Skill(vector<string>list);
 	Skill(string name, string description, short Mpcost, int damage, float critRate, float accuracyRate);
 	                  
 	void Copy(Skill* ability); //复制技能
@@ -101,7 +103,10 @@ public:
 	int defense = 0;           //防御
 	int experience=0;          //经验
 	int money = 0;             //金钱
-	int talkingScript;
+	int talkingScript;         //
+
+	NPC(vector<string>list);  //构造函数
+
 	SkillBar skillBar;
 	void ShowNPCState();
 };
@@ -134,6 +139,8 @@ public:
 	string spotName;                  //场景名称
 	string spotDescription;           //场景描述
 
+
+	Spot(vector<string>list);                   //构造函数
 
 	void readSpotInformation();                 //读取场景信息
 	void printSpotInformation();                //输出场景信息

@@ -239,6 +239,7 @@ void Fight::Fighting()
 	
 }
 
+
 GameThread::GameThread(){
 	cout << endl << "Game Started." << endl;
 }
@@ -255,6 +256,8 @@ vector<string> GameThread::ReadFile(string fileName) {
 		list.push_back(tmp);
 	return list;
 }
+
+//字符串分隔
 vector<string> GameThread::SplitString(string str) {
 	vector<string> split;
 	string::size_type pos;
@@ -269,17 +272,55 @@ vector<string> GameThread::SplitString(string str) {
 	}
 	return split;
 }
+
+//得到物品的数据
 void GameThread::GetItemData(vector<string> list) {
+	//逐个物品读入
 	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
 		vector<string> split(SplitString(str));
-		Goods i;
-		//
+		Goods i(split);
 		DataList::goodsList.push_back(i);
 	}
 }
+
+//得到技能的数据
+void GameThread::GetSkillData(vector<string> list)
+{
+	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
+		vector<string> split(SplitString(str));
+		Skill i(split);
+		DataList::skillList.push_back(i);
+	}
+}
+
+void GameThread::GetNPCData(vector<string> list)
+{
+	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
+		vector<string> split(SplitString(str));
+		NPC i(split);
+		DataList::npcList.push_back(i);
+	}
+}
+
+void GameThread::GetSpotData(vector<string> list)
+{
+	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
+		vector<string> split(SplitString(str));
+		Spot i(split);
+		DataList::spotList.push_back(i);
+	}
+}
+
+//储存数据
 void GameThread::SaveGame() {
 
 }
+
+//读取数据
 void GameThread::LoadGame() {
 
 }

@@ -1,5 +1,24 @@
 #include "GameData.h"
 
+Goods::Goods(vector<string> list)
+{
+	if (list.size() == 13) {
+		name = list[0];
+		description = list[1];
+		attribute = atoi(list[2].c_str());
+		addAtract = atoi(list[3].c_str());
+		addDefense = atoi(list[4].c_str());
+		addHP = atoi(list[5].c_str());
+		addMaxHP = atoi(list[6].c_str);
+		addMP = atoi(list[7].c_str());
+		addMaxMP = atoi(list[8].c_str());
+		addSpeed = atoi(list[9].c_str());
+		index = atoi(list[10].c_str());
+		location = atoi(list[11].c_str());
+		cost == atoi(list[12].c_str());
+	}
+}
+
 //复制物品
 void Goods::Copy(Goods* thing)
 {
@@ -322,6 +341,20 @@ Skill::Skill()
 	accuracyRate = 0;
 }
 
+//利用string类型的vector的构造函数
+Skill::Skill(vector<string> list)
+{
+	if (list.size() == 7) {
+		name = list[0];
+		description = list[1];
+		MPcost = atoi(list[2].c_str);
+		damage = atoi(list[3].c_str);
+		critRate = (float)atoi(list[4].c_str);
+		accuracyRate = (float)atoi(list[5].c_str);
+		id = atoi(list[6].c_str);
+	}
+}
+
 //Skill的构造函数
 Skill::Skill(string name, string description, short MPcost, int damage, float critRate, float accuracyRate)
 {
@@ -419,6 +452,24 @@ void Hero::UsingGoods(int id)
 
 
 
+NPC::NPC(vector<string> list)
+{
+	if (list.size() == 12) {
+		id = atoi(list[0].c_str);
+		name = list[1];
+		HP = atoi(list[2].c_str);
+		HPmax = atoi(list[3].c_str);
+		MP = atoi(list[4].c_str);
+		MPmax = atoi(list[5].c_str);
+		speed = atoi(list[6].c_str);
+		attack = atoi(list[7].c_str);
+		defense = atoi(list[8].c_str);
+		experience = atoi(list[9].c_str);
+		money = atoi(list[10].c_str);
+		talkingScript== atoi(list[11].c_str);
+	}
+}
+
 //显示某角色的状态
 void NPC::ShowNPCState()
 {
@@ -514,5 +565,15 @@ void store::Purchase(Hero* player, int id)
 	}
 	else {
 		cout << "你的金币不足" << endl;
+	}
+}
+
+Spot::Spot(vector<string>list)
+{
+	if (list.size() == 4) {
+		spotNumber = atoi(list[0].c_str);
+		NPCnumber = atoi(list[1].c_str);
+		spotName = list[2];
+		spotDescription = list[3];
 	}
 }
