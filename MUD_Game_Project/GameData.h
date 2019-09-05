@@ -8,6 +8,9 @@
 #include<Windows.h>
 using namespace std;
 
+int GetUserInput();
+int GetUserInput(int min, int max);
+
 class Goods {
 public:
 	Goods();
@@ -149,7 +152,7 @@ public:
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
 	void OnEnterSpot();                         //待对接，读地图对话脚本(enterScript)
-
+	
 
 	vector<int>NPCIdList;                 //包含场景中存在的NPC
 	vector<int>nearSpotNumber;            //包含临近场景的编号
@@ -161,12 +164,14 @@ public:
 class DataList {
 public:
 	DataList();
+	
 	static vector<Goods> goodsList;
 	static vector<Skill> skillList;
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
 	static array<short, 100> trigger;
 };
+
 class Speak {
 public:
 	int Choose;

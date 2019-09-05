@@ -9,6 +9,7 @@
 #define random(x) rand()%(x)
 
 
+
 class Fight {
 public:
 	Fight(Hero* player, NPC* enemy);          //构造函数
@@ -27,6 +28,8 @@ public:
 	NPC* enemy;         //敌人
 	vector<NPC*>list;   //关于回合判定的vector
 };
+
+void ExploreSpot(int spotId);                           //探索场景
 
 //游戏进程类，处于结构的最顶层
 class GameThread {

@@ -10,22 +10,7 @@ int main()
 	return 0;
 }
 
-//输入一个数字
-int GetUserInput() {
-	char str[1];
-	str[0] = getchar();
-	return (int)str[0];
-}
 
-//判定输入正确
-int GetUserInput(int min, int max) {
-	int n = GetUserInput();
-	while (n<min || n>max) {
-		cout << "请输入正确的数字";
-		n = GetUserInput();
-	}
-	return n;
-}
 
 //Fight的构造函数
 Fight::Fight(Hero* player, NPC* enemy)
@@ -322,5 +307,47 @@ void GameThread::SaveGame() {
 
 //读取数据
 void GameThread::LoadGame() {
+
+}
+
+//探索场景
+void ExploreSpot(Hero* hero,int spotId)
+{
+	Spot newSpot = DataList::spotList[spotId];
+	cout << "你来到了" <<newSpot.spotName << endl << newSpot.spotDescription << endl;
+	cout << "你开始慢慢走向前" << endl;
+	cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[0]].name << endl;
+	cout << "你要怎么做"<<endl;
+	int input;
+	//这里的判断要改
+	if (newSpot.spotNumber == 0) {
+		cout << "1. 战斗 2. 偷听 3. 离开";
+		input = GetUserInput(1, 3);
+		if (input == 1) {
+			Fight newFight(hero,&(DataList::npcList[newSpot.NPCIdList[0]]));
+			newFight.Fighting();
+		}
+		else if (input == 2) {
+			//偷听的相关剧情
+		}
+		else if (input == 3) {
+			cout << "你离开了" << newSpot.spotName;
+			//离开
+		}
+
+	}
+	else {
+		cout << "1. 战斗 2. 离开";
+		input = GetUserInput(1, 2);
+		if (input == 1) {
+			Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[0]]));
+			newFight.Fighting();
+		}
+		else if (input == 2) {
+			cout << "你离开了" << newSpot.spotName;
+			//离开
+		}
+	}
+
 
 }

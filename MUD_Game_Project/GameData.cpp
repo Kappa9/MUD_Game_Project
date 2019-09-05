@@ -1,5 +1,22 @@
 #include "GameData.h"
 
+//输入一个数字
+int GetUserInput() {
+	char str[1];
+	str[0] = getchar();
+	return (int)str[0];
+}
+
+//判定输入正确
+int GetUserInput(int min, int max) {
+	int n = GetUserInput();
+	while (n<min || n>max) {
+		cout << "请输入正确的数字";
+		n = GetUserInput();
+	}
+	return n;
+}
+
 Goods::Goods()
 {
 }
@@ -486,6 +503,7 @@ void NPC::ShowNPCState()
 	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
 }
 
+
 vector<Goods> DataList::goodsList(0);
 vector<Skill> DataList::skillList(0);
 vector<NPC> DataList::npcList(0);
@@ -551,6 +569,8 @@ DataList::DataList() {
 void Spot::OnEnterSpot() {
 	
 }
+
+
 
 //构造函数
 store::store()
