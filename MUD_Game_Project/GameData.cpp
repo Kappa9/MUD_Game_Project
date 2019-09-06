@@ -1,18 +1,18 @@
 #include "GameData.h"
 
 //输入一个数字
-int GetUserInput() {
+int GetInput() {
 	char str[1];
 	str[0] = getchar();
 	return (int)str[0];
 }
 
 //判定输入正确
-int GetUserInput(int min, int max) {
-	int n = GetUserInput();
+int GetInput(int min, int max) {
+	int n = GetInput();
 	while (n<min || n>max) {
 		cout << "请输入正确的数字";
-		n = GetUserInput();
+		n = GetInput();
 	}
 	return n;
 }
@@ -528,6 +528,68 @@ int InteractSystem::UserInput(int maxNum) {
 		if (n == 0)n = 10;
 	}
 	return n;
+}
+
+//读文件
+void InteractSystem::Dialog(int id)
+{
+	int input;
+	bool judge = false;//判断是否可读
+	bool judge1 = false;//判断第一个选择是否开启
+	bool judge2 = false;//判断第二个选择是否开启
+	
+	std::ifstream ifile;		
+	ifile.open("file.txt");   //具体文件需要改名字
+	std::string line;
+	while (std::getline(ifile, line)) {
+		//如果有空行 继续循环
+		if (line == "") {
+			continue;
+		}
+		//结束的标志
+		if (line == "#END") {
+			break;  //结束
+		}
+		//到达CASEEND 无法再读出
+		if (line == ("#CASEEND")) {
+			judge = false;
+		}
+		//做出判断
+		if (line == "#DECISION") {
+			input = GetInput(1, 2);
+			if (input == 1) {
+				judge1 = true;
+				judge = false;
+			}
+			else {
+				judge2 = true;
+				judge = false;
+			}
+		}
+
+		//如果为真 读出
+		if (judge) {
+			cout << line<<endl;
+		}
+
+		//结束选择域后 变成可读
+		if (line == ("DECISIONEND")) {
+			judge = false;
+		}
+		//找到对应的选择 变成可读
+		if ((line == ("#CASE1")) && judge1) {
+			judge = true;
+		}
+		//同上
+		if ((line == ("#CASE2")) && judge2) {
+			judge = true;
+		}
+		//找到开始位置
+		if (line == ("#START" + id)) {
+			judge = true;
+		}
+	}
+	ifile.close();
 }
 
 void InteractSystem::PrintLog(string message) {

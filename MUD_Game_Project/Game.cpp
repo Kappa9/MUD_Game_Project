@@ -95,7 +95,7 @@ void Fight::UseSkill(NPC* role)
 		role->skillBar.Print();
 		cout << role->skillBar.list.size() + 2 <<".取消"<< endl << endl;
 
-		int input = GetUserInput(1, num + 2);
+		int input = GetInput(1, num + 2);
 		//取消
 		if (input == num + 2) {
 			
@@ -180,7 +180,7 @@ void Fight::Fighting()
 				player->ShowNPCState();
 				cout << "1.攻击 2.技能 3.物品 4.逃走 ";
 
-				int input = GetUserInput(1, 4);
+				int input = GetInput(1, 4);
 
 				//选择攻击
 				if (input == 1) {
@@ -194,7 +194,7 @@ void Fight::Fighting()
 				else if (input == 3) {
 					player->bag.Print(1);
 					int input;
-					input = GetUserInput(1, player->bag.cargo.size() + 2);
+					input = GetInput(1, player->bag.cargo.size() + 2);
 					//Hero的使用物品 使用RetrunId返回物品的编号
 					player->UsingGoods(player->bag.ReturnId(input));
 				}
@@ -311,43 +311,45 @@ void GameThread::LoadGame() {
 }
 
 //探索场景
-void ExploreSpot(Hero* hero,int spotId)
+void ExploreSpot(Hero* hero, int spotId)
 {
 	Spot newSpot = DataList::spotList[spotId];
-	cout << "你来到了" <<newSpot.spotName << endl << newSpot.spotDescription << endl;
-	cout << "你开始慢慢走向前" << endl;
-	cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[0]].name << endl;
-	cout << "你要怎么做"<<endl;
-	int input;
-	//这里的判断要改
-	if (newSpot.spotNumber == 0) {
-		cout << "1. 战斗 2. 偷听 3. 离开";
-		input = GetUserInput(1, 3);
-		if (input == 1) {
-			Fight newFight(hero,&(DataList::npcList[newSpot.NPCIdList[0]]));
-			newFight.Fighting();
+	cout << "你来到了" << newSpot.spotName << endl << newSpot.spotDescription << endl;
+	for (int i = 0; i < newSpot.NPCnumber; i++) {
+		cout << "你开始慢慢走向前" << endl;
+		cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[i]].name << endl;
+		cout << "你要怎么做" << endl;
+		int input;
+		//这里的判断要改
+		if (newSpot.spotNumber == 0) {
+			cout << "1. 战斗 2. 偷听 3. 离开";
+			input = GetInput(1, 3);
+			if (input == 1) {
+				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
+				newFight.Fighting();
+			}
+			else if (input == 2) {
+				//偷听的相关剧情
+			}
+			else if (input == 3) {
+				cout << "你离开了" << newSpot.spotName;
+				//离开
+			}
+
 		}
-		else if (input == 2) {
-			//偷听的相关剧情
+		else {
+			cout << "1. 战斗 2. 离开";
+			input = GetInput(1, 2);
+			if (input == 1) {
+				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
+				newFight.Fighting();
+			}
+			else if (input == 2) {
+				cout << "你离开了" << newSpot.spotName;
+				//离开
+			}
 		}
-		else if (input == 3) {
-			cout << "你离开了" << newSpot.spotName;
-			//离开
-		}
+
 
 	}
-	else {
-		cout << "1. 战斗 2. 离开";
-		input = GetUserInput(1, 2);
-		if (input == 1) {
-			Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[0]]));
-			newFight.Fighting();
-		}
-		else if (input == 2) {
-			cout << "你离开了" << newSpot.spotName;
-			//离开
-		}
-	}
-
-
 }

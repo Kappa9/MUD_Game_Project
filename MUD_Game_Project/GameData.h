@@ -6,10 +6,11 @@
 #include <list>
 #include<conio.h>
 #include<Windows.h>
+#include<fstream>
 using namespace std;
 
-int GetUserInput();
-int GetUserInput(int min, int max);
+int GetInput();
+int GetInput(int min, int max);
 
 class Goods {
 public:
@@ -215,6 +216,7 @@ public:
 	InteractSystem();
 	int GetUserInput();
 	int UserInput(int maxNum);
+	void Dialog(int id);
 	void PrintLog(string message);
 	void PrintMap();
 private:
