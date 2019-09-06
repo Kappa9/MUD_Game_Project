@@ -573,7 +573,7 @@ void InteractSystem::Dialog(int id)
 		}
 
 		//结束选择域后 变成可读
-		if (line == ("DECISIONEND")) {
+		if (line == ("#DECISIONEND")) {
 			judge = false;
 		}
 		//找到对应的选择 变成可读
