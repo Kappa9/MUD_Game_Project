@@ -12,6 +12,7 @@ using namespace std;
 int GetInput();
 int GetInput(int min, int max);
 
+//物品的类
 class Goods {
 public:
 	Goods();
@@ -35,7 +36,7 @@ public:
 	void PrintDescription();//输出物品的详细描述
 };
 
-
+//背包的类
 class Bag {
 public:
 	struct goods {
@@ -69,7 +70,7 @@ public:
 
 
 
-
+//技能的类
 class Skill {
 public:
 	string name;               //名称
@@ -88,6 +89,7 @@ public:
 	void PrintDescription();   //关于技能的详细描述
 };
 
+//技能栏的类
 class SkillBar {
 public:
 	void Print();				             //输出技能列表
@@ -96,6 +98,7 @@ public:
 	vector<Skill*>list;
 };
 
+//人物的类
 class NPC {
 public:
 	int id;
@@ -129,7 +132,7 @@ public:
 	Bag bag;
 };
 
-
+//商店的类
 class store {
 public:
 	store();                                //构造函数
@@ -173,41 +176,41 @@ public:
 	static array<short, 100> trigger;
 };
 
-class Speak {
-public:
-	int Choose;
-	bool a=true;
-	string Speaklist = "";
-	void Judge() {
-		if (Speaklist == "#END") {
-			//结束对话
-		}
-		if (Speaklist == "#DECISION") {
-			//开始选择
-			a = false;
-			cin >> Choose;           //玩家输入的选择
-		}
-		if (Speaklist == "#DECISIONEND") {
-			//结束选择
-			a = true;
-		}
-		if (Choose == 1) {
-			Speaklist == "#CASE1";
-			//第一种可能
-		}
-		if (Choose == 2) {
-			Speaklist == "#CASE2";
-			//第二种可能
-		}
-		if ((Choose != 1) || (Choose != 2)) {
-			cout << "error";
-		}
-		if (Speaklist == "#CASEEND") {
-			//可能结束
-		}
-	}
-
-};
+//class Speak {
+//public:
+//	int Choose;
+//	bool a=true;
+//	string Speaklist = "";
+//	void Judge() {
+//		if (Speaklist == "#END") {
+//			//结束对话
+//		}
+//		if (Speaklist == "#DECISION") {
+//			//开始选择
+//			a = false;
+//			cin >> Choose;           //玩家输入的选择
+//		}
+//		if (Speaklist == "#DECISIONEND") {
+//			//结束选择
+//			a = true;
+//		}
+//		if (Choose == 1) {
+//			Speaklist == "#CASE1";
+//			//第一种可能
+//		}
+//		if (Choose == 2) {
+//			Speaklist == "#CASE2";
+//			//第二种可能
+//		}
+//		if ((Choose != 1) || (Choose != 2)) {
+//			cout << "error";
+//		}
+//		if (Speaklist == "#CASEEND") {
+//			//可能结束
+//		}
+//	}
+//
+//};
 
 //交互系统
 class InteractSystem
