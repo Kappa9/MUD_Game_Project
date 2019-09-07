@@ -126,7 +126,7 @@ public:
 	int money;             //金钱
 	int talkingScript;         //
 
-	NPC() {}
+	NPC() {};
 	NPC(vector<string>list);  //构造函数
 
 	SkillBar skillBar;

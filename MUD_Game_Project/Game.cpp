@@ -262,7 +262,7 @@ void GameThread::GetSkillData(vector<string> list)
 		DataList::skillList.push_back(i);
 	}
 }
-
+//得到NPC的数据
 void GameThread::GetNPCData(vector<string> list)
 {
 	for (string str : list) {
@@ -272,7 +272,7 @@ void GameThread::GetNPCData(vector<string> list)
 		DataList::npcList.push_back(i);
 	}
 }
-
+//得到地图的数据
 void GameThread::GetSpotData(vector<string> list)
 {
 	int lineNum = 1;
