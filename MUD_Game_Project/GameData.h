@@ -132,7 +132,7 @@ public:
 	void OnEnterSpot();                        //待对接，读地图对话脚本(enterScript)
 
 
-	vector<NPC*>NPClist;                 //包含场景中存在的NPC
+	vector<int>NPClist;                 //包含场景中存在的NPC的编号
 	vector<int>nearSpotNumber;        //包含临近场景的编号
 
 };
