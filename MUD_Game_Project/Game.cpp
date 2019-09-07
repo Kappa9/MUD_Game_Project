@@ -183,7 +183,7 @@ void Fight::Fighting()
 
 				//选择攻击
 				if (input == 1) {
-					UseSkillAttack(player, enemy, 0);
+					UseSkillAttack(player, enemy, 1);
 				}
 				//使用技能
 				else if (input == 2) {
@@ -275,11 +275,33 @@ void GameThread::GetNPCData(vector<string> list)
 
 void GameThread::GetSpotData(vector<string> list)
 {
+	int lineNum = 1;
+	Spot newSpot;
+	vector<string> split;
 	for (string str : list) {
-		//将分隔字符串后的读入新的vector 
-		vector<string> split(InteractSystem::SplitString(str, ","));
-		Spot i(split);
-		DataList::spotList.push_back(i);
+		split = (InteractSystem::SplitString(str, ","));
+		switch (lineNum) {
+		case 1:
+			newSpot.id = atoi(split[0].c_str());
+			newSpot.name = split[1];
+			newSpot.description = split[2];
+			break;
+		case 2:
+			for (string i : split)
+				newSpot.NPCIdList.push_back(atoi(i.c_str()));
+			break;
+		case 3:
+			for (string i : split)
+				newSpot.nearSpotId.push_back(atoi(i.c_str()));
+			DataList::spotList.push_back(newSpot);
+			lineNum = 0;
+			newSpot.NPCIdList.clear();
+			newSpot.nearSpotId.clear();
+			break;
+		default:
+			break;
+		}
+		lineNum++;
 	}
 }
 
@@ -326,29 +348,29 @@ void GameThread::SaveGame(Hero* hero) {
 //读取数据
 void GameThread::LoadGame(Hero* hero) {
 	ifstream in;
-	std::string line;
+	string line;
 	in.open("filename.txt");  //需要具体改名字
 
 	//读取关于hero的属性
-	std::getline(in, line);
+	getline(in, line);
 	hero->name = line;
-	std::getline(in,line);
+	getline(in,line);
 	hero->HP = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->HPmax = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->MP = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->MPmax = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->speed = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->attack = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->defense = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->experience = atoi(line.c_str());
-	std::getline(in, line);
+	getline(in, line);
 	hero->money = atoi(line.c_str());
 
 	//先清空背包 
@@ -357,18 +379,18 @@ void GameThread::LoadGame(Hero* hero) {
 	//读取背包内的物品种类
 	for (int i=0; line != "";i++) {
 		hero->bag.AddGoods(atoi(line.c_str()));
-		std::getline(in, line);
+		getline(in, line);
 	}
 
-	std::getline(in, line);
+	getline(in, line);
 
 	//读取背包内对应的物品种类的数量
 	for (int i = 0; line != ""; i++) {
 		hero->bag.cargo[i].num = atoi(line.c_str());
-		std::getline(in, line);
+		getline(in, line);
 	}
 
-	std::getline(in, line);
+	getline(in, line);
 	//读取关于装备栏中装备的信息
 	for (int i = 0; line != ""; i++) {
 		hero->bag.equipment[i]=(&(DataList::goodsList[atoi(line.c_str())]));
@@ -391,14 +413,14 @@ Explore::Explore(Hero* player, int id) {
 void Explore::ExploreSpot()
 {
 	Spot newSpot = DataList::spotList[spotId];
-	cout << "你来到了" << newSpot.spotName << endl << newSpot.spotDescription << endl;
-	for (int i = 0; i < newSpot.NPCnumber; i++) {
+	cout << "你来到了" << newSpot.name << endl << newSpot.description << endl;
+	for (int i = 0; i < newSpot.NPCIdList.size; i++) {
 		cout << "你开始慢慢走向前" << endl;
 		cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[i]].name << endl;
 		cout << "你要怎么做" << endl;
 		int input;
 		//这里的判断要改
-		if (newSpot.spotNumber == 0) {
+		if (newSpot.id == 0) {
 			cout << "1. 战斗 2. 偷听 3. 离开";
 			input = InteractSystem::UserInput(3);
 			if (input == 1) {
@@ -409,7 +431,7 @@ void Explore::ExploreSpot()
 				//偷听的相关剧情
 			}
 			else if (input == 3) {
-				cout << "你离开了" << newSpot.spotName;
+				cout << "你离开了" << newSpot.name;
 				//离开
 			}
 
@@ -422,7 +444,7 @@ void Explore::ExploreSpot()
 				newFight.Fighting();
 			}
 			else if (input == 2) {
-				cout << "你离开了" << newSpot.spotName;
+				cout << "你离开了" << newSpot.name;
 				//离开
 			}
 		}

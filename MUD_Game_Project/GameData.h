@@ -30,19 +30,19 @@ public:
 	Goods();
 	Goods(vector<string>list);//物品的构造函数   
 
+	int index;                //编号
 	string name;              //名称
 	string description;       //描述
 	int attribute;            //属性    0-可消耗，1-装备，2-学习
-	int addAtract;            //增加攻击
-	int addDefense;           //增加防御
-	int addHP;                //回复血量
-	int addMaxHP;             //增加血量上限
-	int addMP;                //回复蓝量
-	int addMaxMP;             //增加蓝量上限
-	int addSpeed;             //增加速度
-	int index;                //编号
 	int location;             //装备位置  0-身，1-手，2-足, 3-非装备
 	int cost;                 //价值
+	int addHP;                //回复血量
+	int addMP;                //回复蓝量
+	int addMaxHP;             //增加血量上限
+	int addMaxMP;             //增加蓝量上限
+	int addAttack;            //增加攻击
+	int addDefense;           //增加防御
+	int addSpeed;             //增加速度
 
 	void Copy(Goods* thing);//复制物品
 	void PrintDescription();//输出物品的详细描述
@@ -85,13 +85,13 @@ public:
 //技能的类
 class Skill {
 public:
+	int id;                    //技能编号
 	string name;               //名称
 	string description;        //技能描述	
 	short MPcost;			   //消耗MP值
 	int damage;			       //伤害
-	float  critRate;           //暴击率
-	float  accuracyRate;       //命中率
-	int id;                    //技能编号
+	float critRate;           //暴击率
+	float accuracyRate;       //命中率
 
 	Skill();                   //构造函数
 	Skill(vector<string>list);
@@ -115,10 +115,10 @@ class NPC {
 public:
 	int id;
 	string name;          //NPC名称 
+	int HPmax;             //最大血量
+	int MPmax;             //最大魔法值
 	int HP;                //血量
-	int HPmax;             //初始血量
 	int MP;                //魔法值
-	int MPmax;             //初始魔法值
 	int speed;             //速度
 	int attack;            //攻击
 	int defense;           //防御
@@ -158,23 +158,18 @@ public:
 //场景类
 class Spot {
 public:
-	int spotNumber;                   //场景编号
-	int NPCnumber;                    //NPC数量
-	string spotName;                  //场景名称
-	string spotDescription;           //场景描述
+	int id;                   //场景编号
+	string name;                  //场景名称
+	string description;           //场景描述
+	vector<int>NPCIdList;                 //包含场景中存在的NPC
+	vector<int>nearSpotId;            //包含临近场景的编号
 
 	Spot();
 	Spot(vector<string>list);                   //构造函数
 
-	void readSpotInformation();                 //读取场景信息
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
 	void OnEnterSpot();                         //待对接，读地图对话脚本(enterScript)
-	
-
-	vector<int>NPCIdList;                 //包含场景中存在的NPC
-	vector<int>nearSpotNumber;            //包含临近场景的编号
-
 };
 
 
