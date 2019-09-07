@@ -310,6 +310,7 @@ void GameThread::SaveGame(Hero* hero) {
 	//先删除文件
 	fstream fout("stuinfo.txt", ios::out | ios::trunc);  //具体的存档文件的名字需要改 
 
+	fout << hero->level << endl;
 	fout << hero->name << endl;
 	fout << hero->HP << endl;
 	fout << hero->HPmax << endl;
@@ -352,6 +353,8 @@ void GameThread::LoadGame(Hero* hero) {
 	in.open("filename.txt");  //需要具体改名字
 
 	//读取关于hero的属性
+	getline(in, line);
+	hero->level = (atoi(line.c_str()));
 	getline(in, line);
 	hero->name = line;
 	getline(in,line);
