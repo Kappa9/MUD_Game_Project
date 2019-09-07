@@ -8,6 +8,24 @@
 #include<Windows.h>
 using namespace std;
 
+//交互系统
+class InteractSystem
+{
+public:
+	InteractSystem(){}
+	int GetUserInput();
+	int UserInput(int maxNum);
+	void PrintLog(string message);
+	void PrintMap();
+private:
+	static HANDLE handle;
+};
+
+class DialogSystem {
+public:
+	void Dialog(int startLine);
+};
+
 class Goods {
 public:
 	string name;            //名称
@@ -67,7 +85,7 @@ class Skill {
 public:
 	string name;               //名称
 	string description;        //技能描述	
-	short  MPcost;			   //消耗MP值
+	short MPcost;			   //消耗MP值
 	int damage;			       //伤害
 	float  critRate;           //暴击率
 	float  accuracyRate;       //命中率
@@ -147,18 +165,4 @@ public:
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
 	static array<short, 100> trigger;
-};
-
-
-//交互系统
-class InteractSystem
-{
-public:
-	InteractSystem();
-	int GetUserInput();
-	int UserInput(int maxNum);
-	void PrintLog(string message);
-	void PrintMap();
-private:
-	HANDLE handle;
 };
