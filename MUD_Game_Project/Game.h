@@ -29,27 +29,35 @@ public:
 	vector<NPC*>list;   //关于回合判定的vector
 };
 
-//探索场景
-void ExploreSpot(Hero* hero,int spotId);                           
-
-
+//探索场景                       
+class Explore {
+public:
+	Explore(Hero* hero,int id);
+private:
+	Hero* hero;
+	int spotId;
+	void ExploreSpot();
+};
 
 //游戏进程类，处于结构的最顶层
 class GameThread {
 public:
 	GameThread();
-	void LaunchGame();
 private:
-	vector<string> ReadFile(string fileName);
-	vector<string> SplitString(string str);
+	Hero hero;
+	enum Gamestate {
+		title, idle, explore, battle, shop
+	};
+	Gamestate state;
+
+	void HideCursor();
+	void LaunchGame();
+
 	void GetItemData(vector<string> list);
 	void GetSkillData(vector<string> list);
 	void GetNPCData(vector<string> list);
 	void GetSpotData(vector<string> list);
-	enum Gamestate {
-		Title, Battle
-	};
-	Gamestate state;
+	
 	void SaveGame(Hero* hero);
 	void LoadGame(Hero* hero);
 };

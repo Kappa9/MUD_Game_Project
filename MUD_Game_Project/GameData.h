@@ -13,11 +13,13 @@ using namespace std;
 class InteractSystem
 {
 public:
-	InteractSystem(){}
+	InteractSystem() {}
 	static int UserInput(int maxNum);
 	static void PrintLog(string message);
 	static void PrintMap();
-	static void Dialog(int startLine);
+	static int Dialog(int startLine);
+	static vector<string> ReadFile(string fileName);
+	static vector<string> SplitString(string str, string pattern);
 private:
 	static HANDLE handle;
 	static int GetUserInput();
@@ -112,19 +114,19 @@ public:
 class NPC {
 public:
 	int id;
-	string name = "";          //NPC名称 
-	int HP = 0;                //血量
-	int HPmax = 0;             //初始血量
-	int MP = 0;                //魔法值
-	int MPmax = 0;             //初始魔法值
-	int speed = 0;             //速度
-	int attack = 0;            //攻击
-	int defense = 0;           //防御
-	int experience=0;          //经验
-	int money = 0;             //金钱
+	string name;          //NPC名称 
+	int HP;                //血量
+	int HPmax;             //初始血量
+	int MP;                //魔法值
+	int MPmax;             //初始魔法值
+	int speed;             //速度
+	int attack;            //攻击
+	int defense;           //防御
+	int experience;          //经验
+	int money;             //金钱
 	int talkingScript;         //
 
-	NPC();
+	NPC() {}
 	NPC(vector<string>list);  //构造函数
 
 	SkillBar skillBar;
@@ -137,9 +139,11 @@ class Hero :public NPC {
 public:
 	Hero();
 	int level;                                     //等级
-	bool LevelUp();								   //升级
-	void UsingGoods(int id);                       //使用背包中的消耗品 
+	int currentSpotId;
 	Bag bag;
+	bool LevelUp();								   //升级
+	void UsingGoods(int id);                       //使用背包中的消耗品
+	void MoveToSpot(int id);
 };
 
 //商店的类
@@ -177,11 +181,11 @@ public:
 //数据列表
 class DataList {
 public:
-	DataList();
-	
+	DataList() {}
 	static vector<Goods> goodsList;
 	static vector<Skill> skillList;
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
+	static vector<string> dialogList;
 	static array<short, 100> trigger;
 };

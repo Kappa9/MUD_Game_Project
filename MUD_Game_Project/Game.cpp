@@ -3,7 +3,6 @@ int main()
 {
 	cout << "Hello World!";
 	GameThread game;
-	game.LaunchGame();
 
 
 
@@ -224,46 +223,30 @@ void Fight::Fighting()
 	
 }
 
-
-GameThread::GameThread(){
-	cout << endl << "Game Started." << endl;
+GameThread::GameThread() {
+	GetItemData(InteractSystem::ReadFile("Goods"));
+	GetSkillData(InteractSystem::ReadFile("Skill"));
+	GetNPCData(InteractSystem::ReadFile("NPC"));
+	GetSpotData(InteractSystem::ReadFile("Spot"));
+	DataList::dialogList = InteractSystem::ReadFile("Dialog");
+	HideCursor();
+	LaunchGame();
 }
 void GameThread::LaunchGame() {
-	InteractSystem::PrintMap();
+	cout << endl << "Game Started." << endl;
 }
-vector<string> GameThread::ReadFile(string fileName) {
-	string path = "" + fileName + ".txt";
-	fstream fin;
-	fin.open(path.c_str(), ios::in);
-	vector<string> list;
-	string tmp;
-	while (getline(fin, tmp))
-		list.push_back(tmp);
-	return list;
+//隐藏光标函数
+void GameThread::HideCursor()
+{
+	CONSOLE_CURSOR_INFO cursor_info = { 1,0 };
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
 }
-
-//字符串分隔
-vector<string> GameThread::SplitString(string str) {
-	vector<string> split;
-	string::size_type pos;
-	str += ",";
-	unsigned int size = str.size();
-	for (unsigned int i = 0; i < size; i++) {
-		pos = str.find(",", i);
-		if (pos < size) {
-			string s = str.substr(i, pos - i);
-			split.push_back(s);
-		}
-	}
-	return split;
-}
-
 //得到物品的数据
 void GameThread::GetItemData(vector<string> list) {
 	//逐个物品读入
 	for (string str : list) {
 		//将分隔字符串后的读入新的vector 
-		vector<string> split(SplitString(str));
+		vector<string> split(InteractSystem::SplitString(str, ","));
 		Goods i(split);
 		DataList::goodsList.push_back(i);
 	}
@@ -274,7 +257,7 @@ void GameThread::GetSkillData(vector<string> list)
 {
 	for (string str : list) {
 		//将分隔字符串后的读入新的vector 
-		vector<string> split(SplitString(str));
+		vector<string> split(InteractSystem::SplitString(str, ","));
 		Skill i(split);
 		DataList::skillList.push_back(i);
 	}
@@ -284,7 +267,7 @@ void GameThread::GetNPCData(vector<string> list)
 {
 	for (string str : list) {
 		//将分隔字符串后的读入新的vector 
-		vector<string> split(SplitString(str));
+		vector<string> split(InteractSystem::SplitString(str, ","));
 		NPC i(split);
 		DataList::npcList.push_back(i);
 	}
@@ -294,7 +277,7 @@ void GameThread::GetSpotData(vector<string> list)
 {
 	for (string str : list) {
 		//将分隔字符串后的读入新的vector 
-		vector<string> split(SplitString(str));
+		vector<string> split(InteractSystem::SplitString(str, ","));
 		Spot i(split);
 		DataList::spotList.push_back(i);
 	}
@@ -399,8 +382,13 @@ void GameThread::LoadGame(Hero* hero) {
 	in.close();
 }
 
+Explore::Explore(Hero* player, int id) {
+	hero = player;
+	spotId = id;
+	ExploreSpot();
+}
 //探索场景
-void ExploreSpot(Hero* hero, int spotId)
+void Explore::ExploreSpot()
 {
 	Spot newSpot = DataList::spotList[spotId];
 	cout << "你来到了" << newSpot.spotName << endl << newSpot.spotDescription << endl;

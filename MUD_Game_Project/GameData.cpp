@@ -1,22 +1,5 @@
 #include "GameData.h"
 
-//输入一个数字
-int GetInput() {
-	char str[1];
-	str[0] = getchar();
-	return (int)str[0];
-}
-
-//判定输入正确
-int GetInput(int min, int max) {
-	int n = GetInput();
-	while (n<min || n>max) {
-		cout << "请输入正确的数字";
-		n = GetInput();
-	}
-	return n;
-}
-
 Goods::Goods()
 {
 }
@@ -406,7 +389,12 @@ void Skill::PrintDescription()
 
 //Hero构造函数
 Hero::Hero() {
-	id = 0;
+	id = 0; name = "勇者";
+	HPmax = 450; HP = 450;
+	MPmax = 90;	MP = 90;
+	speed = 32; attack = 16; defense = 16;
+	experience = 0; money = 0; level = 1;
+	currentSpotId = 1;
 }
 
 //升级
@@ -471,10 +459,8 @@ void Hero::UsingGoods(int id)
 	}
 }
 
+void Hero::MoveToSpot(int id) {
 
-
-NPC::NPC()
-{
 }
 
 NPC::NPC(vector<string> list)
@@ -491,8 +477,9 @@ NPC::NPC(vector<string> list)
 		defense = atoi(list[8].c_str());
 		experience = atoi(list[9].c_str());
 		money = atoi(list[10].c_str());
-		talkingScript= atoi(list[11].c_str());
+		talkingScript = atoi(list[11].c_str());
 	}
+	else NPC();
 }
 
 //显示某角色的状态
@@ -508,9 +495,39 @@ vector<Goods> DataList::goodsList(0);
 vector<Skill> DataList::skillList(0);
 vector<NPC> DataList::npcList(0);
 vector<Spot> DataList::spotList(0);
+vector<string> DataList::dialogList(0);
 array<short, 100> DataList::trigger = { 0 };
 
 HANDLE InteractSystem::handle = GetStdHandle(STD_OUTPUT_HANDLE);
+//读文件
+vector<string> InteractSystem::ReadFile(string fileName) {
+	string path = "" + fileName + ".txt";
+	fstream fin;
+	fin.open(path.c_str(), ios::in);
+	vector<string> list;
+	string tmp;
+	while (getline(fin, tmp))
+		list.push_back(tmp);
+	fin.close();
+	return list;
+}
+
+//字符串分隔
+vector<string> InteractSystem::SplitString(string str, string pattern) {
+	vector<string> split;
+	string::size_type pos;
+	str += pattern;
+	unsigned int size = str.size();
+	for (unsigned int i = 0; i < size; i++) {
+		pos = str.find(pattern, i);
+		if (pos < size) {
+			string s = str.substr(i, pos - i);
+			split.push_back(s);
+			i = pos + pattern.size() - 1;
+		}
+	}
+	return split;
+}
 //实现不带回显的输入
 int InteractSystem::GetUserInput() {
 	char command[1];
@@ -528,66 +545,59 @@ int InteractSystem::UserInput(int maxNum) {
 	return n;
 }
 
-//读文件
-void InteractSystem::Dialog(int id)
-{
-	int input;
-	bool judge = false;//判断是否可读
-	bool judge1 = false;//判断第一个选择是否开启
-	bool judge2 = false;//判断第二个选择是否开启
-	
-	std::ifstream ifile;		
-	ifile.open("file.txt");   //具体文件需要改名字
-	std::string line;
-	while (std::getline(ifile, line)) {
-		//如果有空行 继续循环
-		if (line == "") {
-			continue;
-		}
-		//结束的标志
-		if (line == "#END") {
-			break;  //结束
-		}
-		//到达CASEEND 无法再读出
-		if (line == ("#CASEEND")) {
-			judge = false;
-		}
-		//做出判断
-		if (line == "#DECISION") {
-			input = GetInput(1, 2);
-			if (input == 1) {
-				judge1 = true;
-				judge = false;
-			}
-			else {
-				judge2 = true;
-				judge = false;
-			}
-		}
+//对话
+int InteractSystem::Dialog(int id) {
+	int input = 0;
+	int maxCases = 0;
+	int lineIndex = 0;
+	bool reading = true;
+	enum DialogState {
+		idle, inDialog, inDecision, inCase
+	};
+	DialogState state = idle;
 
-		//如果为真 读出
-		if (judge) {
-			cout << line<<endl;
+	for (string line : DataList::dialogList) {
+		if (!reading)break;
+		switch (state) {
+		case idle:
+			//找到开始位置
+			if (line == ("#START" + id)) {
+				state = inDialog;
+			}
+			break;
+		case inDialog:
+			//选择域开始标志
+			if (line == "#DECISION") {
+				state = inDecision;
+				for (int i = lineIndex; i < DataList::dialogList.size; i++) {
+					if (DataList::dialogList[i] == "#CASEEND") maxCases++;
+					else if (DataList::dialogList[i] == "#DECISIONEND") break;
+				}
+				input = InteractSystem::UserInput(maxCases);
+			}
+			//结束的标志
+			else if (line == "#END")
+				reading = false;
+			else cout << line << endl;
+			break;
+		case inDecision:
+			//结束选择域
+			if (line == "#CASE" + input)
+				state = inCase;
+			else if (line == "#DECISIONEND")
+				state = inDialog;
+			break;
+		case inCase:
+			//分支域结束
+			if (line == "#CASEEND")
+				state = inDecision;
+			else cout << line << endl;
+			break;
+		default: break;
 		}
-
-		//结束选择域后 变成可读
-		if (line == ("#DECISIONEND")) {
-			judge = false;
-		}
-		//找到对应的选择 变成可读
-		if ((line == ("#CASE1")) && judge1) {
-			judge = true;
-		}
-		//同上
-		if ((line == ("#CASE2")) && judge2) {
-			judge = true;
-		}
-		//找到开始位置
-		if (line == ("#START" + id)) {
-			judge = true;
-		}
+		lineIndex++;
 	}
-	ifile.close();
+	return input;
 }
 
 void InteractSystem::PrintLog(string message) {
@@ -618,10 +628,6 @@ void Spot::printNPCs()
 	for (int i = 0; i < NPCnumber; i++) {
 
 	}
-}
-
-DataList::DataList() {
-	for (int i : trigger) trigger[i] = 0;
 }
 
 
