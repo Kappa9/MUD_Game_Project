@@ -36,7 +36,7 @@ NPC* Fight::DecideWhoAct()
 }
 
 //技能造成伤害(包括普通攻击）
-void Fight::UseSkillAttrck(NPC* attacker,NPC* defender,int id)
+void Fight::UseSkillAttack(NPC* attacker,NPC* defender,int id)
 {
 	int MPcost;
 	MPcost = DataList().skillList[id].MPcost;
@@ -102,7 +102,7 @@ void Fight::UseSkill(NPC* role)
 		}
 		else {
 			int id = ReturnId(player, input-1);
-			UseSkillAttrck(player, enemy, id);
+			UseSkillAttack(player, enemy, id);
 		}
 	}
 }
@@ -133,7 +133,7 @@ void Fight::DecideAct(NPC* enemy,NPC* player)
 			num = i;
 		}
 	}
-	UseSkillAttrck(enemy,player,num);
+	UseSkillAttack(enemy,player,num);
 }
 
 //判定一方死亡
@@ -184,7 +184,7 @@ void Fight::Fighting()
 
 				//选择攻击
 				if (input == 1) {
-					UseSkillAttrck(player, enemy, 0);
+					UseSkillAttack(player, enemy, 0);
 				}
 				//使用技能
 				else if (input == 2) {
@@ -229,7 +229,7 @@ GameThread::GameThread(){
 	cout << endl << "Game Started." << endl;
 }
 void GameThread::LaunchGame() {
-	sys.PrintMap();
+	InteractSystem::PrintMap();
 }
 vector<string> GameThread::ReadFile(string fileName) {
 	string path = "" + fileName + ".txt";

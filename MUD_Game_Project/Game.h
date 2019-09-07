@@ -15,7 +15,7 @@ public:
 	Fight(Hero* player, NPC* enemy);          //构造函数
 	~Fight();                                 //析构函数
 	NPC* DecideWhoAct();                      //决定谁先手
-	void UseSkillAttrck(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害 
+	void UseSkillAttack(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害 
 	int ReturnId(NPC* owner, int num);        //返回技能的编号
 	void UseSkill(NPC* role);                 //使用技能
 	bool Escape(NPC* escaper,NPC* arrester);  //逃跑
@@ -29,8 +29,14 @@ public:
 	vector<NPC*>list;   //关于回合判定的vector
 };
 
-//探索场景
-void ExploreSpot(int spotId);                           
+class Explore {
+public:
+	Explore(int id);
+	//探索场景
+private:
+	int spotId;
+	void ExploreSpot();
+};
 
 
 
