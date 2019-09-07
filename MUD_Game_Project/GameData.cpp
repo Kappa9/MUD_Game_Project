@@ -459,7 +459,11 @@ void Hero::UsingGoods(int id)
 	}
 }
 
-void Hero::MoveToSpot(int id) {
+//移动到一个地点
+void Hero::MoveToSpot(int id)
+{
+	cout << "你来到了" << DataList::spotList[id].spotName<<endl;
+	cout << DataList::spotList[id].spotDescription << endl;
 
 }
 
