@@ -3,7 +3,7 @@ int main()
 {
 	cout << "Hello World!";
 	GameThread game;
-
+	game.LaunchGame();
 
 
 

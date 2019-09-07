@@ -14,13 +14,13 @@ class InteractSystem
 {
 public:
 	InteractSystem(){}
-	static int GetUserInput();
 	static int UserInput(int maxNum);
 	static void PrintLog(string message);
 	static void PrintMap();
 	static void Dialog(int startLine);
 private:
 	static HANDLE handle;
+	static int GetUserInput();
 };
 
 class Goods {

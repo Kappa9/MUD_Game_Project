@@ -54,4 +54,8 @@ private:
 	void GetSpotData(vector<string> list);
 	void SaveGame();
 	void LoadGame();
+	enum Gamestate {
+		Title,Battle
+	};
+	Gamestate state;
 };
