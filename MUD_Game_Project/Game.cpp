@@ -95,7 +95,7 @@ void Fight::UseSkill(NPC* role)
 		role->skillBar.Print();
 		cout << role->skillBar.list.size() + 2 <<".取消"<< endl << endl;
 
-		int input = GetInput(1, num + 2);
+		int input = InteractSystem::UserInput(num + 2);
 		//取消
 		if (input == num + 2) {
 			
@@ -180,7 +180,7 @@ void Fight::Fighting()
 				player->ShowNPCState();
 				cout << "1.攻击 2.技能 3.物品 4.逃走 ";
 
-				int input = GetInput(1, 4);
+				int input = InteractSystem::UserInput(4);
 
 				//选择攻击
 				if (input == 1) {
@@ -194,7 +194,7 @@ void Fight::Fighting()
 				else if (input == 3) {
 					player->bag.Print(1);
 					int input;
-					input = GetInput(1, player->bag.cargo.size() + 2);
+					input = InteractSystem::UserInput(player->bag.cargo.size() + 2);
 					//Hero的使用物品 使用RetrunId返回物品的编号
 					player->UsingGoods(player->bag.ReturnId(input));
 				}
@@ -323,7 +323,7 @@ void ExploreSpot(Hero* hero, int spotId)
 		//这里的判断要改
 		if (newSpot.spotNumber == 0) {
 			cout << "1. 战斗 2. 偷听 3. 离开";
-			input = GetInput(1, 3);
+			input = InteractSystem::UserInput(3);
 			if (input == 1) {
 				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
 				newFight.Fighting();
@@ -339,7 +339,7 @@ void ExploreSpot(Hero* hero, int spotId)
 		}
 		else {
 			cout << "1. 战斗 2. 离开";
-			input = GetInput(1, 2);
+			input = InteractSystem::UserInput(2);
 			if (input == 1) {
 				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
 				newFight.Fighting();

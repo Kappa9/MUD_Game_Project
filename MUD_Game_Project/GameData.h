@@ -14,17 +14,13 @@ class InteractSystem
 {
 public:
 	InteractSystem(){}
-	int GetUserInput();
-	int UserInput(int maxNum);
-	void PrintLog(string message);
-	void PrintMap();
+	static int GetUserInput();
+	static int UserInput(int maxNum);
+	static void PrintLog(string message);
+	static void PrintMap();
+	static void Dialog(int startLine);
 private:
 	static HANDLE handle;
-};
-
-class DialogSystem {
-public:
-	void Dialog(int startLine);
 };
 
 class Goods {
@@ -188,18 +184,4 @@ public:
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
 	static array<short, 100> trigger;
-};
-
-
-//½»»¥ÏµÍ³
-class InteractSystem
-{
-public:
-	InteractSystem();
-	int GetUserInput();
-	int UserInput(int maxNum);
-	void PrintLog(string message);
-	void PrintMap();
-private:
-	HANDLE handle;
 };
