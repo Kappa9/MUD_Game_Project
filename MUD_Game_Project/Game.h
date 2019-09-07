@@ -4,12 +4,18 @@
 #include<string>
 #include<vector>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
+#define random(x) rand()%(x)
+
+
+//战斗的类
 class Fight {
 public:
 	Fight(Hero* player, NPC* enemy);          //构造函数
 	~Fight();                                 //析构函数
 	NPC* DecideWhoAct();                      //决定谁先手
-	void UseSkillAttrck(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害 
+	void UseSkillAttack(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害 
 	int ReturnId(NPC* owner, int num);        //返回技能的编号
 	void UseSkill(NPC* role);                 //使用技能
 	bool Escape(NPC* escaper,NPC* arrester);  //逃跑
@@ -23,20 +29,35 @@ public:
 	vector<NPC*>list;   //关于回合判定的vector
 };
 
+//探索场景                       
+class Explore {
+public:
+	Explore(Hero* hero,int id);
+private:
+	Hero* hero;
+	int spotId;
+	void ExploreSpot();
+};
 
 //游戏进程类，处于结构的最顶层
 class GameThread {
 public:
 	GameThread();
-	void LaunchGame();
 private:
-	InteractSystem sys;
-	vector<string> ReadFile(string fileName);
-	vector<string> SplitString(string str);
+	Hero hero;
+	enum Gamestate {
+		title, idle, explore, battle, shop
+	};
+	Gamestate state;
+
+	void HideCursor();
+	void LaunchGame();
+
 	void GetItemData(vector<string> list);
 	void GetSkillData(vector<string> list);
 	void GetNPCData(vector<string> list);
 	void GetSpotData(vector<string> list);
-	void SaveGame();
-	void LoadGame();
+	
+	void SaveGame(Hero* hero);
+	void LoadGame(Hero* hero);
 };
