@@ -510,9 +510,7 @@ vector<NPC> DataList::npcList(0);
 vector<Spot> DataList::spotList(0);
 array<short, 100> DataList::trigger = { 0 };
 
-InteractSystem::InteractSystem() {
-	handle = GetStdHandle(STD_OUTPUT_HANDLE);
-}
+HANDLE InteractSystem::handle = GetStdHandle(STD_OUTPUT_HANDLE);
 //实现不带回显的输入
 int InteractSystem::GetUserInput() {
 	char command[1];

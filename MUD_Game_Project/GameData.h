@@ -9,10 +9,20 @@
 #include<fstream>
 using namespace std;
 
-int GetInput();
-int GetInput(int min, int max);
+//交互系统
+class InteractSystem
+{
+public:
+	InteractSystem(){}
+	static int UserInput(int maxNum);
+	static void PrintLog(string message);
+	static void PrintMap();
+	static void Dialog(int startLine);
+private:
+	static HANDLE handle;
+	static int GetUserInput();
+};
 
-//物品的类
 class Goods {
 public:
 	Goods();
@@ -75,7 +85,7 @@ class Skill {
 public:
 	string name;               //名称
 	string description;        //技能描述	
-	short  MPcost;			   //消耗MP值
+	short MPcost;			   //消耗MP值
 	int damage;			       //伤害
 	float  critRate;           //暴击率
 	float  accuracyRate;       //命中率
@@ -174,54 +184,4 @@ public:
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
 	static array<short, 100> trigger;
-};
-
-//class Speak {
-//public:
-//	int Choose;
-//	bool a=true;
-//	string Speaklist = "";
-//	void Judge() {
-//		if (Speaklist == "#END") {
-//			//结束对话
-//		}
-//		if (Speaklist == "#DECISION") {
-//			//开始选择
-//			a = false;
-//			cin >> Choose;           //玩家输入的选择
-//		}
-//		if (Speaklist == "#DECISIONEND") {
-//			//结束选择
-//			a = true;
-//		}
-//		if (Choose == 1) {
-//			Speaklist == "#CASE1";
-//			//第一种可能
-//		}
-//		if (Choose == 2) {
-//			Speaklist == "#CASE2";
-//			//第二种可能
-//		}
-//		if ((Choose != 1) || (Choose != 2)) {
-//			cout << "error";
-//		}
-//		if (Speaklist == "#CASEEND") {
-//			//可能结束
-//		}
-//	}
-//
-//};
-
-//交互系统
-class InteractSystem
-{
-public:
-	InteractSystem();
-	int GetUserInput();
-	int UserInput(int maxNum);
-	void Dialog(int id);
-	void PrintLog(string message);
-	void PrintMap();
-private:
-	HANDLE handle;
 };

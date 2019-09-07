@@ -15,7 +15,7 @@ public:
 	Fight(Hero* player, NPC* enemy);          //构造函数
 	~Fight();                                 //析构函数
 	NPC* DecideWhoAct();                      //决定谁先手
-	void UseSkillAttrck(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害 
+	void UseSkillAttack(NPC* attacker,NPC* defender,int id);        //使用技能造成伤害 
 	int ReturnId(NPC* owner, int num);        //返回技能的编号
 	void UseSkill(NPC* role);                 //使用技能
 	bool Escape(NPC* escaper,NPC* arrester);  //逃跑
@@ -40,13 +40,16 @@ public:
 	GameThread();
 	void LaunchGame();
 private:
-	InteractSystem sys;
 	vector<string> ReadFile(string fileName);
 	vector<string> SplitString(string str);
 	void GetItemData(vector<string> list);
 	void GetSkillData(vector<string> list);
 	void GetNPCData(vector<string> list);
 	void GetSpotData(vector<string> list);
+	enum Gamestate {
+		Title, Battle
+	};
+	Gamestate state;
 	void SaveGame(Hero* hero);
 	void LoadGame(Hero* hero);
 };
