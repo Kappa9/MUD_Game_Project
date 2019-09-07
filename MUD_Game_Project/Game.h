@@ -4,6 +4,12 @@
 #include<string>
 #include<vector>
 #include <fstream>
+#include <cstdlib>
+#include <ctime>
+#define random(x) rand()%(x)
+
+
+//战斗的类
 class Fight {
 public:
 	Fight(Hero* player, NPC* enemy);          //构造函数
@@ -22,6 +28,11 @@ public:
 	NPC* enemy;         //敌人
 	vector<NPC*>list;   //关于回合判定的vector
 };
+
+//探索场景
+void ExploreSpot(int spotId);                           
+
+
 
 //游戏进程类，处于结构的最顶层
 class GameThread {

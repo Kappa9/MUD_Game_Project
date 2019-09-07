@@ -1,5 +1,45 @@
 #include "GameData.h"
 
+//输入一个数字
+int GetInput() {
+	char str[1];
+	str[0] = getchar();
+	return (int)str[0];
+}
+
+//判定输入正确
+int GetInput(int min, int max) {
+	int n = GetInput();
+	while (n<min || n>max) {
+		cout << "请输入正确的数字";
+		n = GetInput();
+	}
+	return n;
+}
+
+Goods::Goods()
+{
+}
+
+Goods::Goods(vector<string> list)
+{
+	if (list.size() == 13) {
+		name = list[0];
+		description = list[1];
+		attribute = atoi(list[2].c_str());
+		addAtract = atoi(list[3].c_str());
+		addDefense = atoi(list[4].c_str());
+		addHP = atoi(list[5].c_str());
+		addMaxHP = atoi(list[6].c_str());
+		addMP = atoi(list[7].c_str());
+		addMaxMP = atoi(list[8].c_str());
+		addSpeed = atoi(list[9].c_str());
+		index = atoi(list[10].c_str());
+		location = atoi(list[11].c_str());
+		cost = atoi(list[12].c_str());
+	}
+}
+
 //复制物品
 void Goods::Copy(Goods* thing)
 {
@@ -133,10 +173,10 @@ void Bag::PrintEquipment()
 
 
 //向背包中添加物品
-void Bag::AddGoods(Goods* thing,int num)
+void Bag::AddGoods(int id,int num)
 {
 	bool judge = true;
-
+	Goods* thing = &DataList::goodsList[id];
 	struct goods sthing;
 	sthing.thing = thing;
 
@@ -240,7 +280,7 @@ void Bag::Equip(Goods* thing)
 		}
 		else
 		{
-			this->AddGoods(equipment[thing->location]);
+			this->AddGoods(equipment[thing->location]->index);
 			cout << "卸下了" << equipment[thing->location]->name;
 			equipment[thing->location]->Copy(thing);
 		}
@@ -253,7 +293,7 @@ void Bag::Equip(Goods* thing)
 //卸下装备
 void Bag::Unload(Goods* thing)
 {
-	this->AddGoods(equipment[thing->location]);
+	this->AddGoods(equipment[thing->location]->index);
 	equipment[thing->location] = NULL;
 	cout << "将" << thing->name << "卸下";
 }
@@ -274,7 +314,7 @@ void Bag::Purchase(Goods* thing,int num)
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
 		cout << "你的余额为：" << money;
-		this->AddGoods(thing,num);
+		this->AddGoods(thing->index,num);
 	}
 	else {
 		cout << "你的余额不足";
@@ -322,6 +362,20 @@ Skill::Skill()
 	accuracyRate = 0;
 }
 
+//利用string类型的vector的构造函数
+Skill::Skill(vector<string> list)
+{
+	if (list.size() == 7) {
+		name = list[0];
+		description = list[1];
+		MPcost = atoi(list[2].c_str());
+		damage = atoi(list[3].c_str());
+		critRate = (float)atoi(list[4].c_str());
+		accuracyRate = (float)atoi(list[5].c_str());
+		id = atoi(list[6].c_str());
+	}
+}
+
 //Skill的构造函数
 Skill::Skill(string name, string description, short MPcost, int damage, float critRate, float accuracyRate)
 {
@@ -350,9 +404,36 @@ void Skill::PrintDescription()
 	cout << this->description;
 }
 
-
+//Hero构造函数
 Hero::Hero() {
 	id = 0;
+}
+
+//升级
+bool Hero::LevelUp()
+{
+	int num = this->level;
+	if ( this->experience < 10) {
+		this->level = 1;
+	}
+	else if(this->experience<40){
+		this->level = 2;
+	}
+	else if (this->experience>=40&&this->experience<100) {
+		this->level = 3;
+	}
+	else if (this->experience > 100 && this->experience < 200) {
+		this->level = 4;
+	}
+	else if (this->experience >= 200) {
+		this->level = 5;
+	}
+	if (level > num) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 //Hero在背包中使用消耗品
@@ -392,6 +473,28 @@ void Hero::UsingGoods(int id)
 
 
 
+NPC::NPC()
+{
+}
+
+NPC::NPC(vector<string> list)
+{
+	if (list.size() == 12) {
+		id = atoi(list[0].c_str());
+		name = list[1];
+		HP = atoi(list[2].c_str());
+		HPmax = atoi(list[3].c_str());
+		MP = atoi(list[4].c_str());
+		MPmax = atoi(list[5].c_str());
+		speed = atoi(list[6].c_str());
+		attack = atoi(list[7].c_str());
+		defense = atoi(list[8].c_str());
+		experience = atoi(list[9].c_str());
+		money = atoi(list[10].c_str());
+		talkingScript= atoi(list[11].c_str());
+	}
+}
+
 //显示某角色的状态
 void NPC::ShowNPCState()
 {
@@ -399,6 +502,7 @@ void NPC::ShowNPCState()
 	cout << "（生命值:" << this->HP << "/" << this->HPmax;
 	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
 }
+
 
 vector<Goods> DataList::goodsList(0);
 vector<Skill> DataList::skillList(0);
@@ -422,6 +526,68 @@ int InteractSystem::UserInput(int maxNum) {
 		if (n == 0)n = 10;
 	}
 	return n;
+}
+
+//读文件
+void InteractSystem::Dialog(int id)
+{
+	int input;
+	bool judge = false;//判断是否可读
+	bool judge1 = false;//判断第一个选择是否开启
+	bool judge2 = false;//判断第二个选择是否开启
+	
+	std::ifstream ifile;		
+	ifile.open("file.txt");   //具体文件需要改名字
+	std::string line;
+	while (std::getline(ifile, line)) {
+		//如果有空行 继续循环
+		if (line == "") {
+			continue;
+		}
+		//结束的标志
+		if (line == "#END") {
+			break;  //结束
+		}
+		//到达CASEEND 无法再读出
+		if (line == ("#CASEEND")) {
+			judge = false;
+		}
+		//做出判断
+		if (line == "#DECISION") {
+			input = GetInput(1, 2);
+			if (input == 1) {
+				judge1 = true;
+				judge = false;
+			}
+			else {
+				judge2 = true;
+				judge = false;
+			}
+		}
+
+		//如果为真 读出
+		if (judge) {
+			cout << line<<endl;
+		}
+
+		//结束选择域后 变成可读
+		if (line == ("#DECISIONEND")) {
+			judge = false;
+		}
+		//找到对应的选择 变成可读
+		if ((line == ("#CASE1")) && judge1) {
+			judge = true;
+		}
+		//同上
+		if ((line == ("#CASE2")) && judge2) {
+			judge = true;
+		}
+		//找到开始位置
+		if (line == ("#START" + id)) {
+			judge = true;
+		}
+	}
+	ifile.close();
 }
 
 void InteractSystem::PrintLog(string message) {
@@ -453,6 +619,7 @@ void Spot::printNPCs()
 
 	}
 }
+
 DataList::DataList() {
 	for (int i : trigger) trigger[i] = 0;
 }
@@ -461,4 +628,44 @@ DataList::DataList() {
 //待对接，读地图对话脚本(enterScript)
 void Spot::OnEnterSpot() {
 	
+}
+
+
+
+//构造函数
+store::store()
+{
+}
+
+//添加物品的ID
+void store::AddGoodsId(int id)
+{
+	goodsIdList.push_back(id);
+}
+
+//购买物品
+void store::Purchase(Hero* player, int id)
+{
+	if (player->bag.money >= DataList::goodsList[id].cost) { 
+		player->bag.AddGoods(DataList::goodsList[id].index);
+		player->bag.money -= DataList::goodsList[id].cost;
+		cout << "你购买了" << DataList::goodsList[id].name << endl;
+	}
+	else {
+		cout << "你的金币不足" << endl;
+	}
+}
+
+Spot::Spot()
+{
+}
+
+Spot::Spot(vector<string>list)
+{
+	if (list.size() == 4) {
+		spotNumber = atoi(list[0].c_str());
+		NPCnumber = atoi(list[1].c_str());
+		spotName = list[2];
+		spotDescription = list[3];
+	}
 }

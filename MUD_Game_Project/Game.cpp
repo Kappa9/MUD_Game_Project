@@ -10,22 +10,7 @@ int main()
 	return 0;
 }
 
-//输入一个数字
-int GetUserInput() {
-	char str[1];
-	str[0] = getchar();
-	return (int)str[0];
-}
 
-//判定输入正确
-int GetUserInput(int min, int max) {
-	int n = GetUserInput();
-	while (n<min || n>max) {
-		cout << "请输入正确的数字";
-		n = GetUserInput();
-	}
-	return n;
-}
 
 //Fight的构造函数
 Fight::Fight(Hero* player, NPC* enemy)
@@ -53,25 +38,42 @@ NPC* Fight::DecideWhoAct()
 //技能造成伤害(包括普通攻击）
 void Fight::UseSkillAttrck(NPC* attacker,NPC* defender,int id)
 {
-	if (id != 0) {
-		int MPcost;
-		MPcost = DataList().skillList[id].MPcost;
-		if (attacker->MP < MPcost) {
-			cout << "魔法值不足";
-		}
-		else {
-			int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
-			attacker->MP -= MPcost;
-			defender->HP -= damage;
-			cout <<attacker->name<< "使用了" << DataList().skillList[id].name;
-			cout << endl << "对" << defender->name << "造成了" << damage << "点伤害";
-		}
+	int MPcost;
+	MPcost = DataList().skillList[id].MPcost;
+	if (attacker->MP < MPcost) {
+		cout << "魔法值不足";
 	}
 	else {
-		int damage = 5 * attacker->attack - defender->defense * 2;
-		defender->HP -= damage;
-		cout <<attacker->name<< "攻击了" << defender->name;
-		cout << "对其造成了" << damage << "点伤害";
+		srand((int)time(0));
+		if (random(100) <= DataList::skillList[id].accuracyRate) {
+			if (random(100) <= DataList::skillList[id].critRate) {
+				int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
+				attacker->MP -= MPcost;
+				defender->HP -= 2 * damage;
+				if (id != 0) {
+					cout << attacker->name << "使用了" << DataList().skillList[id].name << "并产生了暴击";
+				}
+				else {
+					cout << "你攻击了" << defender->name << "，并产生了暴击";
+				}
+				cout << endl << "对" << defender->name << "造成了" << 2 * damage << "点伤害";
+			}
+			else {
+				int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
+				attacker->MP -= MPcost;
+				defender->HP -= damage;
+				if (id != 0) {
+					cout << attacker->name << "使用了" << DataList().skillList[id].name;
+				}
+				else {
+					cout << "你攻击了" << defender->name;
+				}
+				cout << endl << "对" << defender->name << "造成了" << damage << "点伤害";
+			}
+		}
+		else {
+			cout << "你的攻击被闪避了";
+		}
 	}
 }
 
@@ -93,7 +95,7 @@ void Fight::UseSkill(NPC* role)
 		role->skillBar.Print();
 		cout << role->skillBar.list.size() + 2 <<".取消"<< endl << endl;
 
-		int input = GetUserInput(1, num + 2);
+		int input = GetInput(1, num + 2);
 		//取消
 		if (input == num + 2) {
 			
@@ -178,7 +180,7 @@ void Fight::Fighting()
 				player->ShowNPCState();
 				cout << "1.攻击 2.技能 3.物品 4.逃走 ";
 
-				int input = GetUserInput(1, 4);
+				int input = GetInput(1, 4);
 
 				//选择攻击
 				if (input == 1) {
@@ -192,7 +194,7 @@ void Fight::Fighting()
 				else if (input == 3) {
 					player->bag.Print(1);
 					int input;
-					input = GetUserInput(1, player->bag.cargo.size() + 2);
+					input = GetInput(1, player->bag.cargo.size() + 2);
 					//Hero的使用物品 使用RetrunId返回物品的编号
 					player->UsingGoods(player->bag.ReturnId(input));
 				}
@@ -213,7 +215,15 @@ void Fight::Fighting()
 		}
 	}
 	Victory(player, enemy);
+	//查看等级提升
+	if (player->LevelUp()) {
+		cout << "恭喜你的等级提升到"<<player->level<<"级";
+	}
+	else {
+	}
+	
 }
+
 
 GameThread::GameThread(){
 	cout << endl << "Game Started." << endl;
@@ -231,6 +241,8 @@ vector<string> GameThread::ReadFile(string fileName) {
 		list.push_back(tmp);
 	return list;
 }
+
+//字符串分隔
 vector<string> GameThread::SplitString(string str) {
 	vector<string> split;
 	string::size_type pos;
@@ -245,17 +257,99 @@ vector<string> GameThread::SplitString(string str) {
 	}
 	return split;
 }
+
+//得到物品的数据
 void GameThread::GetItemData(vector<string> list) {
+	//逐个物品读入
 	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
 		vector<string> split(SplitString(str));
-		Goods i;
-		//
+		Goods i(split);
 		DataList::goodsList.push_back(i);
 	}
 }
+
+//得到技能的数据
+void GameThread::GetSkillData(vector<string> list)
+{
+	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
+		vector<string> split(SplitString(str));
+		Skill i(split);
+		DataList::skillList.push_back(i);
+	}
+}
+
+void GameThread::GetNPCData(vector<string> list)
+{
+	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
+		vector<string> split(SplitString(str));
+		NPC i(split);
+		DataList::npcList.push_back(i);
+	}
+}
+
+void GameThread::GetSpotData(vector<string> list)
+{
+	for (string str : list) {
+		//将分隔字符串后的读入新的vector 
+		vector<string> split(SplitString(str));
+		Spot i(split);
+		DataList::spotList.push_back(i);
+	}
+}
+
+//储存数据
 void GameThread::SaveGame() {
 
 }
+
+//读取数据
 void GameThread::LoadGame() {
 
+}
+
+//探索场景
+void ExploreSpot(Hero* hero, int spotId)
+{
+	Spot newSpot = DataList::spotList[spotId];
+	cout << "你来到了" << newSpot.spotName << endl << newSpot.spotDescription << endl;
+	for (int i = 0; i < newSpot.NPCnumber; i++) {
+		cout << "你开始慢慢走向前" << endl;
+		cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[i]].name << endl;
+		cout << "你要怎么做" << endl;
+		int input;
+		//这里的判断要改
+		if (newSpot.spotNumber == 0) {
+			cout << "1. 战斗 2. 偷听 3. 离开";
+			input = GetInput(1, 3);
+			if (input == 1) {
+				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
+				newFight.Fighting();
+			}
+			else if (input == 2) {
+				//偷听的相关剧情
+			}
+			else if (input == 3) {
+				cout << "你离开了" << newSpot.spotName;
+				//离开
+			}
+
+		}
+		else {
+			cout << "1. 战斗 2. 离开";
+			input = GetInput(1, 2);
+			if (input == 1) {
+				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
+				newFight.Fighting();
+			}
+			else if (input == 2) {
+				cout << "你离开了" << newSpot.spotName;
+				//离开
+			}
+		}
+
+
+	}
 }
