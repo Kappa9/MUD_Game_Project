@@ -30,7 +30,7 @@ public:
 };
 
 //Ì½Ë÷³¡¾°
-void ExploreSpot(int spotId);                           
+void ExploreSpot(Hero* hero,int spotId);                           
 
 
 
@@ -47,6 +47,6 @@ private:
 	void GetSkillData(vector<string> list);
 	void GetNPCData(vector<string> list);
 	void GetSpotData(vector<string> list);
-	void SaveGame();
-	void LoadGame();
+	void SaveGame(Hero* hero);
+	void LoadGame(Hero* hero);
 };
