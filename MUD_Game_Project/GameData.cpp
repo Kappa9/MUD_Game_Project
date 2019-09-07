@@ -1,26 +1,26 @@
 #include "GameData.h"
 
-Goods::Goods()
-{
+Goods::Goods() {
+	index = -1;
 }
 
-Goods::Goods(vector<string> list)
-{
+Goods::Goods(vector<string> list) {
 	if (list.size() == 13) {
-		name = list[0];
-		description = list[1];
-		attribute = atoi(list[2].c_str());
-		addAtract = atoi(list[3].c_str());
-		addDefense = atoi(list[4].c_str());
-		addHP = atoi(list[5].c_str());
-		addMaxHP = atoi(list[6].c_str());
+		index = atoi(list[0].c_str());
+		name = list[1];
+		description = list[2];
+		attribute = atoi(list[3].c_str());
+		location = atoi(list[4].c_str());
+		cost = atoi(list[5].c_str());
+		addHP = atoi(list[6].c_str());
 		addMP = atoi(list[7].c_str());
-		addMaxMP = atoi(list[8].c_str());
-		addSpeed = atoi(list[9].c_str());
-		index = atoi(list[10].c_str());
-		location = atoi(list[11].c_str());
-		cost = atoi(list[12].c_str());
+		addMaxHP = atoi(list[8].c_str());
+		addMaxMP = atoi(list[9].c_str());
+		addAttack = atoi(list[10].c_str());
+		addDefense = atoi(list[11].c_str());
+		addSpeed = atoi(list[12].c_str());
 	}
+	else Goods();
 }
 
 //复制物品
@@ -29,7 +29,7 @@ void Goods::Copy(Goods* thing)
 	name=thing->name;            
 	description=thing->description;     
 	attribute=thing->attribute;          
-	addAtract=thing->addAtract;          
+	addAttack=thing->addAttack;          
 	addDefense=thing->addDefense;         
 	addHP=thing->addHP;              
 	addMaxHP=thing->addMaxHP;           
@@ -140,7 +140,7 @@ void Bag::PrintEquipment()
 					switch (i)
 					{
 					case 0:cout << "铠甲：" << equipment[i]->name <<" 防御："<<equipment[i]->addDefense<<endl;
-					case 1:cout << "武器：" << equipment[i]->name <<" 攻击："<<equipment[i]->addAtract<< endl;
+					case 1:cout << "武器：" << equipment[i]->name <<" 攻击："<<equipment[i]->addAttack<< endl;
 					case 2:cout << "足具：" << equipment[i]->name <<" 速度："<<equipment[i]->addSpeed<<endl;
 					default:
 						break;
@@ -337,6 +337,7 @@ void SkillBar::LearnSkill(Skill* ability)
 //Skill的构造函数
 Skill::Skill()
 {
+	id = -1;
 	name = " ";
 	description = " ";
 	MPcost = 0;
@@ -349,14 +350,15 @@ Skill::Skill()
 Skill::Skill(vector<string> list)
 {
 	if (list.size() == 7) {
-		name = list[0];
-		description = list[1];
-		MPcost = atoi(list[2].c_str());
-		damage = atoi(list[3].c_str());
-		critRate = (float)atoi(list[4].c_str());
-		accuracyRate = (float)atoi(list[5].c_str());
-		id = atoi(list[6].c_str());
+		id = atoi(list[0].c_str());
+		name = list[1];
+		description = list[2];
+		MPcost = atoi(list[3].c_str());
+		damage = atoi(list[4].c_str());
+		critRate = atof(list[5].c_str());
+		accuracyRate = atof(list[6].c_str());
 	}
+	else Skill();
 }
 
 //Skill的构造函数
@@ -389,9 +391,9 @@ void Skill::PrintDescription()
 
 //Hero构造函数
 Hero::Hero() {
-	id = 0; name = "勇者";
-	HPmax = 450; HP = 450;
-	MPmax = 90;	MP = 90;
+	id = 1; name = "勇者";
+	HPmax = 450; MPmax = 90;
+	HP = HPmax; MP = MPmax;
 	speed = 32; attack = 16; defense = 16;
 	experience = 0; money = 0; level = 1;
 	currentSpotId = 1;
@@ -404,10 +406,10 @@ bool Hero::LevelUp()
 	if ( this->experience < 10) {
 		this->level = 1;
 	}
-	else if(this->experience<40){
+	else if (this->experience < 40) {
 		this->level = 2;
 	}
-	else if (this->experience>=40&&this->experience<100) {
+	else if (this->experience >= 40 && this->experience < 100) {
 		this->level = 3;
 	}
 	else if (this->experience > 100 && this->experience < 200) {
@@ -469,19 +471,18 @@ void Hero::MoveToSpot(int id)
 
 NPC::NPC(vector<string> list)
 {
-	if (list.size() == 12) {
+	if (list.size() == 10) {
 		id = atoi(list[0].c_str());
 		name = list[1];
-		HP = atoi(list[2].c_str());
-		HPmax = atoi(list[3].c_str());
-		MP = atoi(list[4].c_str());
-		MPmax = atoi(list[5].c_str());
-		speed = atoi(list[6].c_str());
-		attack = atoi(list[7].c_str());
-		defense = atoi(list[8].c_str());
-		experience = atoi(list[9].c_str());
-		money = atoi(list[10].c_str());
-		talkingScript = atoi(list[11].c_str());
+		HPmax = atoi(list[2].c_str());
+		MPmax = atoi(list[3].c_str());
+		HP = HPmax; MP = MPmax;
+		speed = atoi(list[4].c_str());
+		attack = atoi(list[5].c_str());
+		defense = atoi(list[6].c_str());
+		experience = atoi(list[7].c_str());
+		money = atoi(list[8].c_str());
+		talkingScript = atoi(list[9].c_str());
 	}
 	else NPC();
 }
@@ -612,24 +613,28 @@ void InteractSystem::PrintMap() {
 
 }
 
-
-//读取文件中的场景信息
-void Spot::readSpotInformation()
-{
-
+Spot::Spot() {
+	id = -1;
 }
 
+Spot::Spot(vector<string>list) {
+	if (list.size() == 3) {
+		id = atoi(list[0].c_str());
+		name = list[1];
+		description = list[2];
+	}
+}
 
 //输出场景信息
 void Spot::printSpotInformation() {
-	cout << "你到达了" << spotName << "，" << spotDescription << "。" << endl;
-	}
+	cout << "你到达了" << name << "，" << description << "。" << endl;
+}
 
 
 //读取文件信息后输出NPC信息
 void Spot::printNPCs()
 {
-	for (int i = 0; i < NPCnumber; i++) {
+	for (int i = 0; i < NPCIdList.size; i++) {
 
 	}
 }
@@ -666,16 +671,4 @@ void store::Purchase(Hero* player, int id)
 	}
 }
 
-Spot::Spot()
-{
-}
 
-Spot::Spot(vector<string>list)
-{
-	if (list.size() == 4) {
-		spotNumber = atoi(list[0].c_str());
-		NPCnumber = atoi(list[1].c_str());
-		spotName = list[2];
-		spotDescription = list[3];
-	}
-}
