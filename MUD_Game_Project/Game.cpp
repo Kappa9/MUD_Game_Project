@@ -242,6 +242,84 @@ bool GameThread::LoadGame() {
 	else return false;
 }
 
+//Hero构造函数
+Hero::Hero() {
+	id = 0; name = "勇者";
+	HPmax = 450; MPmax = 90;
+	HP = HPmax; MP = MPmax;
+	speed = 24; attack = 16; defense = 16;
+	experience = 0; level = 1;
+	money = 0; bag.money = 0;
+	currentSpotId = -1;
+}
+
+//升级
+bool Hero::LevelUp() {
+	int num = level;
+	if (experience < 10) {
+		level = 1;
+	}
+	else if (experience < 40) {
+		level = 2;
+	}
+	else if (this->experience >= 40 && this->experience < 100) {
+		this->level = 3;
+	}
+	else if (this->experience > 100 && this->experience < 200) {
+		this->level = 4;
+	}
+	else if (this->experience >= 200) {
+		this->level = 5;
+	}
+	if (level > num) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+//Hero在背包中使用消耗品
+void Hero::UsingGoods(int id) {
+	Goods usingGoods = DataList().goodsList[id];
+	if (usingGoods.attribute == 0) {
+		this->bag.AbandonGoods(id);
+		cout << "你使用了" << usingGoods.name;
+		for (int i = 0; i < bag.cargo.size(); i++) {
+			if (bag.cargo[i].thing->index == id) {
+				bag.ReturnNum(bag.cargo[i].thing);
+			}
+		}
+		if ((DataList().goodsList[id].addHP) == 0) {}
+		else {
+			if (DataList().goodsList[id].addHP <= (this->HPmax - this->HP))
+				cout << "你的HP增加了" << DataList().goodsList[id].addHP << "点";
+			else {
+				cout << "你的HP增加了" << this->HPmax - this->HP;
+			}
+		}
+		if ((DataList().goodsList[id].addMP) == 0) {}
+		else {
+			if (DataList().goodsList[id].addMP <= (this->MPmax - this->MP)) {
+				cout << "你的MP增加了" << DataList().goodsList[id].addMP << "点";
+			}
+			else {
+				cout << "你的MP增加了" << this->MPmax - this->MP;
+			}
+		}
+	}
+	else {
+		cout << "选择的物品无法使用";
+	}
+}
+
+//移动到一个地点
+void Hero::MoveToSpot(int id) {
+	system("cls");
+	currentSpotId = id;
+	DataList::spotList[id].OnEnterSpot();
+}
+
 //Fight的构造函数
 Fight::Fight(Hero* player, NPC* enemy)
 {

@@ -1,6 +1,18 @@
 #pragma once
 #include "GameData.h"
 
+//勇者类
+class Hero :public NPC {
+public:
+	Hero();
+	int level;                                     //等级
+	int currentSpotId;
+	Bag bag;
+	bool LevelUp();								   //升级
+	void UsingGoods(int id);                       //使用背包中的消耗品
+	void MoveToSpot(int id);
+	//void ExploreSpot();
+};
 //商店的类
 class store {
 public:
