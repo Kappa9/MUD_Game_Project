@@ -143,7 +143,6 @@ void GameThread::NewGame() {
 void GameThread::SaveGame() {
 	//先删除文件
 	fstream fout("save.txt", ios::out | ios::trunc);  //具体的存档文件的名字需要改 
-
 	fout << hero.level << endl;
 	fout << hero.HPmax << endl;
 	fout << hero.MPmax << endl;
@@ -241,7 +240,6 @@ bool GameThread::LoadGame() {
 	}
 	else return false;
 }
-
 //Hero构造函数
 Hero::Hero() {
 	id = 0; name = "勇者";
@@ -252,7 +250,6 @@ Hero::Hero() {
 	money = 0; bag.money = 0;
 	currentSpotId = -1;
 }
-
 //升级
 bool Hero::LevelUp() {
 	int num = level;
@@ -278,7 +275,6 @@ bool Hero::LevelUp() {
 		return false;
 	}
 }
-
 //Hero在背包中使用消耗品
 void Hero::UsingGoods(int id) {
 	Goods usingGoods = DataList().goodsList[id];
@@ -312,14 +308,37 @@ void Hero::UsingGoods(int id) {
 		cout << "选择的物品无法使用";
 	}
 }
-
 //移动到一个地点
 void Hero::MoveToSpot(int id) {
 	system("cls");
 	currentSpotId = id;
 	DataList::spotList[id].OnEnterSpot();
 }
-
+//探索场景
+void Hero::ExploreSpot() {
+	switch (currentSpotId) {
+	case 0:
+		cout << "你来到了" << DataList::spotList[currentSpotId].name << endl;
+		cout << DataList::spotList[currentSpotId].description << endl;
+		for (int id : DataList::spotList[currentSpotId].NPCIdList) {
+			cout << "你开始慢慢走向前" << endl;
+			cout << "你发现了" << DataList::npcList[id].name << endl;
+			cout << "你要怎么做" << endl;
+			cout << "1. 战斗 2. 偷听 3. 离开";
+			int input = InteractSystem::UserInput(3);
+			if (input == 1) {
+				Fight newFight(this, &(DataList::npcList[id]));
+				newFight.Fighting();
+			}
+			else if (input == 2) {
+				//偷听的相关剧情
+			}
+		}
+		break;
+	default:
+		break;
+	}
+}
 //Fight的构造函数
 Fight::Fight(Hero* player, NPC* enemy)
 {
@@ -455,7 +474,6 @@ void Fight::Victory(Hero* player, NPC* enemy) {
 		player->experience += enemy->experience;
 	}
 }
-
 //战斗过程
 void Fight::Fighting() {
 	cout << "你与" << enemy->name << "斗在了一起";
@@ -516,74 +534,20 @@ void Fight::Fighting() {
 	}
 
 }
-
+//产生随机数
 int Fight::Random(int num) {
 	srand((unsigned int)time(NULL));
 	return rand() % num;
 }
-
-Explore::Explore(Hero* player, int id) {
-	hero = player;
-	spotId = id;
-	ExploreSpot();
+//商店构造函数
+store::store() {
 }
-//探索场景
-void Explore::ExploreSpot() {
-	Spot newSpot = DataList::spotList[spotId];
-	cout << "你来到了" << newSpot.name << endl << newSpot.description << endl;
-	for (int i = 0; i < newSpot.NPCIdList.size(); i++) {
-		cout << "你开始慢慢走向前" << endl;
-		cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[i]].name << endl;
-		cout << "你要怎么做" << endl;
-		int input;
-		//这里的判断要改
-		if (newSpot.id == 0) {
-			cout << "1. 战斗 2. 偷听 3. 离开";
-			input = InteractSystem::UserInput(3);
-			if (input == 1) {
-				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
-				newFight.Fighting();
-			}
-			else if (input == 2) {
-				//偷听的相关剧情
-			}
-			else if (input == 3) {
-				cout << "你离开了" << newSpot.name;
-				//离开
-			}
-
-		}
-		else {
-			cout << "1. 战斗 2. 离开";
-			input = InteractSystem::UserInput(2);
-			if (input == 1) {
-				Fight newFight(hero, &(DataList::npcList[newSpot.NPCIdList[i]]));
-				newFight.Fighting();
-			}
-			else if (input == 2) {
-				cout << "你离开了" << newSpot.name;
-				//离开
-			}
-		}
-	}
-}
-
-
-
-//构造函数
-store::store()
-{
-}
-
-//添加物品的ID
-void store::AddGoodsId(int id)
-{
+//向商店添加物品
+void store::AddGoodsId(int id) {
 	goodsIdList.push_back(id);
 }
-
 //购买物品
-void store::Purchase(Hero* player, int id)
-{
+void store::Purchase(Hero* player, int id) {
 	if (player->bag.money >= DataList::goodsList[id].cost) {
 		player->bag.AddGoods(DataList::goodsList[id].index);
 		player->bag.money -= DataList::goodsList[id].cost;
@@ -593,5 +557,3 @@ void store::Purchase(Hero* player, int id)
 		cout << "你的金币不足" << endl;
 	}
 }
-
-

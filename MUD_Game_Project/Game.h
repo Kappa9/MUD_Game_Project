@@ -11,7 +11,7 @@ public:
 	bool LevelUp();								   //升级
 	void UsingGoods(int id);                       //使用背包中的消耗品
 	void MoveToSpot(int id);
-	//void ExploreSpot();
+	void ExploreSpot();
 };
 //商店的类
 class store {
@@ -41,15 +41,6 @@ public:
 	vector<NPC*>list;   //关于回合判定的vector
 private:
 	int Random(int num);
-};
-//探索场景                       
-class Explore {
-public:
-	Explore(Hero* hero, int id);
-private:
-	Hero* hero;
-	int spotId;
-	void ExploreSpot();
 };
 //游戏进程类，处于结构的最顶层
 class GameThread {
