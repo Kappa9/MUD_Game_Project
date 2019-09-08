@@ -15,13 +15,11 @@ class InteractSystem
 public:
 	InteractSystem() {}
 	static int UserInput(int maxNum);
-	static void PrintLog(string message);
 	static void PrintMap();
 	static int Dialog(int startLine);
 	static vector<string> ReadFile(string fileName);
 	static vector<string> SplitString(string str, string pattern);
 private:
-	static HANDLE handle;
 	static int GetUserInput();
 };
 

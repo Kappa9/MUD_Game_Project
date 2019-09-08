@@ -503,13 +503,16 @@ vector<Spot> DataList::spotList(0);
 vector<string> DataList::dialogList(0);
 array<short, 100> DataList::trigger = { 0 };
 
-HANDLE InteractSystem::handle = GetStdHandle(STD_OUTPUT_HANDLE);
 //读文件
 vector<string> InteractSystem::ReadFile(string fileName) {
-	string path = "" + fileName + ".txt";
+	string path = "Data\\" + fileName + ".txt";
 	fstream fin;
 	fin.open(path.c_str(), ios::in);
 	vector<string> list;
+	if (!fin.is_open()) {
+		cout << "未成功打开" << fileName << "文件！" << endl;
+		return list;
+	}
 	string tmp;
 	while (getline(fin, tmp))
 		list.push_back(tmp);
@@ -574,7 +577,7 @@ int InteractSystem::Dialog(int id) {
 			//选择域开始标志
 			if (line == "#DECISION") {
 				state = inDecision;
-				for (int i = lineIndex; i < DataList::dialogList.size; i++) {
+				for (int i = lineIndex; i < DataList::dialogList.size(); i++) {
 					if (DataList::dialogList[i] == "#CASEEND") maxCases++;
 					else if (DataList::dialogList[i] == "#DECISIONEND") break;
 				}
@@ -605,12 +608,16 @@ int InteractSystem::Dialog(int id) {
 	return input;
 }
 
-void InteractSystem::PrintLog(string message) {
-	SetConsoleTextAttribute(handle, 15 | 0);
-	cout << message << endl << endl;
-}
 void InteractSystem::PrintMap() {
-
+	cout << "                            废弃的魔法阵→女巫小屋" << endl;
+	cout << "                                 ↑            |" << endl;
+	cout << "                            林中村落(Lv.5)     |" << endl;
+	cout << "                                 ↑            ↓" << endl;
+	cout << "        王城————→森林小径→山谷———→火山洞穴—→林间小屋" << endl;
+	cout << "                         ↓" << endl;
+	cout << "                哥布林领地门口(Lv.2)" << endl;
+	cout << "                         ↓" << endl;
+	cout << "                      隐秘地牢" << endl;
 }
 
 Spot::Spot() {
@@ -634,7 +641,7 @@ void Spot::printSpotInformation() {
 //读取文件信息后输出NPC信息
 void Spot::printNPCs()
 {
-	for (int i = 0; i < NPCIdList.size; i++) {
+	for (int i = 0; i < NPCIdList.size(); i++) {
 
 	}
 }

@@ -1,7 +1,6 @@
 #include "Game.h"
 int main()
 {
-	cout << "Hello World!";
 	GameThread game;
 
 
@@ -233,7 +232,8 @@ GameThread::GameThread() {
 	LaunchGame();
 }
 void GameThread::LaunchGame() {
-	cout << endl << "Game Started." << endl;
+	cout << "Game Started." << endl << endl;
+	InteractSystem::PrintMap();
 }
 //隐藏光标函数
 void GameThread::HideCursor()
@@ -454,7 +454,7 @@ void Explore::ExploreSpot()
 {
 	Spot newSpot = DataList::spotList[spotId];
 	cout << "你来到了" << newSpot.name << endl << newSpot.description << endl;
-	for (int i = 0; i < newSpot.NPCIdList.size; i++) {
+	for (int i = 0; i < newSpot.NPCIdList.size(); i++) {
 		cout << "你开始慢慢走向前" << endl;
 		cout << "你发现了" << DataList::npcList[newSpot.NPCIdList[i]].name << endl;
 		cout << "你要怎么做" << endl;
