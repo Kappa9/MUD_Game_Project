@@ -125,11 +125,11 @@ public:
 	int experience;          //经验
 	int money;             //金钱
 	int talkingScript;         //
+	SkillBar skillBar;
 
 	NPC() {};
 	NPC(vector<string>list);  //构造函数
 
-	SkillBar skillBar;
 	void ShowNPCState();
 };
 
