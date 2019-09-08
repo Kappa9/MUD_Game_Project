@@ -343,35 +343,35 @@ void GameThread::GetSpotData(vector<string> list)
 }
 
 //储存数据
-void GameThread::SaveGame(Hero* hero) {
+void GameThread::SaveGame() {
 	//先删除文件
-	fstream fout("stuinfo.txt", ios::out | ios::trunc);  //具体的存档文件的名字需要改 
+	fstream fout("save.txt", ios::out | ios::trunc);  //具体的存档文件的名字需要改 
 
-	fout << hero->level << endl;
-	fout << hero->name << endl;
-	fout << hero->HP << endl;
-	fout << hero->HPmax << endl;
-	fout << hero->MP << endl;
-	fout << hero->MPmax << endl;
-	fout << hero->speed << endl;
-	fout << hero->attack << endl;
-	fout << hero->defense << endl;
-	fout << hero->experience << endl;
-	fout << hero->money<< endl;
+	fout << hero.level << endl;
+	fout << hero.HPmax << endl;
+	fout << hero.MPmax << endl;
+	fout << hero.HP << endl;
+	fout << hero.MP << endl;
+	fout << hero.speed << endl;
+	fout << hero.attack << endl;
+	fout << hero.defense << endl;
+	fout << hero.experience << endl;
+	fout << hero.bag.money<< endl;
+	fout << hero.currentSpotId<< endl;
 	
 	//存储背包中的物品的id
-	for (int i = 0; i < hero->bag.cargo.size(); i++) {
-		fout << hero->bag.cargo[i].thing->index << endl;
+	for (int i = 0; i < hero.bag.cargo.size(); i++) {
+		fout << hero.bag.cargo[i].thing->index << endl;
 	}
 	fout << " "<<endl;
 	//存储背包中的对应物品的数量
-	for (int i = 0; i < hero->bag.cargo.size(); i++) {
-		fout << hero->bag.cargo[i].num << endl;
+	for (int i = 0; i < hero.bag.cargo.size(); i++) {
+		fout << hero.bag.cargo[i].num << endl;
 	}
 	fout << " " << endl;
 
-	for (int i = 0; i < hero->bag.cargo.size(); i++) {
-		fout << hero->bag.equipment[i]->index << endl;
+	for (int i = 0; i < hero.bag.cargo.size(); i++) {
+		fout << hero.bag.equipment[i]->index << endl;
 	}
 	fout << " " << endl;
 
@@ -384,64 +384,67 @@ void GameThread::SaveGame(Hero* hero) {
 }
 
 //读取数据
-void GameThread::LoadGame(Hero* hero) {
+void GameThread::LoadGame() {
 	ifstream in;
 	string line;
-	in.open("filename.txt");  //需要具体改名字
-
-	//读取关于hero的属性
-	getline(in, line);
-	hero->level = (atoi(line.c_str()));
-	getline(in, line);
-	hero->name = line;
-	getline(in,line);
-	hero->HP = atoi(line.c_str());
-	getline(in, line);
-	hero->HPmax = atoi(line.c_str());
-	getline(in, line);
-	hero->MP = atoi(line.c_str());
-	getline(in, line);
-	hero->MPmax = atoi(line.c_str());
-	getline(in, line);
-	hero->speed = atoi(line.c_str());
-	getline(in, line);
-	hero->attack = atoi(line.c_str());
-	getline(in, line);
-	hero->defense = atoi(line.c_str());
-	getline(in, line);
-	hero->experience = atoi(line.c_str());
-	getline(in, line);
-	hero->money = atoi(line.c_str());
-
-	//先清空背包 
-	hero->bag.cargo.clear();
-
-	//读取背包内的物品种类
-	for (int i=0; line != "";i++) {
-		hero->bag.AddGoods(atoi(line.c_str()));
+	in.open("save.txt");  //需要具体改名字
+	if (in.is_open()) {
+		//读取关于hero的属性
 		getline(in, line);
-	}
-
-	getline(in, line);
-
-	//读取背包内对应的物品种类的数量
-	for (int i = 0; line != ""; i++) {
-		hero->bag.cargo[i].num = atoi(line.c_str());
+		hero.level = (atoi(line.c_str()));
 		getline(in, line);
-	}
+		hero.HPmax = atoi(line.c_str());
+		getline(in, line);
+		hero.MPmax = atoi(line.c_str());
+		getline(in, line);
+		hero.HP = atoi(line.c_str());
+		getline(in, line);
+		hero.MP = atoi(line.c_str());
+		getline(in, line);
+		hero.speed = atoi(line.c_str());
+		getline(in, line);
+		hero.attack = atoi(line.c_str());
+		getline(in, line);
+		hero.defense = atoi(line.c_str());
+		getline(in, line);
+		hero.experience = atoi(line.c_str());
+		getline(in, line);
+		hero.bag.money = atoi(line.c_str());
+		getline(in, line);
+		hero.currentSpotId = atoi(line.c_str());
 
-	getline(in, line);
-	//读取关于装备栏中装备的信息
-	for (int i = 0; line != ""; i++) {
-		hero->bag.equipment[i]=(&(DataList::goodsList[atoi(line.c_str())]));
-	}
+		//先清空背包 
+		hero.bag.cargo.clear();
 
-	//读取关于对话的开关
-	for (int i = 0; i < DataList::trigger.size(); i++) {
-		DataList::trigger[i] = atoi(line.c_str());
-	}
+		//读取背包内的物品种类
+		for (int i = 0; line != ""; i++) {
+			hero.bag.AddGoods(atoi(line.c_str()));
+			getline(in, line);
+		}
 
-	in.close();
+		getline(in, line);
+
+		//读取背包内对应的物品种类的数量
+		for (int i = 0; line != ""; i++) {
+			hero.bag.cargo[i].num = atoi(line.c_str());
+			getline(in, line);
+		}
+
+		getline(in, line);
+		//读取关于装备栏中装备的信息
+		for (int i = 0; line != ""; i++) {
+			hero.bag.equipment[i] = (&(DataList::goodsList[atoi(line.c_str())]));
+		}
+
+		//读取关于对话的开关
+		for (int i = 0; i < DataList::trigger.size(); i++) {
+			DataList::trigger[i] = atoi(line.c_str());
+		}
+		in.close();
+
+	}
+	else 
+		cout << "未找到存档文件！" << endl;
 }
 
 Explore::Explore(Hero* player, int id) {

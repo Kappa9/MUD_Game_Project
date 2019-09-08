@@ -389,13 +389,41 @@ void Skill::PrintDescription()
 	cout << this->description;
 }
 
+
+NPC::NPC(vector<string> list)
+{
+	if (list.size() == 10) {
+		id = atoi(list[0].c_str());
+		name = list[1];
+		HPmax = atoi(list[2].c_str());
+		MPmax = atoi(list[3].c_str());
+		HP = HPmax; MP = MPmax;
+		speed = atoi(list[4].c_str());
+		attack = atoi(list[5].c_str());
+		defense = atoi(list[6].c_str());
+		experience = atoi(list[7].c_str());
+		money = atoi(list[8].c_str());
+		talkingScript = atoi(list[9].c_str());
+	}
+	else NPC();
+}
+
+//显示某角色的状态
+void NPC::ShowNPCState()
+{
+	cout << this->name;
+	cout << "（生命值:" << this->HP << "/" << this->HPmax;
+	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
+}
+
 //Hero构造函数
 Hero::Hero() {
 	id = 1; name = "勇者";
 	HPmax = 450; MPmax = 90;
 	HP = HPmax; MP = MPmax;
 	speed = 32; attack = 16; defense = 16;
-	experience = 0; money = 0; level = 1;
+	experience = 0; level = 1;
+	money = 0; bag.money = 0;
 	currentSpotId = 1;
 }
 
@@ -468,33 +496,6 @@ void Hero::MoveToSpot(int id)
 	cout << DataList::spotList[id].description << endl;
 
 }
-
-NPC::NPC(vector<string> list)
-{
-	if (list.size() == 10) {
-		id = atoi(list[0].c_str());
-		name = list[1];
-		HPmax = atoi(list[2].c_str());
-		MPmax = atoi(list[3].c_str());
-		HP = HPmax; MP = MPmax;
-		speed = atoi(list[4].c_str());
-		attack = atoi(list[5].c_str());
-		defense = atoi(list[6].c_str());
-		experience = atoi(list[7].c_str());
-		money = atoi(list[8].c_str());
-		talkingScript = atoi(list[9].c_str());
-	}
-	else NPC();
-}
-
-//显示某角色的状态
-void NPC::ShowNPCState()
-{
-	cout << this->name;
-	cout << "（生命值:" << this->HP << "/" << this->HPmax;
-	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
-}
-
 
 vector<Goods> DataList::goodsList(0);
 vector<Skill> DataList::skillList(0);

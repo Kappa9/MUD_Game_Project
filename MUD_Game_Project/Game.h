@@ -58,6 +58,7 @@ private:
 	void GetNPCData(vector<string> list);
 	void GetSpotData(vector<string> list);
 	
-	void SaveGame(Hero* hero);
-	void LoadGame(Hero* hero);
+	void NewGame();
+	void SaveGame();
+	void LoadGame();
 };
