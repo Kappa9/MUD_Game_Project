@@ -320,16 +320,20 @@ void GameThread::GetSpotData(vector<string> list)
 			newSpot.description = split[2];
 			break;
 		case 2:
-			for (string i : split)
-				newSpot.NPCIdList.push_back(atoi(i.c_str()));
+			if (str != "-1") {
+				for (string i : split)
+					newSpot.NPCIdList.push_back(atoi(i.c_str()));
+			}
 			break;
 		case 3:
-			for (string i : split)
-				newSpot.nearSpotId.push_back(atoi(i.c_str()));
-			DataList::spotList.push_back(newSpot);
-			lineNum = 0;
-			newSpot.NPCIdList.clear();
-			newSpot.nearSpotId.clear();
+			if (str != "-1") {
+				for (string i : split)
+					newSpot.nearSpotId.push_back(atoi(i.c_str()));
+				DataList::spotList.push_back(newSpot);
+				lineNum = 0;
+				newSpot.NPCIdList.clear();
+				newSpot.nearSpotId.clear();
+			}
 			break;
 		default:
 			break;
