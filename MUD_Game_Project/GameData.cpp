@@ -418,13 +418,13 @@ void NPC::ShowNPCState()
 
 //Hero构造函数
 Hero::Hero() {
-	id = 1; name = "勇者";
+	id = 0; name = "勇者";
 	HPmax = 450; MPmax = 90;
 	HP = HPmax; MP = MPmax;
-	speed = 32; attack = 16; defense = 16;
+	speed = 24; attack = 16; defense = 16;
 	experience = 0; level = 1;
 	money = 0; bag.money = 0;
-	currentSpotId = 1;
+	currentSpotId = 0;
 }
 
 //升级
@@ -610,15 +610,15 @@ int InteractSystem::Dialog(int id) {
 }
 
 void InteractSystem::PrintMap() {
-	cout << "                            废弃的魔法阵→女巫小屋" << endl;
-	cout << "                                 ↑            |" << endl;
-	cout << "                            林中村落(Lv.5)     |" << endl;
-	cout << "                                 ↑            ↓" << endl;
-	cout << "        王城————→森林小径→山谷———→火山洞穴—→林间小屋" << endl;
-	cout << "                         ↓" << endl;
-	cout << "                哥布林领地门口(Lv.2)" << endl;
-	cout << "                         ↓" << endl;
-	cout << "                      隐秘地牢" << endl;
+	cout << "                       废弃的魔法阵--------→女巫小屋" << endl;
+	cout << "                           ↑                   |" << endl;
+	cout << "                      林中村落(Lv.5)            |" << endl;
+	cout << "                           ↑                  ↓" << endl;
+	cout << "           王城(商店)--→森林小径--→山谷--→火山洞穴--→林间小屋" << endl;
+	cout << "               ↓" << endl;
+	cout << "         哥布林领地门口(Lv.2)" << endl;
+	cout << "               ↓" << endl;
+	cout << "            隐秘地牢" << endl;
 }
 
 Spot::Spot() {

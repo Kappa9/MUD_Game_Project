@@ -159,9 +159,11 @@
     <ClInclude Include="GameData.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Data\Dialog.txt" />
     <Text Include="Data\Goods.txt" />
     <Text Include="Data\NPC.txt" />
     <Text Include="Data\Skill.txt" />
+    <Text Include="Data\Spot.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

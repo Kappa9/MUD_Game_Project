@@ -18,13 +18,11 @@ Fight::Fight(Hero* player, NPC* enemy)
 }
 
 //Fight的析构函数
-Fight::~Fight()
-{
+Fight::~Fight() {
 }
 
 //判定谁先先手
-NPC* Fight::DecideWhoAct()
-{
+NPC* Fight::DecideWhoAct() {
 	if (player->speed >= enemy->speed) {
 		return player;
 	}
@@ -226,14 +224,32 @@ GameThread::GameThread() {
 	GetItemData(InteractSystem::ReadFile("Goods"));
 	GetSkillData(InteractSystem::ReadFile("Skill"));
 	GetNPCData(InteractSystem::ReadFile("NPC"));
-	GetSpotData(InteractSystem::ReadFile("Spot"));
-	DataList::dialogList = InteractSystem::ReadFile("Dialog");
+	//GetSpotData(InteractSystem::ReadFile("Spot"));
+	//DataList::dialogList = InteractSystem::ReadFile("Dialog");
 	HideCursor();
 	LaunchGame();
 }
 void GameThread::LaunchGame() {
-	cout << "Game Started." << endl << endl;
 	InteractSystem::PrintMap();
+	cout << "MUDGAME" << endl << endl;
+	cout << "1.新的开始" << endl;
+	cout << "2.旧的回忆" << endl;
+	cout << "3.退出游戏" << endl;
+	/*int input = InteractSystem::UserInput(3);
+	switch (input)
+	{
+	case 1:
+		NewGame();
+		break;
+	case 2:
+		LoadGame();
+		break;
+	case 3:
+		exit(0);
+		break;
+	default:
+		break;
+	}*/
 }
 //隐藏光标函数
 void GameThread::HideCursor()
@@ -272,17 +288,17 @@ void GameThread::GetNPCData(vector<string> list)
 		split = (InteractSystem::SplitString(str, ","));
 		switch (lineNum) {
 		case 1:
-			newNPC.id = atoi(list[0].c_str());
-			newNPC.name = list[1];
-			newNPC.HPmax = atoi(list[2].c_str());
-			newNPC.MPmax = atoi(list[3].c_str());
+			newNPC.id = atoi(split[0].c_str());
+			newNPC.name = split[1];
+			newNPC.HPmax = atoi(split[2].c_str());
+			newNPC.MPmax = atoi(split[3].c_str());
 			newNPC.HP = newNPC.HPmax; newNPC.MP = newNPC.MPmax;
-			newNPC.speed = atoi(list[4].c_str());
-			newNPC.attack = atoi(list[5].c_str());
-			newNPC.defense = atoi(list[6].c_str());
-			newNPC.experience = atoi(list[7].c_str());
-			newNPC.money = atoi(list[8].c_str());
-			newNPC.talkingScript = atoi(list[9].c_str());
+			newNPC.speed = atoi(split[4].c_str());
+			newNPC.attack = atoi(split[5].c_str());
+			newNPC.defense = atoi(split[6].c_str());
+			newNPC.experience = atoi(split[7].c_str());
+			newNPC.money = atoi(split[8].c_str());
+			newNPC.talkingScript = atoi(split[9].c_str());
 			break;
 		case 2:
 			if (str != "-1") {
@@ -298,12 +314,7 @@ void GameThread::GetNPCData(vector<string> list)
 		}
 		lineNum++;
 	}
-	for (string str : list) {
-		//将分隔字符串后的读入新的vector 
-		vector<string> split(InteractSystem::SplitString(str, ","));
-		NPC i(split);
-		DataList::npcList.push_back(i);
-	}
+	int j = 0;
 }
 //得到地图的数据
 void GameThread::GetSpotData(vector<string> list)
@@ -340,6 +351,10 @@ void GameThread::GetSpotData(vector<string> list)
 		}
 		lineNum++;
 	}
+}
+
+void GameThread::NewGame() {
+
 }
 
 //储存数据

@@ -40,5 +40,11 @@
     <Text Include="Data\Skill.txt">
       <Filter>资源文件</Filter>
     </Text>
+    <Text Include="Data\Dialog.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="Data\Spot.txt">
+      <Filter>资源文件</Filter>
+    </Text>
   </ItemGroup>
 </Project>
