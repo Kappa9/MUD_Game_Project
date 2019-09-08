@@ -24,41 +24,33 @@ Goods::Goods(vector<string> list) {
 }
 
 //复制物品
-void Goods::Copy(Goods* thing)
-{
-	name=thing->name;            
-	description=thing->description;     
-	attribute=thing->attribute;          
-	addAttack=thing->addAttack;          
-	addDefense=thing->addDefense;         
-	addHP=thing->addHP;              
-	addMaxHP=thing->addMaxHP;           
-	addMP=thing->addMP;              
-	addMaxMP=thing->addMaxMP;          
-	addSpeed = thing->addSpeed;           
-	index=thing->index;         
-	location=thing->location;           
-	cost=thing->cost;               
-
+void Goods::Copy(Goods* thing) {
+	name=thing->name;
+	description=thing->description;
+	attribute=thing->attribute;
+	addAttack=thing->addAttack;
+	addDefense=thing->addDefense;
+	addHP=thing->addHP;
+	addMaxHP=thing->addMaxHP;
+	addMP=thing->addMP;
+	addMaxMP=thing->addMaxMP;
+	addSpeed = thing->addSpeed;
+	index=thing->index;
+	location=thing->location;
+	cost=thing->cost;
 }
 
 //输出物品的详细描述
-void Goods::PrintDescription()
-{
+void Goods::PrintDescription() {
 	cout << this->description;
 }
 
-
-
 //描述背包内容
-void Bag::Print(int page)
-{
+void Bag::Print(int page) {
 	int i = (page - 1) * 7;
 	int number = 1;
 	PrintPart(i);
-
 }
-
 	/*	cin >> number;
 		while (number < 0 || number>9) {
 			cout << "请输入正确的数字";
@@ -109,8 +101,7 @@ void Bag::Print(int page)
 	}*/
 
 //描述背包中的部分物体
-void Bag::PrintPart(int i)
-{
+void Bag::PrintPart(int i) {
 	int num = 0;
 	cout << "背包内有：" << endl;
 	for (; i < cargo.size(); i++) {
@@ -125,8 +116,7 @@ void Bag::PrintPart(int i)
 }
 
 //描述武器栏中的情况
-void Bag::PrintEquipment()
-{
+void Bag::PrintEquipment() {
 	bool judge=false;
 
 	for (int i = 0; i < 2; i++) {
@@ -156,8 +146,7 @@ void Bag::PrintEquipment()
 
 
 //向背包中添加物品
-void Bag::AddGoods(int id,int num)
-{
+void Bag::AddGoods(int id,int num) {
 	bool judge = true;
 	Goods* thing = &DataList::goodsList[id];
 	struct goods sthing;
@@ -176,8 +165,7 @@ void Bag::AddGoods(int id,int num)
 }
 
 //删除背包中的物品
-void Bag::AbandonGoods(int id, int num)
-{
+void Bag::AbandonGoods(int id, int num) {
 	bool judge = false;
 	int position;
 	for (int i = 0; i < cargo.size(); i++) {
@@ -203,8 +191,7 @@ void Bag::AbandonGoods(int id, int num)
 }
 
 //在背包中删除物品
-void Bag::AbandonGoods(Goods* thing,int num)
-{
+void Bag::AbandonGoods(Goods* thing,int num) {
 	bool judge = false;
 	int position;
 	for (int i = 0; i < cargo.size(); i++) {
@@ -231,8 +218,7 @@ void Bag::AbandonGoods(Goods* thing,int num)
 }
 
 //返回在背包中该物品的剩余情况
-void Bag::ReturnNum(Goods* thing)
-{
+void Bag::ReturnNum(Goods* thing) {
 	bool judge = false;
 
 	for (int i = 0; i < cargo.size(); i++) {
@@ -252,10 +238,8 @@ void Bag::ReturnNum(Goods* thing)
 }
 
 //装备背包中的装备
-void Bag::Equip(Goods* thing)
-{
-	if (thing->attribute == 1)
-	{
+void Bag::Equip(Goods* thing) {
+	if (thing->attribute == 1) {
 		cout << "装备了" << thing->name<<endl;
 
 		if (equipment[thing->location] == NULL) {
@@ -268,14 +252,11 @@ void Bag::Equip(Goods* thing)
 			equipment[thing->location]->Copy(thing);
 		}
 	}
-	
 	this->AbandonGoods(thing);
-
 }
 
 //卸下装备
-void Bag::Unload(Goods* thing)
-{
+void Bag::Unload(Goods* thing) {
 	this->AddGoods(equipment[thing->location]->index);
 	equipment[thing->location] = NULL;
 	cout << "将" << thing->name << "卸下";
@@ -283,8 +264,7 @@ void Bag::Unload(Goods* thing)
 
 
 //出售背包中的物品
-void Bag::Sell(Goods* thing, int num)
-{
+void Bag::Sell(Goods* thing, int num) {
 	money +=(thing->cost)*num;
 	this->AbandonGoods(thing,num);
 	cout << "你出售了" << thing->name << " ×" << num << endl;
@@ -292,8 +272,7 @@ void Bag::Sell(Goods* thing, int num)
 }
 
 //购买物品
-void Bag::Purchase(Goods* thing,int num)
-{
+void Bag::Purchase(Goods* thing,int num) {
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
 		cout << "你的余额为：" << money;
@@ -305,38 +284,16 @@ void Bag::Purchase(Goods* thing,int num)
 }
 
 //返回编号
-int Bag::ReturnId(int num)
-{
+int Bag::ReturnId(int num) {
 	return cargo[num - 1].thing->index;
 }
 
 
 
-//输出技能列表
-void SkillBar::Print()
-{
-	if (list.size() == 0) {
-		cout << "还未学会技能";
-	}
-	else {
-		cout << "你已学会技能：";
-		for (int i = 0; i < list.size(); i++) {
-			cout << i+1<<". "<<list[i]->name<<" 消耗MP："<<list[i]->MPcost;
-			cout << endl;
-		}
-	}
-}
 
-//学习技能
-void SkillBar::LearnSkill(Skill* ability)
-{
-	this->list.push_back(ability);
-
-}
 
 //Skill的构造函数
-Skill::Skill()
-{
+Skill::Skill() {
 	id = -1;
 	name = " ";
 	description = " ";
@@ -347,8 +304,7 @@ Skill::Skill()
 }
 
 //利用string类型的vector的构造函数
-Skill::Skill(vector<string> list)
-{
+Skill::Skill(vector<string> list) {
 	if (list.size() == 7) {
 		id = atoi(list[0].c_str());
 		name = list[1];
@@ -362,8 +318,7 @@ Skill::Skill(vector<string> list)
 }
 
 //Skill的构造函数
-Skill::Skill(string name, string description, short MPcost, int damage, float critRate, float accuracyRate)
-{
+Skill::Skill(string name, string description, short MPcost, int damage, float critRate, float accuracyRate) {
 	this->name = name;
 	this->description = description;
 	this->MPcost = MPcost;
@@ -373,8 +328,7 @@ Skill::Skill(string name, string description, short MPcost, int damage, float cr
 }
 
 //复制技能
-void Skill::Copy(Skill* ability)
-{
+void Skill::Copy(Skill* ability) {
 	this->name = ability->name;
 	this->description = ability->description;
 	this->MPcost = ability->MPcost;
@@ -384,14 +338,31 @@ void Skill::Copy(Skill* ability)
 }
 
 //关于技能的详细描述
-void Skill::PrintDescription()
-{
+void Skill::PrintDescription() {
 	cout << this->description;
 }
 
+//输出技能列表
+void SkillBar::Print() {
+	if (list.size() == 0) {
+		cout << "还未学会技能";
+	}
+	else {
+		cout << "你已学会技能：";
+		for (int i = 0; i < list.size(); i++) {
+			cout << i + 1 << ". " << list[i]->name << " 消耗MP：" << list[i]->MPcost;
+			cout << endl;
+		}
+	}
+}
 
-NPC::NPC(vector<string> list)
-{
+//学习技能
+void SkillBar::LearnSkill(Skill* ability) {
+	this->list.push_back(ability);
+}
+
+
+NPC::NPC(vector<string> list) {
 	if (list.size() == 10) {
 		id = atoi(list[0].c_str());
 		name = list[1];
@@ -409,11 +380,69 @@ NPC::NPC(vector<string> list)
 }
 
 //显示某角色的状态
-void NPC::ShowNPCState()
-{
+void NPC::ShowNPCState() {
 	cout << this->name;
 	cout << "（生命值:" << this->HP << "/" << this->HPmax;
 	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
+}
+
+
+Spot::Spot() {
+	id = -1;
+}
+
+//输出场景信息
+void Spot::printSpotInformation() {
+	cout << "你来到了" << name << endl;
+	cout << description << endl << endl;
+}
+
+
+//读取文件信息后输出NPC信息
+void Spot::printNPCs()
+{
+	if (NPCIdList.size() == 0)
+		cout << "这里没有可以对话的NPC！" << endl << endl;
+	else {
+		cout << "可对话的NPC如下：" << endl;
+		int i = 1;
+		for (int id : NPCIdList) {
+			cout << i << "：" << DataList::npcList[id].name << endl;
+			i++;
+		}
+		cout << endl;
+	}
+}
+
+
+//待对接，读地图对话脚本(enterScript)
+void Spot::OnEnterSpot() {
+	switch (id) {
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	case 8:
+		break;
+	case 9:
+		break;
+	case 10:
+		break;
+	default:
+		break;
+	}
 }
 
 //Hero构造函数
@@ -424,18 +453,17 @@ Hero::Hero() {
 	speed = 24; attack = 16; defense = 16;
 	experience = 0; level = 1;
 	money = 0; bag.money = 0;
-	currentSpotId = 0;
+	currentSpotId = -1;
 }
 
 //升级
-bool Hero::LevelUp()
-{
-	int num = this->level;
-	if ( this->experience < 10) {
-		this->level = 1;
+bool Hero::LevelUp() {
+	int num = level;
+	if ( experience < 10) {
+		level = 1;
 	}
-	else if (this->experience < 40) {
-		this->level = 2;
+	else if (experience < 40) {
+		level = 2;
 	}
 	else if (this->experience >= 40 && this->experience < 100) {
 		this->level = 3;
@@ -455,8 +483,7 @@ bool Hero::LevelUp()
 }
 
 //Hero在背包中使用消耗品
-void Hero::UsingGoods(int id)
-{
+void Hero::UsingGoods(int id) {
 	Goods usingGoods = DataList().goodsList[id];
 	if (usingGoods.attribute == 0) {
 		this->bag.AbandonGoods(id);
@@ -490,12 +517,12 @@ void Hero::UsingGoods(int id)
 }
 
 //移动到一个地点
-void Hero::MoveToSpot(int id)
-{
-	cout << "你来到了" << DataList::spotList[id].name<<endl;
-	cout << DataList::spotList[id].description << endl;
-
+void Hero::MoveToSpot(int id) {
+	system("cls");
+	currentSpotId = id;
+	DataList::spotList[id].OnEnterSpot();
 }
+
 
 vector<Goods> DataList::goodsList(0);
 vector<Skill> DataList::skillList(0);
@@ -520,7 +547,6 @@ vector<string> InteractSystem::ReadFile(string fileName) {
 	fin.close();
 	return list;
 }
-
 //字符串分隔
 vector<string> InteractSystem::SplitString(string str, string pattern) {
 	vector<string> split;
@@ -543,7 +569,6 @@ int InteractSystem::GetUserInput() {
 	command[0] = _getch();
 	return atoi(command);
 }
-
 //用户输入数字选项，maxNum(最大为10)为选项数，返回选项编号
 int InteractSystem::UserInput(int maxNum) {
 	int n = -1;
@@ -553,7 +578,6 @@ int InteractSystem::UserInput(int maxNum) {
 	}
 	return n;
 }
-
 //对话
 int InteractSystem::Dialog(int id) {
 	int input = 0;
@@ -564,7 +588,6 @@ int InteractSystem::Dialog(int id) {
 		idle, inDialog, inDecision, inCase
 	};
 	DialogState state = idle;
-
 	for (string line : DataList::dialogList) {
 		if (!reading)break;
 		switch (state) {
@@ -608,7 +631,7 @@ int InteractSystem::Dialog(int id) {
 	}
 	return input;
 }
-
+//输出地图
 void InteractSystem::PrintMap() {
 	cout << "                       废弃的魔法阵--------→女巫小屋" << endl;
 	cout << "                           ↑                   |" << endl;
@@ -620,63 +643,3 @@ void InteractSystem::PrintMap() {
 	cout << "               ↓" << endl;
 	cout << "            隐秘地牢" << endl;
 }
-
-Spot::Spot() {
-	id = -1;
-}
-
-Spot::Spot(vector<string>list) {
-	if (list.size() == 3) {
-		id = atoi(list[0].c_str());
-		name = list[1];
-		description = list[2];
-	}
-}
-
-//输出场景信息
-void Spot::printSpotInformation() {
-	cout << "你到达了" << name << "，" << description << "。" << endl;
-}
-
-
-//读取文件信息后输出NPC信息
-void Spot::printNPCs()
-{
-	for (int i = 0; i < NPCIdList.size(); i++) {
-
-	}
-}
-
-
-//待对接，读地图对话脚本(enterScript)
-void Spot::OnEnterSpot() {
-	
-}
-
-
-
-//构造函数
-store::store()
-{
-}
-
-//添加物品的ID
-void store::AddGoodsId(int id)
-{
-	goodsIdList.push_back(id);
-}
-
-//购买物品
-void store::Purchase(Hero* player, int id)
-{
-	if (player->bag.money >= DataList::goodsList[id].cost) { 
-		player->bag.AddGoods(DataList::goodsList[id].index);
-		player->bag.money -= DataList::goodsList[id].cost;
-		cout << "你购买了" << DataList::goodsList[id].name << endl;
-	}
-	else {
-		cout << "你的金币不足" << endl;
-	}
-}
-
-

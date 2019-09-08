@@ -1,12 +1,13 @@
 #pragma once
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 #include <vector>
 #include <array>
-#include <list>
-#include<conio.h>
-#include<Windows.h>
-#include<fstream>
+#include <conio.h>
+#include <Windows.h>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 //交互系统
@@ -16,13 +17,13 @@ public:
 	InteractSystem() {}
 	static int UserInput(int maxNum);
 	static void PrintMap();
-	static int Dialog(int startLine);
+	static int Dialog(int id);
 	static vector<string> ReadFile(string fileName);
 	static vector<string> SplitString(string str, string pattern);
 private:
 	static int GetUserInput();
 };
-
+//物品类
 class Goods {
 public:
 	Goods();
@@ -45,7 +46,6 @@ public:
 	void Copy(Goods* thing);//复制物品
 	void PrintDescription();//输出物品的详细描述
 };
-
 //背包的类
 class Bag {
 public:
@@ -77,9 +77,6 @@ public:
 	vector <goods> cargo;
 	Goods* equipment[3];
  };
-
-
-
 //技能的类
 class Skill {
 public:
@@ -98,7 +95,6 @@ public:
 	void Copy(Skill* ability); //复制技能
 	void PrintDescription();   //关于技能的详细描述
 };
-
 //技能栏的类
 class SkillBar {
 public:
@@ -107,7 +103,6 @@ public:
 
 	vector<Skill*>list;
 };
-
 //人物的类
 class NPC {
 public:
@@ -130,8 +125,6 @@ public:
 
 	void ShowNPCState();
 };
-
-
 //勇者类
 class Hero :public NPC {
 public:
@@ -143,16 +136,6 @@ public:
 	void UsingGoods(int id);                       //使用背包中的消耗品
 	void MoveToSpot(int id);
 };
-
-//商店的类
-class store {
-public:
-	store();                                //构造函数
-	void AddGoodsId(int id);                //添加物品的ID
-	void Purchase(Hero* player, int id);    //购买物品
-	vector<int>goodsIdList;
-};
-
 //场景类
 class Spot {
 public:
@@ -163,15 +146,13 @@ public:
 	vector<int>nearSpotId;            //包含临近场景的编号
 
 	Spot();
-	Spot(vector<string>list);                   //构造函数
 
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
-	void OnEnterSpot();                         //待对接，读地图对话脚本(enterScript)
+	void printNearSpots();                           //输出邻接场景
+	void OnEnterSpot();                         //进入场景后触发的函数
 };
-
-
-//数据列表
+//数据列表静态类
 class DataList {
 public:
 	DataList() {}
