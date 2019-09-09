@@ -39,109 +39,38 @@ void Goods::Copy(Goods* thing) {
 	location=thing->location;
 	cost=thing->cost;
 }
-
-//输出物品的详细描述
-void Goods::PrintDescription() {
-	cout << this->description;
-}
-
 //描述背包内容
-void Bag::Print(int page) {
-	int i = (page - 1) * 7;
-	int number = 1;
-	PrintPart(i);
-}
-	/*	cin >> number;
-		while (number < 0 || number>9) {
-			cout << "请输入正确的数字";
-			cin >> number;
-
-			if (number == 8) {
-				if (i < 7) {
-					cout << "无法翻到上一页";
-				}
-				else {
-					int remainder;
-					remainder = (i) % 7;
-					i -= (7 + remainder);
-					PrintPart(i);
-				}
-			}
-
-			if (number == 9) {
-				if (i == cargo.size()) {
-					cout << "无法翻到下一页";
-				}
-				else {
-					PrintPart(i);
-				}
-			}
-		}
-
-		if (number == 8) {
-			if (i < 7) {
-				cout << "无法翻到上一页";
-			}
-			else {
-				int remainder;
-				remainder = (i) % 7;
-				i -= (7 + remainder);
-				PrintPart(i);
-			}
-		}
-
-		if (number == 9) {
-			if (i == cargo.size()) {
-				cout << "无法翻到下一页";
-			}
-			else {
-				PrintPart(i);
-			}
-		}
-	}*/
-
-//描述背包中的部分物体
-void Bag::PrintPart(int i) {
-	int num = 0;
+void Bag::Print() {
 	cout << "背包内有：" << endl;
-	for (; i < cargo.size(); i++) {
-		num++;
-		cout << num << ". " << cargo[i].thing->name << " ×" << cargo[i].num << " ";
-		if (num == 7) {
-			num = 0;
-			cout << "8. 上一页 9. 下一页 ";
-			break;
-		}
+	int i = 0;
+	for (i = 0; i < cargo.size(); i++) {
+		cout << i + 1 << ". " << cargo[i].thing->name << "  ×" << cargo[i].num << "  " << cargo[i].thing->description << endl;
 	}
+	cout << i + 1 << ". " << "取消" << endl << endl;
 }
-
 //描述武器栏中的情况
 void Bag::PrintEquipment() {
-	bool judge=false;
-
+	bool judge = false;
 	for (int i = 0; i < 2; i++) {
 		if (equipment[i] != NULL) {
 			judge = true;
-		}
-	}
-		if (judge) {
-			for (int i = 0; i < 2; i++) {
-				if (equipment[i] != NULL) {
-					switch (i)
-					{
-					case 0:cout << "铠甲：" << equipment[i]->name <<" 防御："<<equipment[i]->addDefense<<endl;
-					case 1:cout << "武器：" << equipment[i]->name <<" 攻击："<<equipment[i]->addAttack<< endl;
-					case 2:cout << "足具：" << equipment[i]->name <<" 速度："<<equipment[i]->addSpeed<<endl;
-					default:
-						break;
-					}
+			switch (i) {
+			case 0:
+				cout << "铠甲：" << equipment[i]->name << " 防御：" << equipment[i]->addDefense << endl;
+				break;
+			case 1:
+				cout << "武器：" << equipment[i]->name << " 攻击：" << equipment[i]->addAttack << endl;
+				break;
+			case 2:
+				cout << "足具：" << equipment[i]->name << " 速度：" << equipment[i]->addSpeed << endl;
+				break;
+			default:
+				break;
 			}
 		}
 	}
-		else
-		{
-			cout << "你未穿戴任何装备";
-		}
+	if (!judge)
+		cout << "你未穿戴任何装备" << endl << endl;
 }
 
 
@@ -151,106 +80,79 @@ void Bag::AddGoods(int id,int num) {
 	Goods* thing = &DataList::goodsList[id];
 	struct goods sthing;
 	sthing.thing = thing;
-
 	for (unsigned int i = 0; i < cargo.size(); i++) {
-		if (cargo[i].thing->name == thing->name) {
+		if (cargo[i].thing->index == thing->index) {
 			cargo[i].num+=num;
 			judge = false;
+			return;
 		}
 	}
 	if (judge) {
 		sthing.num = num;
 		this->cargo.push_back(sthing);
-	 }
+	}
 }
 
 //删除背包中的物品
-void Bag::AbandonGoods(int id, int num) {
-	bool judge = false;
-	int position;
+//删除背包中的物品
+bool Bag::AbandonGoods(int id, int num) {
 	for (int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->index == id) {
-			if ((cargo[i].num - num) == 0) {
-				judge = true;
-				position = i;
+			if ((cargo[i].num - num) < 0) {
+				cout << "背包中不存在这么多的物品";
+				return false;
 			}
-			if ((cargo[i].num - num) > 0) {
+			else {
 				cargo[i].num -= num;
 				this->ReturnNum(cargo[i].thing);
-			}
-			if ((cargo[i].num - num) < 0) {
-				cout << "背包中不存在这么多的物品";
+				if ((cargo[i].num - num) == 0)
+					cargo.erase(cargo.begin() + i);
+				return true;
 			}
 		}
-	}
-	if (judge) {
-		this->ReturnNum(cargo[position].thing);
-
-		cargo.erase(cargo.begin() + position);
 	}
 }
-
 //在背包中删除物品
-void Bag::AbandonGoods(Goods* thing,int num) {
-	bool judge = false;
-	int position;
+bool Bag::AbandonGoods(Goods* thing,int num) {
 	for (int i = 0; i < cargo.size(); i++) {
-		if (cargo[i].thing->name == thing->name) {
-			if ((cargo[i].num -num)==0) {
-				judge = true;
-				position = i;
-			}
-			if ((cargo[i].num-num)>0){
-				cargo[i].num-=num;
-				this->ReturnNum(thing);
-			}
+		if (cargo[i].thing->index == thing->index) {
 			if ((cargo[i].num - num) < 0) {
 				cout << "背包中不存在这么多的物品";
+				return false;
+			}
+			else {
+				cargo[i].num -= num;
+				this->ReturnNum(thing);
+				if ((cargo[i].num - num) == 0)
+					cargo.erase(cargo.begin() + i);
+				return true;
 			}
 		}
-	}
-
-	if (judge) {
-		this->ReturnNum(thing);
-
-		cargo.erase(cargo.begin() + position);
 	}
 }
 
 //返回在背包中该物品的剩余情况
 void Bag::ReturnNum(Goods* thing) {
-	bool judge = false;
-
 	for (int i = 0; i < cargo.size(); i++) {
-		if (cargo[i].thing->name == thing->name) {
-			if (cargo[i].num != 0) {
-				cout << thing->name<<"还剩余" << cargo[i].num << "件";
-			}
-			else {
-				judge = true;
-			}
+		if (cargo[i].thing->index == thing->index) {
+			cout << thing->name << "还剩余" << cargo[i].num << "件";
+			return;
 		}
 	}
-	if (judge) {
-		cout << thing->name << "已不存在";
-	}
-
 }
 
 //装备背包中的装备
 void Bag::Equip(Goods* thing) {
 	if (thing->attribute == 1) {
-		cout << "装备了" << thing->name<<endl;
-
 		if (equipment[thing->location] == NULL) {
 			equipment[thing->location]->Copy(thing);
 		}
-		else
-		{
+		else {
 			this->AddGoods(equipment[thing->location]->index);
-			cout << "卸下了" << equipment[thing->location]->name;
+			cout << "卸下了" << equipment[thing->location]->name << endl;
 			equipment[thing->location]->Copy(thing);
 		}
+		cout << "装备了" << thing->name << endl;
 	}
 	this->AbandonGoods(thing);
 }
@@ -259,27 +161,27 @@ void Bag::Equip(Goods* thing) {
 void Bag::Unload(Goods* thing) {
 	this->AddGoods(equipment[thing->location]->index);
 	equipment[thing->location] = NULL;
-	cout << "将" << thing->name << "卸下";
+	cout << "将" << thing->name << "卸下" << endl << endl;
 }
 
 
 //出售背包中的物品
 void Bag::Sell(Goods* thing, int num) {
-	money +=(thing->cost)*num;
-	this->AbandonGoods(thing,num);
+	money += (thing->cost) * num;
+	this->AbandonGoods(thing, num);
 	cout << "你出售了" << thing->name << " ×" << num << endl;
-	cout<< ", 获得了" << (thing->cost) * num << "元";
+	cout << "获得了" << (thing->cost) * num << "元" << endl << endl;
 }
 
 //购买物品
 void Bag::Purchase(Goods* thing,int num) {
 	if (money >=(thing->cost)*num) {
 		cout << "你购买了：" << thing->name <<" ×"<<num<< endl;
-		cout << "你的余额为：" << money;
+		cout << "你的余额为：" << money << endl << endl;
 		this->AddGoods(thing->index,num);
 	}
 	else {
-		cout << "你的余额不足";
+		cout << "你的余额不足" << endl << endl;
 	}
 }
 
@@ -344,15 +246,13 @@ void Skill::PrintDescription() {
 
 //输出技能列表
 void SkillBar::Print() {
-	if (list.size() == 0) {
-		cout << "还未学会技能";
-	}
+	if (list.size() == 0)
+		cout << "还未学会技能" << endl << endl;
 	else {
-		cout << "你已学会技能：";
-		for (int i = 0; i < list.size(); i++) {
-			cout << i + 1 << ". " << list[i]->name << " 消耗MP：" << list[i]->MPcost;
-			cout << endl;
-		}
+		cout << "你已学会技能：" << endl;
+		for (int i = 0; i < list.size(); i++)
+			cout << i + 1 << ". " << list[i]->name << " 消耗MP：" << list[i]->MPcost << " " << list[i]->description << endl;
+		cout << endl;
 	}
 }
 
@@ -361,6 +261,19 @@ void SkillBar::LearnSkill(Skill* ability) {
 	this->list.push_back(ability);
 }
 
+NPC::NPC() {
+	id = -1;
+	name = "";
+	HPmax = 1;
+	MPmax = 0;
+	HP = HPmax; MP = MPmax;
+	speed = 0;
+	attack = 0;
+	defense = 0;
+	experience = 0;
+	money = 0;
+	talkingScript = -1;
+}
 
 NPC::NPC(vector<string> list) {
 	if (list.size() == 10) {
@@ -383,7 +296,7 @@ NPC::NPC(vector<string> list) {
 void NPC::ShowNPCState() {
 	cout << this->name;
 	cout << "（生命值:" << this->HP << "/" << this->HPmax;
-	cout << "魔法值" << this->MP << "/" << this->MPmax << ")";
+	cout << "魔法值" << this->MP << "/" << this->MPmax << ")" << endl << endl;
 }
 
 
@@ -396,8 +309,15 @@ void Spot::printSpotInformation() {
 	cout << "你来到了" << name << endl;
 	cout << description << endl << endl;
 }
-
-
+//
+void Spot::printNearSpots() {
+	cout << "要去哪里？" << endl;
+	int i = 1;
+	for (int id : nearSpotId) {
+		cout << i << "：" << DataList::spotList[id].name << endl;
+		i++;
+	}
+}
 //读取文件信息后输出NPC信息
 void Spot::printNPCs()
 {
@@ -450,7 +370,8 @@ vector<Skill> DataList::skillList(0);
 vector<NPC> DataList::npcList(0);
 vector<Spot> DataList::spotList(0);
 vector<string> DataList::dialogList(0);
-array<short, 100> DataList::trigger = { 0 };
+array<short, 10> DataList::trigger = { 0 };
+DataList::Gamestate DataList::state = over;
 
 //读文件
 vector<string> InteractSystem::ReadFile(string fileName) {
@@ -486,71 +407,73 @@ vector<string> InteractSystem::SplitString(string str, string pattern) {
 }
 //实现不带回显的输入
 int InteractSystem::GetUserInput() {
-	char command[1];
-	command[0] = _getch();
-	return atoi(command);
+	int command;
+	cin >> command;
+	return command;
 }
 //用户输入数字选项，maxNum(最大为10)为选项数，返回选项编号
 int InteractSystem::UserInput(int maxNum) {
 	int n = -1;
-	while (n <= 0 || n > maxNum) {
+	while (n <= 0 || n > maxNum)
 		n = GetUserInput();
-		if (n == 0)n = 10;
-	}
 	return n;
 }
 //对话
 int InteractSystem::Dialog(int id) {
-	int input = 0;
-	int maxCases = 0;
-	int lineIndex = 0;
-	bool reading = true;
-	enum DialogState {
-		idle, inDialog, inDecision, inCase
-	};
-	DialogState state = idle;
-	for (string line : DataList::dialogList) {
-		if (!reading)break;
-		switch (state) {
-		case idle:
-			//找到开始位置
-			if (line == ("#START" + id)) {
-				state = inDialog;
-			}
-			break;
-		case inDialog:
-			//选择域开始标志
-			if (line == "#DECISION") {
-				state = inDecision;
-				for (int i = lineIndex; i < DataList::dialogList.size(); i++) {
-					if (DataList::dialogList[i] == "#CASEEND") maxCases++;
-					else if (DataList::dialogList[i] == "#DECISIONEND") break;
+	if (DataList::state != DataList::over) {
+		int input = 0;
+		int maxCases = 0;
+		int lineIndex = 0;
+		bool reading = true;
+		enum DialogState {
+			idle, inDialog, inDecision, inCase
+		};
+		DialogState state = idle;
+		for (string line : DataList::dialogList) {
+			if (!reading)break;
+			switch (state) {
+			case idle:
+				//找到开始位置
+				if (line == ("#START" + id)) {
+					state = inDialog;
 				}
-				input = InteractSystem::UserInput(maxCases);
+				break;
+			case inDialog:
+				//选择域开始标志
+				if (line == "#DECISION") {
+					state = inDecision;
+					for (int i = lineIndex; i < DataList::dialogList.size(); i++) {
+						if (DataList::dialogList[i] == "#CASEEND") maxCases++;
+						else if (DataList::dialogList[i] == "#DECISIONEND") break;
+					}
+					input = InteractSystem::UserInput(maxCases);
+				}
+				//结束的标志
+				else if (line == "#END")
+					reading = false;
+				else cout << line << endl;
+				break;
+			case inDecision:
+				//结束选择域
+				if (line == "#CASE" + input)
+					state = inCase;
+				else if (line == "#DECISIONEND")
+					state = inDialog;
+				break;
+			case inCase:
+				//分支域结束
+				if (line == "#CASEEND")
+					state = inDecision;
+				else cout << line << endl;
+				break;
+			default: break;
 			}
-			//结束的标志
-			else if (line == "#END")
-				reading = false;
-			else cout << line << endl;
-			break;
-		case inDecision:
-			//结束选择域
-			if (line == "#CASE" + input)
-				state = inCase;
-			else if (line == "#DECISIONEND")
-				state = inDialog;
-			break;
-		case inCase:
-			//分支域结束
-			if (line == "#CASEEND")
-				state = inDecision;
-			else cout << line << endl;
-			break;
-		default: break;
+			lineIndex++;
 		}
-		lineIndex++;
+		cout << endl;
+		return input;
 	}
-	return input;
+	return -1;
 }
 //输出地图
 void InteractSystem::PrintMap() {
@@ -562,5 +485,5 @@ void InteractSystem::PrintMap() {
 	cout << "               ↓" << endl;
 	cout << "         哥布林领地门口(Lv.2)" << endl;
 	cout << "               ↓" << endl;
-	cout << "            隐秘地牢" << endl;
+	cout << "            隐秘地牢" << endl << endl;
 }

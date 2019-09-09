@@ -32,7 +32,7 @@ public:
 	int index;                //编号
 	string name;              //名称
 	string description;       //描述
-	int attribute;            //属性    0-可消耗，1-装备，2-学习
+	int attribute;            //属性    0-可消耗，1-装备，2-重要物品
 	int location;             //装备位置  0-身，1-手，2-足, 3-非装备
 	int cost;                 //价值
 	int addHP;                //回复血量
@@ -44,7 +44,6 @@ public:
 	int addSpeed;             //增加速度
 
 	void Copy(Goods* thing);//复制物品
-	void PrintDescription();//输出物品的详细描述
 };
 //背包的类
 class Bag {
@@ -60,12 +59,11 @@ public:
 		}
 	};
 
-	void Print(int page);                          //描述背包中存在的物品
-	void PrintPart(int i);                         //描述背包中的部分物体
+	void Print();                          //描述背包中存在的物品
 	void PrintEquipment();                         //描述武器栏中的情况
 	void AddGoods(int id,int num=1);               //向背包中添加物品
-	void AbandonGoods(int id, int num = 1);        //删除背包中存在的物品
-	void AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品 
+	bool AbandonGoods(int id, int num = 1);        //删除背包中存在的物品
+	bool AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品 
 	void ReturnNum(Goods* thing);                  //返回在背包中该物品的剩余情况
 	void Equip(Goods* thing);                      //装备背包中的装备 
 	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
@@ -117,12 +115,11 @@ public:
 	int defense;           //防御
 	int experience;          //经验
 	int money;             //金钱
-	int talkingScript;         //
+	int talkingScript;         //对话序号
 	SkillBar skillBar;
 
-	NPC() {};
+	NPC();
 	NPC(vector<string>list);  //构造函数
-
 	void ShowNPCState();
 };
 
@@ -136,7 +133,6 @@ public:
 	vector<int>nearSpotId;            //包含临近场景的编号
 
 	Spot();
-
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
 	void printNearSpots();                           //输出邻接场景
@@ -151,5 +147,9 @@ public:
 	static vector<NPC> npcList;
 	static vector<Spot> spotList;
 	static vector<string> dialogList;
-	static array<short, 100> trigger;
+	static array<short, 10> trigger;
+	enum Gamestate {
+		title, idle, explore, battle, shop, over
+	};
+	static Gamestate state;
 };

@@ -12,6 +12,8 @@ public:
 	void UsingGoods(int id);                       //使用背包中的消耗品
 	void MoveToSpot(int id);
 	void ExploreSpot();
+	void IdleInput();
+	void SaveGame();
 };
 //商店的类
 class store {
@@ -24,20 +26,19 @@ public:
 //战斗的类
 class Fight {
 public:
-	Fight(Hero* player, NPC* enemy);          //构造函数
+	Fight(Hero* player, int enemyId);          //构造函数
 	~Fight();                                 //析构函数
-	NPC* DecideWhoAct();                      //决定谁先手
+	void Fighting(int id);                          //战斗过程
+	void DecideWhoAct(NPC* enemy);                      //决定谁先手
 	void UseSkillAttack(NPC* attacker, NPC* defender, int id);        //使用技能造成伤害 
 	int ReturnId(NPC* owner, int num);        //返回技能的编号
-	void UseSkill(NPC* role);                 //使用技能
+	int SearchSkill();                 //查看技能列表
 	bool Escape(NPC* escaper, NPC* arrester);  //逃跑
 	void DecideAct(NPC* ememy, NPC* player);   //ememy的选择
-	bool DeathOrNot(NPC* player, NPC* enemy); //判定是否有人死亡
+	bool DeathOrNot(NPC* enemy); //判定是否有人死亡
 	void Victory(Hero* player, NPC* enemy);   //胜负判定
-	void Fighting();                          //战斗过程
 
 	Hero* player;       //玩家
-	NPC* enemy;         //敌人
 	vector<NPC*>list;   //关于回合判定的vector
 private:
 	int Random(int num);
@@ -46,15 +47,9 @@ private:
 class GameThread {
 public:
 	GameThread();
+	int TitleScreen();
 private:
 	Hero hero;
-	enum Gamestate {
-		title, idle, explore, battle, shop
-	};
-	Gamestate state;
-
-	void HideCursor();
-	void TitleScreen();
 
 	void GetItemData(vector<string> list);
 	void GetSkillData(vector<string> list);
@@ -62,6 +57,6 @@ private:
 	void GetSpotData(vector<string> list);
 	
 	void NewGame();
-	void SaveGame();
+
 	bool LoadGame();
 };

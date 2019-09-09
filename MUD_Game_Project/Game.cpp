@@ -1,36 +1,42 @@
 #include "Game.h"
 int main() {
 	GameThread game;
+	int input = 0;
+	while (input != 3) {
+		if(DataList::state==DataList::over)
+			game.TitleScreen();
+	}
 	return 0;
 }
 
 GameThread::GameThread() {
 	GetItemData(InteractSystem::ReadFile("Goods"));
 	GetSkillData(InteractSystem::ReadFile("Skill"));
-	//GetNPCData(InteractSystem::ReadFile("NPC"));
+	GetNPCData(InteractSystem::ReadFile("NPC"));
 	GetSpotData(InteractSystem::ReadFile("Spot"));
 	DataList::dialogList = InteractSystem::ReadFile("Dialog");
-	HideCursor();
-	TitleScreen();
 }
 //标题画面
-void GameThread::TitleScreen() {
+int GameThread::TitleScreen() {
+	system("cls");
+	DataList::state == DataList::title;
 	InteractSystem::PrintMap();
 	cout << "MUDGAME" << endl << endl;
 	cout << "1.新的开始" << endl;
 	cout << "2.旧的回忆" << endl;
 	cout << "3.退出游戏" << endl;
 	int input = InteractSystem::UserInput(3);
-	switch (input)
-	{
+	switch (input) {
 	case 1:
 		NewGame();
 		break;
 	case 2:
-		if (LoadGame())
+		if (LoadGame()) {
+			DataList::state = DataList::idle;
 			hero.MoveToSpot(hero.currentSpotId);
+		}
 		else
-			cout << endl << "未找到存档文件！" << endl;
+			cout << endl << "未找到存档文件！" << endl << endl;
 		break;
 	case 3:
 		exit(0);
@@ -38,11 +44,7 @@ void GameThread::TitleScreen() {
 	default:
 		break;
 	}
-}
-//隐藏光标函数
-void GameThread::HideCursor() {
-	CONSOLE_CURSOR_INFO cursor_info = { 1,0 };
-	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
+	return input;
 }
 //得到物品的数据
 void GameThread::GetItemData(vector<string> list) {
@@ -137,45 +139,45 @@ void GameThread::GetSpotData(vector<string> list) {
 }
 //新的游戏
 void GameThread::NewGame() {
+	DataList::state = DataList::idle;
 	hero.MoveToSpot(0);
 }
 //储存数据
-void GameThread::SaveGame() {
+void Hero::SaveGame() {
 	//先删除文件
 	fstream fout("save.txt", ios::out | ios::trunc);  //具体的存档文件的名字需要改 
-	fout << hero.level << endl;
-	fout << hero.HPmax << endl;
-	fout << hero.MPmax << endl;
-	fout << hero.HP << endl;
-	fout << hero.MP << endl;
-	fout << hero.speed << endl;
-	fout << hero.attack << endl;
-	fout << hero.defense << endl;
-	fout << hero.experience << endl;
-	fout << hero.bag.money<< endl;
-	fout << hero.currentSpotId<< endl;
+	fout << level << endl;
+	fout << HPmax << endl;
+	fout << MPmax << endl;
+	fout << HP << endl;
+	fout << MP << endl;
+	fout << speed << endl;
+	fout << attack << endl;
+	fout << defense << endl;
+	fout << experience << endl;
+	fout << bag.money<< endl;
+	fout << currentSpotId<< endl;
 	
 	//存储背包中的物品的id
-	for (int i = 0; i < hero.bag.cargo.size(); i++) {
-		fout << hero.bag.cargo[i].thing->index << endl;
+	for (int i = 0; i < bag.cargo.size(); i++) {
+		fout << bag.cargo[i].thing->index << endl;
 	}
 	fout << " "<<endl;
 	//存储背包中的对应物品的数量
-	for (int i = 0; i < hero.bag.cargo.size(); i++) {
-		fout << hero.bag.cargo[i].num << endl;
+	for (int i = 0; i < bag.cargo.size(); i++) {
+		fout << bag.cargo[i].num << endl;
 	}
 	fout << " " << endl;
-
-	for (int i = 0; i < hero.bag.cargo.size(); i++) {
-		fout << hero.bag.equipment[i]->index << endl;
+	//存储装备中的对应物品的id
+	for (int i = 0; i < bag.cargo.size(); i++) {
+		fout << bag.equipment[i]->index << endl;
 	}
 	fout << " " << endl;
-
 	//存储对话的开关
 	for (int i = 0; i < DataList::trigger.size(); i++) {
 		fout << DataList::trigger[i] << endl;
 	}
-	
+	fout << " " << endl;
 	fout.close();
 }
 //读取数据
@@ -210,30 +212,29 @@ bool GameThread::LoadGame() {
 
 		//先清空背包 
 		hero.bag.cargo.clear();
-
+		getline(in, line);
 		//读取背包内的物品种类
-		for (int i = 0; line != ""; i++) {
+		for (int i = 0; line != " "; i++) {
 			hero.bag.AddGoods(atoi(line.c_str()));
 			getline(in, line);
 		}
-
 		getline(in, line);
-
 		//读取背包内对应的物品种类的数量
-		for (int i = 0; line != ""; i++) {
+		for (int i = 0; line != " "; i++) {
 			hero.bag.cargo[i].num = atoi(line.c_str());
 			getline(in, line);
 		}
-
 		getline(in, line);
 		//读取关于装备栏中装备的信息
-		for (int i = 0; line != ""; i++) {
+		for (int i = 0; line != " "; i++) {
 			hero.bag.equipment[i] = (&(DataList::goodsList[atoi(line.c_str())]));
+			getline(in, line);
 		}
-
+		getline(in, line);
 		//读取关于对话的开关
 		for (int i = 0; i < DataList::trigger.size(); i++) {
 			DataList::trigger[i] = atoi(line.c_str());
+			getline(in, line);
 		}
 		in.close();
 		return true;
@@ -253,147 +254,229 @@ Hero::Hero() {
 //升级
 bool Hero::LevelUp() {
 	int num = level;
-	if (experience < 10) {
-		level = 1;
+	int explist[4] = { 10,40,100,200 };
+	while (level < 5 && experience >= explist[level - 1]) {
+		level++;
+		HPmax += 50;
+		MPmax += 10;
+		HP += 50;
+		MP += 10;
+		attack += 2;
+		defense += 2;
+		speed += 2;
 	}
-	else if (experience < 40) {
-		level = 2;
-	}
-	else if (this->experience >= 40 && this->experience < 100) {
-		this->level = 3;
-	}
-	else if (this->experience > 100 && this->experience < 200) {
-		this->level = 4;
-	}
-	else if (this->experience >= 200) {
-		this->level = 5;
-	}
-	if (level > num) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	if (level > num) return true;
+	else return false;
 }
 //Hero在背包中使用消耗品
 void Hero::UsingGoods(int id) {
-	Goods usingGoods = DataList().goodsList[id];
-	if (usingGoods.attribute == 0) {
-		this->bag.AbandonGoods(id);
-		cout << "你使用了" << usingGoods.name;
-		for (int i = 0; i < bag.cargo.size(); i++) {
-			if (bag.cargo[i].thing->index == id) {
-				bag.ReturnNum(bag.cargo[i].thing);
+	Goods usingGoods(DataList().goodsList[id]);
+	if (bag.AbandonGoods(id)) {
+		int addHp = DataList().goodsList[id].addHP;
+		int addMp = DataList().goodsList[id].addMP;
+		switch (usingGoods.attribute) {
+		case 0:
+			cout << "你使用了" << usingGoods.name << endl;
+			if (addHp > 0) {
+				addHp = min(addHp, HPmax - HP);
+				cout << "你的HP增加了" << addHp << "点" << endl;
 			}
+			if (addMp > 0) {
+				addHp = min(addMp, MPmax - MP);
+				cout << "你的MP增加了" << addMp << "点！" << endl;
+			}
+			cout << endl;
+			break;
+		case 1:
+			if (DataList::state == DataList::idle) {
+				//cout << "你装备了" << usingGoods.name << endl;
+
+			}
+			else
+				cout << "目前无法变更装备！" << endl << endl;
+			break;
+		case 2:
+			cout << "选择的物品无法使用！" << endl << endl;
+			break;
+		default:
+			break;
 		}
-		if ((DataList().goodsList[id].addHP) == 0) {}
-		else {
-			if (DataList().goodsList[id].addHP <= (this->HPmax - this->HP))
-				cout << "你的HP增加了" << DataList().goodsList[id].addHP << "点";
-			else {
-				cout << "你的HP增加了" << this->HPmax - this->HP;
-			}
-		}
-		if ((DataList().goodsList[id].addMP) == 0) {}
-		else {
-			if (DataList().goodsList[id].addMP <= (this->MPmax - this->MP)) {
-				cout << "你的MP增加了" << DataList().goodsList[id].addMP << "点";
-			}
-			else {
-				cout << "你的MP增加了" << this->MPmax - this->MP;
-			}
-		}
+
 	}
-	else {
-		cout << "选择的物品无法使用";
-	}
+	
 }
 //移动到一个地点
 void Hero::MoveToSpot(int id) {
 	system("cls");
+	cout << "new" << endl;
 	currentSpotId = id;
 	DataList::spotList[id].OnEnterSpot();
 }
 //探索场景
 void Hero::ExploreSpot() {
-	switch (currentSpotId) {
-	case 0:
-		cout << "你来到了" << DataList::spotList[currentSpotId].name << endl;
-		cout << DataList::spotList[currentSpotId].description << endl;
-		for (int id : DataList::spotList[currentSpotId].NPCIdList) {
-			cout << "你开始慢慢走向前" << endl;
-			cout << "你发现了" << DataList::npcList[id].name << endl;
-			cout << "你要怎么做" << endl;
-			cout << "1. 战斗 2. 偷听 3. 离开";
-			int input = InteractSystem::UserInput(3);
-			if (input == 1) {
-				Fight newFight(this, &(DataList::npcList[id]));
-				newFight.Fighting();
+	while (DataList::state != DataList::over) {
+		switch (currentSpotId) {
+		case 0:
+			IdleInput();
+			break;
+		case 1:
+			cout << "你来到了" << DataList::spotList[currentSpotId].name << endl;
+			cout << DataList::spotList[currentSpotId].description << endl;
+			for (int id : DataList::spotList[currentSpotId].NPCIdList) {
+				cout << "你开始慢慢走向前" << endl;
+				cout << "你发现了" << DataList::npcList[id].name << endl;
+				cout << "你要怎么做" << endl;
+				cout << "1. 战斗 2. 偷听 3. 离开" << endl << endl;
+				int input = InteractSystem::UserInput(3);
+				if (input == 1) {
+					Fight newFight(this, id);
+				}
+				else if (input == 2) {
+					//偷听的相关剧情
+				}
 			}
-			else if (input == 2) {
-				//偷听的相关剧情
-			}
+			break;
+		default:
+			break;
 		}
+	}
+}
+void Hero::IdleInput() {
+	cout << "你要怎么做？" << endl;
+	cout << "1. 赶路 2. 背包 3. 状态 4. 存档 5. 返回标题画面" << endl << endl;
+	int input = InteractSystem::UserInput(5);
+	switch (input) {
+	case 1:
+		DataList::spotList[currentSpotId].printNearSpots();
+		cout << DataList::spotList[currentSpotId].nearSpotId.size() + 1 << ".取消" << endl << endl;
+		int spotInput = InteractSystem::UserInput(DataList::spotList[currentSpotId].nearSpotId.size());
+		if (spotInput != DataList::spotList[currentSpotId].nearSpotId.size() + 1) {
+			int spotId = DataList::spotList[currentSpotId].nearSpotId[spotInput - 1];
+			MoveToSpot(spotId);
+		}
+		break;
+	case 2:
+		bag.Print();
+		int index = InteractSystem::UserInput(bag.cargo.size() + 1);
+		if (index != bag.cargo.size() + 1) 
+			UsingGoods(bag.ReturnId(index));
+		break;
+	case 3:
+		ShowNPCState();
+		break;
+	case 4:
+		SaveGame();
+		break;
+	case 5:
+		DataList::state == DataList::over;
 		break;
 	default:
 		break;
 	}
+
 }
 //Fight的构造函数
-Fight::Fight(Hero* player, NPC* enemy)
+Fight::Fight(Hero* player, int enemyId)
 {
+	DataList::state = DataList::battle;
 	this->player = player;
-	this->enemy = enemy;
+	Fighting(enemyId);
 }
 //Fight的析构函数
 Fight::~Fight() {
 }
-//判定谁先先手
-NPC* Fight::DecideWhoAct() {
-	if (player->speed >= enemy->speed) {
-		return player;
-	}
-	else {
-		return enemy;
-	}
-}
-//技能造成伤害(包括普通攻击）
-void Fight::UseSkillAttack(NPC* attacker, NPC* defender, int id) {
-	int MPcost;
-	MPcost = DataList().skillList[id].MPcost;
-	if (attacker->MP < MPcost) {
-		cout << "魔法值不足";
-	}
-	else {
-		srand((int)time(0));
-		if (Random(100) <= DataList::skillList[id].accuracyRate) {
-			if (Random(100) <= DataList::skillList[id].critRate) {
-				int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
-				attacker->MP -= MPcost;
-				defender->HP -= 2 * damage;
-				if (id != 0) {
-					cout << attacker->name << "使用了" << DataList().skillList[id].name << "并产生了暴击";
+//战斗过程
+void Fight::Fighting(int enemyId) {
+	NPC enemy(DataList::npcList[enemyId]);
+	cout << "你与" << enemy.name << "斗在了一起！";
+	while (DeathOrNot(&enemy)) {
+		DecideWhoAct(&enemy);
+		int index = -1;
+		int command = -1;
+		while (command == -1) {
+			index = -1;
+			cout << endl;
+			player->ShowNPCState();
+			cout << "请选择你的行动：" << endl;
+			cout << "1.攻击 2.技能 3.物品 4.逃走 " << endl << endl;
+			command = InteractSystem::UserInput(4);
+			switch (command) {
+			case 1:
+				index = 0;
+				break;		//选择攻击
+			case 2:		//查看技能列表
+				index = SearchSkill();
+				if (index == -1)command = -1;
+				break;
+			case 3:		//查看物品列表
+				player->bag.Print();
+				index = InteractSystem::UserInput(player->bag.cargo.size() + 1);
+				if (index == player->bag.cargo.size() + 1) command = -1;
+				break;
+			case 4:		//逃跑
+				if (Escape(player, &enemy)) {
+					DataList::state = DataList::idle;
+					return;
 				}
 				else {
-					cout << "你攻击了" << defender->name << "，并产生了暴击";
+					list.clear();
+					list.push_back(&enemy);
 				}
-				cout << endl << "对" << defender->name << "造成了" << 2 * damage << "点伤害";
-			}
-			else {
-				int damage = DataList().skillList[id].damage * attacker->attack - defender->defense * 2;
-				attacker->MP -= MPcost;
-				defender->HP -= damage;
-				if (id != 0) {
-					cout << attacker->name << "使用了" << DataList().skillList[id].name;
-				}
-				else {
-					cout << "你攻击了" << defender->name;
-				}
-				cout << endl << "对" << defender->name << "造成了" << damage << "点伤害";
+				break;
+			default: break;
 			}
 		}
-		else {
-			cout << "你的攻击被闪避了";
+		for (int i = 0; i < list.size(); i++) {
+			if (list[i]->id == 0) {
+				//Hero的使用物品 使用RetrunId返回物品的编号
+				if (command != 3)
+					player->UsingGoods(player->bag.ReturnId(index));
+				else
+					UseSkillAttack(player, &enemy, index);
+			}
+			//enemy行动
+			else
+				DecideAct(&enemy, player);
+			if (DeathOrNot(&enemy))break;
+		}
+	}
+	Victory(player, &enemy);
+}
+//判定谁先先手
+void Fight::DecideWhoAct(NPC* enemy) {
+	list.clear();
+	if (player->speed >= enemy->speed) {
+		list.push_back(player);
+		list.push_back(enemy);
+	}
+	else {
+		list.push_back(enemy);
+		list.push_back(player);
+	}
+}
+//使用技能
+int Fight::SearchSkill() {
+	int num = player->skillBar.list.size();
+	if (num == 0) {
+		cout << "你还未学习技能" << endl << endl;
+		return -1;
+	}
+	else {
+		cout << endl << "要使用什么技能？" << endl;
+		player->skillBar.Print();
+		cout << player->skillBar.list.size() + 1 << ".取消" << endl << endl;
+		int input = -1;
+		while (input == -1) {
+			input = InteractSystem::UserInput(num + 1);
+			if (input == num + 1) return -1;
+			else {
+				int skillId = ReturnId(player, input - 1);
+				if (DataList::skillList[skillId].MPcost > player->MP) {
+					cout << "魔法值不足！" << endl << endl;
+					input = -1;
+				}
+				else return skillId;
+			}
 		}
 	}
 }
@@ -401,41 +484,34 @@ void Fight::UseSkillAttack(NPC* attacker, NPC* defender, int id) {
 int Fight::ReturnId(NPC* owner, int num) {
 	return owner->skillBar.list[num]->id;
 }
-//使用技能
-void Fight::UseSkill(NPC* role) {
-	int num = role->skillBar.list.size();
-	if (num == 0) {
-		cout << "你还未学习技能";
-	}
-	else {
-		cout << "要使用什么技能？";
-		role->skillBar.Print();
-		cout << role->skillBar.list.size() + 2 << ".取消" << endl << endl;
-
-		int input = InteractSystem::UserInput(num + 2);
-		//取消
-		if (input == num + 2) {
-
+//技能造成伤害(包括普通攻击）
+void Fight::UseSkillAttack(NPC* attacker, NPC* defender, int id) {
+	attacker->MP -= DataList::skillList[id].MPcost;
+	cout << attacker->name << "使用了" << DataList::skillList[id].name << endl;
+	if (Random(100) <= DataList::skillList[id].accuracyRate) {
+		int damage = DataList::skillList[id].damage * attacker->attack - defender->defense * 2;
+		damage = max(damage, 0);
+		if (Random(100) <= DataList::skillList[id].critRate) {
+			cout << "产生了暴击！" << endl;
+			damage *= 2;
 		}
-		else {
-			int id = ReturnId(player, input - 1);
-			UseSkillAttack(player, enemy, id);
-		}
+		defender->HP -= damage;
+		cout << defender->name << "受到了" << damage << "点伤害" << endl << endl;
 	}
+	else
+		cout << "但是没有命中目标！" << endl << endl;
 }
-
 //逃跑
 bool Fight::Escape(NPC* escaper, NPC* arrester) {
 	if (escaper->speed >= arrester->speed)
 	{
-		cout << "成功逃离";
+		cout << "成功逃离！" << endl << endl;
 		return true;
 	}
 	else {
-		cout << "逃跑失败";
+		cout << "逃跑失败！" << endl << endl;
 		return false;
 	}
-
 }
 
 //enemy决定行动
@@ -450,89 +526,32 @@ void Fight::DecideAct(NPC* enemy, NPC* player) {
 	}
 	UseSkillAttack(enemy, player, num);
 }
-
 //判定一方死亡
-bool Fight::DeathOrNot(NPC* player, NPC* enemy) {
-	if ((player->HP <= 0) || (enemy->HP <= 0)) {
+bool Fight::DeathOrNot(NPC* enemy) {
+	if (player->HP <= 0 || enemy->HP <= 0)
 		return true;
-	}
-	else {
+	else 
 		return false;
-	}
 }
-
 //胜负判定
 void Fight::Victory(Hero* player, NPC* enemy) {
 	if (player->HP <= 0) {
 		cout << "你被" << enemy->name << "打败了" << endl;
-		cout << "你失败了";
+		cout << "游戏结束" << endl;
+		system("pause");
+		DataList::state = DataList::over;
 	}
 	else {
-		cout << "你战胜了" << enemy->name;
-		cout << "你获得了" << enemy->experience << "点经验值" << "," << enemy->money << "金币";
+		cout << "你战胜了" << enemy->name << endl;
+		cout << "你获得了" << enemy->experience << "点经验值" << "与" << enemy->money << "金币" << endl;
 		player->bag.money += enemy->money;
 		player->experience += enemy->experience;
+		//查看等级提升
+		if (player->LevelUp())
+			cout << "恭喜你的等级提升到" << player->level << "级" << endl;
+		system("pause");
+		DataList::state = DataList::idle;
 	}
-}
-//战斗过程
-void Fight::Fighting() {
-	cout << "你与" << enemy->name << "斗在了一起";
-	list[0] = DecideWhoAct();
-	if (enemy->name == list[0]->name) {
-		list[1] = player;
-	}
-	else {
-		list[1] = enemy;
-	}
-	while (DeathOrNot(player, enemy)) {
-		for (int i = 0; i < list.size(); i++) {
-			if (list[i]->id == 0) {
-				cout << "轮到你行动了！";
-				player->ShowNPCState();
-				cout << "1.攻击 2.技能 3.物品 4.逃走 ";
-
-				int input = InteractSystem::UserInput(4);
-
-				//选择攻击
-				if (input == 1) {
-					UseSkillAttack(player, enemy, 1);
-				}
-				//使用技能
-				else if (input == 2) {
-					UseSkill(player);
-				}
-				//使用物品
-				else if (input == 3) {
-					player->bag.Print(1);
-					int input;
-					input = InteractSystem::UserInput(player->bag.cargo.size() + 2);
-					//Hero的使用物品 使用RetrunId返回物品的编号
-					player->UsingGoods(player->bag.ReturnId(input));
-				}
-				//逃跑
-				else if (input == 4) {
-					if (Escape(player, enemy)) {
-						break;
-					}
-					else {
-						continue;
-					}
-				}
-			}
-			//enemy行动
-			else {
-				DecideAct(enemy, player);
-			}
-		}
-	}
-	Victory(player, enemy);
-	//查看等级提升
-	if (player->LevelUp()) {
-		cout << "恭喜你的等级提升到" << player->level << "级";
-	}
-	else {
-	}
-
 }
 //产生随机数
 int Fight::Random(int num) {
