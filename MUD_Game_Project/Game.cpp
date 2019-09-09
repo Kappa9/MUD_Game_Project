@@ -21,7 +21,7 @@ GameThread::GameThread() {
 int GameThread::TitleScreen() {
 	system("cls");
 	DataList::state = DataList::title;
-	cout << "MUDGAME" << endl << endl;
+	cout << "勇者之路" << endl << endl;
 	cout << "1.新的开始" << endl;
 	cout << "2.旧的回忆" << endl;
 	cout << "3.退出游戏" << endl << endl;
@@ -295,6 +295,7 @@ void Hero::LearnSkill(int id) {
 void Hero::UsingGoods(int id) {
 	Goods usingGoods(DataList().goodsList[id]);
 	if (bag.AbandonGoods(id)) {
+		system("cls");
 		int addHp = usingGoods.addHP;
 		int addMp = usingGoods.addMP;
 		switch (usingGoods.attribute) {
@@ -330,9 +331,7 @@ void Hero::UsingGoods(int id) {
 		default:
 			break;
 		}
-
 	}
-
 }
 //移动到一个地点
 void Hero::MoveToSpot(int id) {
@@ -368,8 +367,10 @@ void Hero::OnEnterSpot() {
 			if (level >= 5) {
 				if (DataList::trigger[1] == 0) {
 					DataList::trigger[1] = InteractSystem::Dialog(3);
-					if (DataList::trigger[1] == 1)
+					if (DataList::trigger[1] == 1) {
+						DataList::trigger[1] = 0;
 						MoveToSpot(7);
+					}
 				}
 				else if (DataList::trigger[1] == 1 && DataList::trigger[2] == 1 && DataList::trigger[3] == 0) {
 					DataList::trigger[3] = InteractSystem::Dialog(5);
@@ -394,7 +395,8 @@ void Hero::OnEnterSpot() {
 			}
 			break;
 		case 7:
-			if (DataList::trigger[1] == 1) {
+			if (DataList::trigger[1] == 0) {
+				DataList::trigger[1] = 1;
 				Fight(this, 6);
 				DataList::trigger[2] = InteractSystem::Dialog(4);
 				if (DataList::trigger[2] == 1)
@@ -424,7 +426,7 @@ void Hero::OnEnterSpot() {
 		default:
 			break;
 		}
-		IdleInput();
+		if (DataList::state != DataList::over)IdleInput();
 	}
 }
 void Hero::ExploreSpot() {

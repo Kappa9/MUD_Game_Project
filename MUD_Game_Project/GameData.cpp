@@ -340,18 +340,18 @@ vector<string> InteractSystem::SplitString(string str, string pattern) {
 	}
 	return split;
 }
-//实现不带回显的输入
-int InteractSystem::GetUserInput() {
-	int command;
-	cin >> command;
-	return command;
-}
 //用户输入数字选项，maxNum(最大为10)为选项数，返回选项编号
 int InteractSystem::UserInput(int maxNum) {
 	int n = -1;
 	while (n <= 0 || n > maxNum)
 		n = GetUserInput();
 	return n;
+}
+//实现输入
+int InteractSystem::GetUserInput() {
+	string command;
+	cin >> command;
+	return atoi(command.c_str());
 }
 //对话
 int InteractSystem::Dialog(int id) {
