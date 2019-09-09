@@ -48,33 +48,34 @@ public:
 //背包的类
 class Bag {
 public:
-	struct goods {
+	class Cargo {
+	public:
 		Goods* thing;
 		int num;
 
-		goods() { thing = NULL; num = 0; }
-		goods(Goods* entry_thing, int add_on) {
+		Cargo() { thing = NULL; num = 0; }
+		Cargo(Goods* entry_thing, int add_on) {
 			thing = entry_thing;
 			num = add_on;
 		}
 	};
-
+	Bag();
 	void Print();                          //描述背包中存在的物品
 	void PrintEquipment();                         //描述武器栏中的情况
-	void AddGoods(int id,int num=1);               //向背包中添加物品
+	void AddGoods(int id, int num = 1);               //向背包中添加物品
 	bool AbandonGoods(int id, int num = 1);        //删除背包中存在的物品
-	bool AbandonGoods(Goods* thing,int num=1);     //删除背包中存在的物品 
+	bool AbandonGoods(Goods* thing, int num = 1);     //删除背包中存在的物品 
 	void ReturnNum(Goods* thing);                  //返回在背包中该物品的剩余情况
 	void Equip(Goods* thing);                      //装备背包中的装备 
 	void Unload(Goods* thing);                     //卸下武器栏中的中的装备
-	void Sell(Goods* thing, int num=1);            //出售背包中的物品
-	void Purchase(Goods* thing, int num=1);        //购买物品 
+	void Sell(Goods* thing, int num = 1);            //出售背包中的物品
+	void Purchase(Goods* thing, int num = 1);        //购买物品 
 	int ReturnId(int num);                         //返回ID
 
 	int money;
-	vector <goods> cargo;
+	vector <Cargo> cargo;
 	Goods* equipment[3];
- };
+};
 //技能的类
 class Skill {
 public:
@@ -88,17 +89,13 @@ public:
 
 	Skill();                   //构造函数
 	Skill(vector<string>list);
-	Skill(string name, string description, short Mpcost, int damage, float critRate, float accuracyRate);
-	                  
 	void Copy(Skill* ability); //复制技能
-	void PrintDescription();   //关于技能的详细描述
 };
 //技能栏的类
 class SkillBar {
 public:
 	void Print();				             //输出技能列表
 	void LearnSkill(Skill* ability);         //学习技能
-
 	vector<Skill*>list;
 };
 //人物的类
@@ -122,7 +119,6 @@ public:
 	NPC(vector<string>list);  //构造函数
 	void ShowNPCState();
 };
-
 //场景类
 class Spot {
 public:
@@ -136,7 +132,6 @@ public:
 	void printSpotInformation();                //输出场景信息
 	void printNPCs();                           //输出场景中所有NPC的信息
 	void printNearSpots();                           //输出邻接场景
-	void OnEnterSpot();                         //进入场景后触发的函数
 };
 //数据列表静态类
 class DataList {
@@ -149,7 +144,7 @@ public:
 	static vector<string> dialogList;
 	static array<short, 10> trigger;
 	enum Gamestate {
-		title, idle, explore, battle, shop, over
+		title, idle, battle, over
 	};
 	static Gamestate state;
 };
