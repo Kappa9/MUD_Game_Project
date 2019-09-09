@@ -294,8 +294,8 @@ void Hero::LearnSkill(int id) {
 //Hero在背包中使用消耗品
 void Hero::UsingGoods(int id) {
 	Goods usingGoods(DataList().goodsList[id]);
+	system("cls");
 	if (bag.AbandonGoods(id)) {
-		system("cls");
 		int addHp = usingGoods.addHP;
 		int addMp = usingGoods.addMP;
 		switch (usingGoods.attribute) {
@@ -470,7 +470,10 @@ void Hero::ExploreSpot() {
 				input = InteractSystem::UserInput(store.goodsIdList.size() + 1);
 				if (input != store.goodsIdList.size() + 1)
 					store.Purchase(this, store.goodsIdList[input - 1]);
-				else return;
+				else {
+					system("cls");
+					return;
+				}
 			}
 		}
 		else {
@@ -503,6 +506,7 @@ void Hero::IdleInput() {
 	case 4:
 		bag.Print();
 		input = InteractSystem::UserInput(bag.cargo.size() + 1);
+		system("cls");
 		if (input != bag.cargo.size() + 1)
 			UsingGoods(bag.ReturnId(input));
 		break;
@@ -604,6 +608,7 @@ void Fight::DecideWhoAct(NPC* enemy) {
 int Fight::SearchSkill() {
 	int num = player->skillBar.list.size();
 	if (num == 0) {
+		system("cls");
 		cout << "你还未学习技能" << endl << endl;
 	}
 	else {
@@ -613,6 +618,7 @@ int Fight::SearchSkill() {
 		int input = -1;
 		while (input == -1) {
 			input = InteractSystem::UserInput(num + 1);
+			system("cls");
 			if (input == num + 1) return -1;
 			else {
 				int skillId = ReturnId(player, input - 1);
@@ -703,6 +709,12 @@ Store::Store() {
 	AddGoodsId(12);
 	AddGoodsId(13);
 	AddGoodsId(14);
+	AddGoodsId(1);
+	AddGoodsId(2);
+	AddGoodsId(5);
+	AddGoodsId(6);
+	AddGoodsId(9);
+	AddGoodsId(10);
 }
 //向商店添加物品
 void Store::AddGoodsId(int id) {
@@ -719,6 +731,7 @@ void Store::Print() {
 }
 //购买物品
 void Store::Purchase(Hero* player, int id) {
+	system("cls");
 	if (player->bag.money >= DataList::goodsList[id].cost) {
 		player->bag.AddGoods(DataList::goodsList[id].index);
 		player->bag.money -= DataList::goodsList[id].cost;
