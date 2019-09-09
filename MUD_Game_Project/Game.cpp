@@ -386,6 +386,7 @@ void Hero::OnEnterSpot() {
 				}
 				else if (DataList::trigger[4] == 1) {
 					InteractSystem::Dialog(10);
+					bag.AbandonGoods(16);
 					DataList::trigger[5] = 1;
 				}	
 			}
@@ -404,6 +405,8 @@ void Hero::OnEnterSpot() {
 				InteractSystem::Dialog(8);
 				Fight(this, 4);
 				InteractSystem::Dialog(9);
+				bag.AddGoods(16);
+				bag.AddGoods(17);
 				DataList::trigger[4] = 1;
 			}
 			break;
@@ -651,18 +654,12 @@ bool Fight::Escape(NPC* escaper, NPC* arrester) {
 		return false;
 	}
 }
-
 //enemy决定行动
 void Fight::DecideAct(NPC* enemy, NPC* player) {
-	int num = 0;
-	int damage = 0;
-	for (unsigned int i = 0; i < enemy->skillBar.list.size(); i++) {
-		if ((enemy->skillBar.list[i]->damage * enemy->attack - player->defense * 2) > damage) {
-			damage = enemy->skillBar.list[i]->damage * enemy->attack - player->defense * 2;
-			num = i;
-		}
-	}
-	UseSkillAttack(enemy, player, num);
+	unsigned int size = enemy->skillBar.list.size();
+	int index = rand() % size;
+	int id = enemy->skillBar.list[index]->id;
+	UseSkillAttack(enemy, player, id);
 }
 //判定一方死亡
 bool Fight::DeathOrNot(NPC* enemy) {
