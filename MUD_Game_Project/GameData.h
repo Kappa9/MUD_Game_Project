@@ -3,10 +3,8 @@
 #include <string>
 #include <vector>
 #include <array>
-#include <conio.h>
 #include <Windows.h>
 #include <fstream>
-#include <cstdlib>
 #include <ctime>
 using namespace std;
 
