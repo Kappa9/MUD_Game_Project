@@ -143,6 +143,7 @@ void GameThread::NewGame() {
 	hero.bag.equipment[0] = &DataList::goodsList[8];
 	hero.bag.equipment[1] = &DataList::goodsList[0];
 	hero.bag.equipment[2] = &DataList::goodsList[4];
+	hero.bag.AddGoods(12);
 	hero.MoveToSpot(0);
 }
 //储存数据
@@ -304,9 +305,10 @@ void Hero::UsingGoods(int id) {
 				cout << "你的HP增加了" << addHp << "点" << endl;
 			}
 			if (addMp > 0) {
-				addHp = min(addMp, MPmax - MP);
+				addMp = min(addMp, MPmax - MP);
 				cout << "你的MP增加了" << addMp << "点！" << endl;
 			}
+			HP += addHp; MP += addMp;
 			cout << endl;
 			break;
 		case 1:
@@ -477,7 +479,7 @@ void Hero::ExploreSpot() {
 }
 void Hero::IdleInput() {
 	cout << "你要怎么做？" << endl;
-	cout << "1. 探索 2. 赶路 3. 状态 4. 背包 5.装备 6. 地图 7. 存档 8. 返回标题画面" << endl << endl;
+	cout << "1. 探索 2. 赶路 3. 状态 4. 背包 5. 装备 6. 地图 7. 存档 8. 返回标题画面" << endl << endl;
 	int input = InteractSystem::UserInput(8);
 	system("cls");
 	switch (input) {

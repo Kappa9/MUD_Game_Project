@@ -57,12 +57,12 @@ void Bag::Print() {
 		cout << i + 1 << ". " << cargo[i].thing->name << "  ×" << cargo[i].num << "  " << cargo[i].thing->description << endl;
 	}
 	cout << i + 1 << ". " << "离开" << endl << endl;
-	cout << "请选择想使用的物品：" << endl << endl;
+	cout << "请选择想使用的物品：";
 }
 //描述武器栏中的情况
 void Bag::PrintEquipment() {
 	bool judge = false;
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i <= 2; i++) {
 		if (equipment[i] != NULL) {
 			judge = true;
 			switch (i) {
@@ -107,13 +107,13 @@ bool Bag::AbandonGoods(int id, int num) {
 	for (unsigned int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->index == id) {
 			if ((cargo[i].num - num) < 0) {
-				cout << "背包中不存在这么多的物品";
+				cout << "背包中不存在这么多的物品" << endl << endl;
 				return false;
 			}
 			else {
 				cargo[i].num -= num;
-				if ((cargo[i].num - num) == 0)
-					cargo.erase(cargo.begin() + i);
+				if (cargo[i].num == 0)
+					cargo.erase(begin(cargo) + i);
 				return true;
 			}
 		}
@@ -125,13 +125,13 @@ bool Bag::AbandonGoods(Goods* thing,int num) {
 	for (unsigned int i = 0; i < cargo.size(); i++) {
 		if (cargo[i].thing->index == thing->index) {
 			if ((cargo[i].num - num) < 0) {
-				cout << "背包中不存在这么多的物品";
+				cout << "背包中不存在这么多的物品" << endl << endl;
 				return false;
 			}
 			else {
 				cargo[i].num -= num;
-				if ((cargo[i].num - num) == 0)
-					cargo.erase(cargo.begin() + i);
+				if (cargo[i].num == 0)
+					cargo.erase(begin(cargo) + i);
 				return true;
 			}
 		}
@@ -150,11 +150,11 @@ void Bag::ReturnNum(Goods* thing) {
 //装备背包中的装备
 void Bag::Equip(Goods* thing) {
 	if (equipment[thing->location] == NULL) {
-		*equipment[thing->location] = *thing;
+		equipment[thing->location] = thing;
 	}
 	else {
 		Unload(equipment[thing->location]);
-		*equipment[thing->location] = *thing;
+		equipment[thing->location] = thing;
 	}
 	cout << "装备了" << thing->name << endl << endl;
 	AbandonGoods(thing);
