@@ -478,7 +478,7 @@ void Hero::ExploreSpot() {
 void Hero::IdleInput() {
 	cout << "你要怎么做？" << endl;
 	cout << "1. 探索 2. 赶路 3. 状态 4. 背包 5.装备 6. 地图 7. 存档 8. 返回标题画面" << endl << endl;
-	int input = InteractSystem::UserInput(7);
+	int input = InteractSystem::UserInput(8);
 	system("cls");
 	switch (input) {
 	case 1:
