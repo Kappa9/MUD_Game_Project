@@ -576,6 +576,7 @@ void Fight::Fighting(int enemyId) {
 			switch (command) {
 			case 1:
 				index = 0;
+				system("cls");
 				break;		//选择攻击
 			case 2:		//查看技能列表
 				index = SearchSkill();
@@ -641,7 +642,6 @@ int Fight::SearchSkill() {
 		int input = -1;
 		while (input == -1) {
 			input = InteractSystem::UserInput(num + 1);
-			system("cls");
 			if (input == num + 1) return -1;
 			else {
 				int skillId = ReturnId(player, input - 1);
@@ -649,7 +649,10 @@ int Fight::SearchSkill() {
 					cout << "魔法值不足！" << endl << endl;
 					input = -1;
 				}
-				else return skillId;
+				else {
+					system("cls");
+					return skillId;
+				}
 			}
 		}
 	}
@@ -678,13 +681,13 @@ void Fight::UseSkillAttack(NPC* attacker, NPC* defender, int id) {
 }
 //逃跑
 bool Fight::Escape(NPC* escaper, NPC* arrester) {
-	if (escaper->speed >= arrester->speed) {
-		cout << "成功逃离！" << endl << endl;
-		return true;
-	}
-	else {
+	if (escaper->speed < arrester->speed || arrester->id >= 4) {
 		cout << "逃跑失败！" << endl << endl;
 		return false;
+	}
+	else {
+		cout << "成功逃离！" << endl << endl;
+		return true;
 	}
 }
 //enemy决定行动
