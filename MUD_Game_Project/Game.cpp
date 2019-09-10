@@ -392,6 +392,7 @@ void Hero::OnEnterSpot() {
 					DataList::trigger[1] = InteractSystem::Dialog(3);
 					if (DataList::trigger[1] == 1) {
 						DataList::trigger[1] = 0;
+						system("pause");
 						MoveToSpot(7);
 					}
 				}
@@ -424,6 +425,7 @@ void Hero::OnEnterSpot() {
 				DataList::trigger[2] = InteractSystem::Dialog(4);
 				if (DataList::trigger[2] == 1)
 					bag.AddGoods(15);
+				system("pause");
 				MoveToSpot(5);
 			}
 			break;
