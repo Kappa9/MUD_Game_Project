@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Hero">
+    <Position X="7" Y="5.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACCAABAAAQAAFAIoAAAAAFAAEAAAAAEAAAAgAAAAA=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="bag" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Store">
+    <Position X="11" Y="8.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAEAAAAAAAAAAAAAAABAAAAAAAQAEAAA=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Fight">
+    <Position X="10.25" Y="1.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AIAAAoAAAIAIAAAAAQIAAAAAAAAEBAgBAAASAAAAAAA=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameThread">
+    <Position X="6.5" Y="2.25" Width="3" />
+    <AssociationLine Name="hero" Type="Hero" FixedFromPoint="true">
+      <Path>
+        <Point X="7.875" Y="4.614" />
+        <Point X="7.875" Y="5.25" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EAAACAQAAERAAAAAAAAAAAAABAAAAAAAgAAAAAAAAAE=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="hero" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Goods">
+    <Position X="11.25" Y="11" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAQABAAAAAAAIgAAAACSAggUAAQAAAAAAAABACA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bag">
+    <Position X="6.5" Y="9.25" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Bag::Cargo">
+        <TypeIdentifier>
+          <NewMemberFileName>GameData.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAUAAICAAIgAAAAAQAAAAAAAAAAEACAgAAAAAQCEEAA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skill">
+    <Position X="18.5" Y="5.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAggAEAIAAAAAAAAgBEAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SkillBar">
+    <Position X="14.75" Y="9.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC">
+    <Position X="15" Y="5.25" Width="2.25" />
+    <AssociationLine Name="skillBar" Type="SkillBar" FixedToPoint="true">
+      <Path>
+        <Point X="16" Y="9.156" />
+        <Point X="16" Y="9.5" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAABAAAAAAAAAACAAAAAAUgAEAQCAAAJAAAAIEgI=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="skillBar" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Spot">
+    <Position X="11" Y="5.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAIAAAAAAAAIAAAAAAAAAAEAAAAAAgAAAAIIkA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataList">
+    <Position X="18.5" Y="11.25" Width="2.25" />
+    <Members>
+      <Method Name="DataList" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="DataList::Gamestate">
+        <TypeIdentifier>
+          <NewMemberFileName>GameData.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAEICAAACAAAAAAAAAAAAAAAAFAAAAAAAAAIA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InteractSystem">
+    <Position X="0.5" Y="7.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>gQCgAAAAAAAAQAAAAAAAAAAAABAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>GameData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
